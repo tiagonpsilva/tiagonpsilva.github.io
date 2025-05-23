@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiago Silva - System Design & Software Architecture</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #232526 0%, #414345 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 2rem;
+            border: 5px solid #64b5f6;
+            background: linear-gradient(45deg, #64b5f6, #42a5f5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .profile-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #64b5f6, #90caf9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .section {
+            padding: 3rem 2rem;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #2c3e50;
+            position: relative;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .section h2::after {
+            content: '';
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(45deg, #64b5f6, #42a5f5);
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .expertise-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #64b5f6;
+            transition: transform 0.3s ease;
+        }
+
+        .expertise-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .expertise-card h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .expertise-card h3 i {
+            font-size: 1.5rem;
+            color: #64b5f6;
+        }
+
+        .expertise-card ul {
+            list-style: none;
+        }
+
+        .expertise-card li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .expertise-card li::before {
+            content: '▶';
+            color: #64b5f6;
+            position: absolute;
+            left: 0;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: linear-gradient(to bottom, #64b5f6, #42a5f5);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            padding: 20px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+            background: white;
+            border: 4px solid #64b5f6;
+            top: 25px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+
+        .timeline-item:nth-child(even)::after {
+            left: -10px;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+
+        .case-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            border-left: 5px solid #64b5f6;
+        }
+
+        .case-card.ai-highlight {
+            border-left: 5px solid #ff6b6b;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffffff 50%);
+        }
+
+        .case-card.ai-highlight .case-header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+        }
+
+        .case-header {
+            background: linear-gradient(135deg, #64b5f6, #42a5f5);
+            color: white;
+            padding: 1rem 1.5rem;
+            margin: -2rem -2rem 1.5rem -2rem;
+            border-radius: 15px 15px 0 0;
+            position: relative;
+        }
+
+        .case-period {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .case-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .case-title i {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .case-company {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .car-section {
+            margin: 1rem 0;
+        }
+
+        .car-label {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .car-content {
+            padding-left: 1.5rem;
+            border-left: 3px solid #e3f2fd;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .results-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .results-list li {
+            padding: 0.3rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .results-list li::before {
+            content: '✓';
+            color: #4caf50;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .ai-badge {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+        }
+
+        .education-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .education-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #4caf50;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .education-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .education-year {
+            background: linear-gradient(45deg, #4caf50, #45a049);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .education-institution {
+            color: #4caf50;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .education-degree {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .education-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .education-tag {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .specializations {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .specializations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .specialization-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #9c27b0;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .specialization-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .specialization-year {
+            background: linear-gradient(45deg, #9c27b0, #8e24aa);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            box-shadow: 0 3px 10px rgba(156, 39, 176, 0.3);
+        }
+
+        .specialization-mentor {
+            color: #9c27b0;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .specialization-title {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .specialization-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .specialization-tag {
+            background: #f3e5f5;
+            color: #6a1b9a;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .certifications {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .cert-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .cert-item:hover {
+            transform: scale(1.05);
+        }
+
+        .cert-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .cert-item i {
+            font-size: 2.5rem;
+            color: #ff9800;
+            margin-bottom: 1rem;
+        }
+
+        .cert-item .aws-icon {
+            color: #ff9900;
+        }
+
+        .cert-item .kanban-icon {
+            color: #2196f3;
+        }
+
+        .cert-item .cx-icon {
+            color: #9c27b0;
+        }
+
+        .cert-item .flight-icon {
+            color: #4caf50;
+        }
+
+        .cert-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .cert-tag {
+            background: #fff3e0;
+            color: #e65100;
+            padding: 0.3rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-header {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 1.5rem;
+        }
+
+        .project-body {
+            padding: 1.5rem;
+        }
+
+        .project-card h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .github-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #64b5f6;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .github-link:hover {
+            color: #42a5f5;
+        }
+
+        .contact {
+            background: linear-gradient(135deg, #232526 0%, #414345 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .contact h2 {
+            color: white;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .contact-item i {
+            font-size: 1.5rem;
+            color: #64b5f6;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 2rem 1rem;
+            }
+            
+            .expertise-grid,
+            .projects-grid,
+            .education-grid,
+            .specializations-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item::after {
+                left: 22px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="card hero">
+            <div class="hero-content">
+                <div class="profile-img">
+                    <!-- Foto do perfil do GitHub -->
+                    <img src="https://github.com/tiagonpsilva.png" alt="Tiago Silva" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-user\'></i>';">
+                </div>
+                <h1>Tiago Pinto Silva</h1>
+                <p class="subtitle">Head de Tecnologia</p>
+                <p>20+ anos de experiência com Tecnologia da Informação 🚀</p>
+                <p>4x AWS Certified ☁️ | Especialista em Cloud Computing 🌐</p>
+                
+                <div class="social-links">
+                    <a href="https://github.com/tiagonpsilva" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/tiagonpsilva" target="_blank">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="mailto:tiagonpsilva@gmail.com">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expertise Section -->
+        <div class="card">
+            <div class="section">
+                <h2>Áreas de Expertise</h2>
+                <div class="expertise-grid">
+                    <div class="expertise-card">
+                        <h3><i class="fas fa-project-diagram"></i> System Design & Arquitetura</h3>
+                        <ul>
+                            <li>Concepção de arquiteturas distribuídas escaláveis</li>
+                            <li>Design de sistemas de alta disponibilidade</li>
+                            <li>Architecture Decision Records (ADR)</li>
+                            <li>Padrões de arquitetura empresarial</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="expertise-card">
+                        <h3><i class="fas fa-cloud"></i> Cloud Computing</h3>
+                        <ul>
+                            <li>AWS Solutions Architecture</li>
+                            <li>Migração e modernização para nuvem</li>
+                            <li>Infraestrutura como código</li>
+                            <li>Estratégias multi-cloud</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="expertise-card">
+                        <h3><i class="fas fa-database"></i> Engenharia de Dados</h3>
+                        <ul>
+                            <li>Modern Data Stack</li>
+                            <li>Apache Airflow, Spark, DBT</li>
+                            <li>Data Lakes e Data Warehouses</li>
+                            <li>Pipelines de dados em tempo real</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="expertise-card">
+                        <h3><i class="fas fa-brain"></i> IA Generativa</h3>
+                        <ul>
+                            <li>LangChain e frameworks de IA</li>
+                            <li>Model Context Protocol (MCP)</li>
+                            <li>Automação com IA</li>
+                            <li>Integração de IA em produtos</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="expertise-card">
+                        <h3><i class="fas fa-users-cog"></i> Liderança Técnica</h3>
+                        <ul>
+                            <li>Direção de times multidisciplinares</li>
+                            <li>Metodologias ágeis (Kanban, Scrum)</li>
+                            <li>Gestão orientada a dados</li>
+                            <li>Customer Experience (CX)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="expertise-card">
+                        <h3><i class="fas fa-cogs"></i> Engenharia de Software</h3>
+                        <ul>
+                            <li>Go, Python, JavaScript</li>
+                            <li>Microserviços e APIs</li>
+                            <li>DevOps e CI/CD</li>
+                            <li>Gestão de sistemas legados</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cases Section -->
+        <div class="card">
+            <div class="section">
+                <h2>📈 Cases</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 3rem;">
+                    Principais realizações ao longo de +20 anos de experiência
+                </p>
+                
+                <div class="timeline">
+                    <!-- 2024-2025 -->
+                    <div class="timeline-item">
+                        <div class="case-card ai-highlight">
+                            <div class="ai-badge">🤖 IA DESTAQUE</div>
+                            <div class="case-header">
+                                <div class="case-period">🚀 2024-2025</div>
+                                <div class="case-title"><i class="fas fa-robot"></i> Implantação de IA em Times de Tecnologia</div>
+                                <div class="case-company">Papel: Líder da Iniciativa</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🎯 Contexto:</div>
+                                <div class="car-content">Resistência organizacional, falta de conhecimento em IA e processos manuais impactando produtividade dos times de tecnologia</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">⚡ Ação:</div>
+                                <div class="car-content">Liderou implementação escalonada de IA: Times de Engenharia (GitHub Copilot, Amazon Q, pré-aprovação de PRs), Arquitetura (diagnóstico de códigos legados, geração de artefatos), Cloud (análise de anomalias), Agilidade (interpretação de métricas de fluxo). Iniciou com líderes técnicos entusiastas e expandiu para todos os times, incluindo treinamento em engenharia de prompt</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🏆 Resultado:</div>
+                                <div class="car-content">
+                                    <ul class="results-list">
+                                        <li>Redução do cycle-time de 5 para 2 dias (-60%)</li>
+                                        <li>Melhoria da qualidade em code reviews</li>
+                                        <li>Redução de riscos em menor tempo</li>
+                                        <li>Aumento da satisfação e produtividade dos times</li>
+                                        <li>Adoção organizacional de práticas de IA</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="case-card ai-highlight">
+                            <div class="ai-badge">🤖 IA DESTAQUE</div>
+                            <div class="case-header">
+                                <div class="case-period">🚀 2022-2025</div>
+                                <div class="case-title"><i class="fas fa-lightbulb"></i> Inovação em IA Generativa</div>
+                                <div class="case-company">Papel: Head de Engenharia, Dados e Cloud/CTO</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🎯 Contexto:</div>
+                                <div class="car-content">Mercado demandando soluções inteligentes e inovação tecnológica</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">⚡ Ação:</div>
+                                <div class="car-content">Elaborou arquitetura de referência para LLMs e implementou práticas de IA Generativa</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🏆 Resultado:</div>
+                                <div class="car-content">
+                                    <ul class="results-list">
+                                        <li>+US$30.000 de investimento recebido</li>
+                                        <li>Projetos de inovação aprovados</li>
+                                        <li>Arquitetura de referência para LLMs</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="case-card">
+                            <div class="case-header">
+                                <div class="case-period">🚀 2022-2025</div>
+                                <div class="case-title">Processo de M&A e Integração Tecnológica</div>
+                                <div class="case-company">Papel: Head de Engenharia, Dados e Cloud/CTO</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🎯 Contexto:</div>
+                                <div class="car-content">Necessidade de integração tecnológica pós-aquisição</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">⚡ Ação:</div>
+                                <div class="car-content">Liderou due diligence e integração de equipes, sistemas e culturas técnicas</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🏆 Resultado:</div>
+                                <div class="car-content">
+                                    <ul class="results-list">
+                                        <li>+20 pessoas integradas</li>
+                                        <li>+5 novas tecnologias no portfólio</li>
+                                        <li>Integração cultural bem-sucedida</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="case-card">
+                            <div class="case-header">
+                                <div class="case-period">🚀 2022-2025</div>
+                                <div class="case-title">Democratização de Dados</div>
+                                <div class="case-company">Papel: Head de Engenharia, Dados e Cloud/CTO</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🎯 Contexto:</div>
+                                <div class="car-content">Dificuldade de acesso à informação para áreas técnicas e negócios</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">⚡ Ação:</div>
+                                <div class="car-content">Idealizou e implementou Plataforma de Dados (Databricks) com governança e políticas</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🏆 Resultado:</div>
+                                <div class="car-content">
+                                    <ul class="results-list">
+                                        <li>+50% de ganho em eficiência operacional</li>
+                                        <li>Redução significativa de custos</li>
+                                        <li>Aumento da velocidade de entrega</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="case-card">
+                            <div class="case-header">
+                                <div class="case-period">🚀 2022-2025</div>
+                                <div class="case-title">Modernização de Arquitetura</div>
+                                <div class="case-company">Papel: Head de Engenharia, Dados e Cloud/CTO</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🎯 Contexto:</div>
+                                <div class="car-content">Produto monolítico legado com arquitetura obsoleta limitando escalabilidade</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">⚡ Ação:</div>
+                                <div class="car-content">Reconstruiu arquitetura baseada em System Design moderno</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🏆 Resultado:</div>
+                                <div class="car-content">
+                                    <ul class="results-list">
+                                        <li>Migração de +600 clientes</li>
+                                        <li>+60.000 usuários ativos na nova arquitetura</li>
+                                        <li>Arquitetura escalável e moderna</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2015-2021 -->
+                    <div class="timeline-item">
+                        <div class="case-card">
+                            <div class="case-header">
+                                <div class="case-period">💼 2015-2021</div>
+                                <div class="case-title">Inovação IoT para Construção Civil</div>
+                                <div class="case-company">Papel: Head de Tecnologia</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🎯 Contexto:</div>
+                                <div class="car-content">Necessidade de controle de acesso em canteiros de obras</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">⚡ Ação:</div>
+                                <div class="car-content">Desenvolveu sistema de controle de acesso utilizando tecnologia IoT</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🏆 Resultado:</div>
+                                <div class="car-content">
+                                    <ul class="results-list">
+                                        <li>Solução inovadora para gestão de acesso</li>
+                                        <li>Aplicação IoT pioneira em canteiros</li>
+                                        <li>Melhoria na segurança e controle</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="case-card">
+                            <div class="case-header">
+                                <div class="case-period">💼 2015-2021</div>
+                                <div class="case-title">Transformação de Processos Ágeis</div>
+                                <div class="case-company">Papel: Head de Tecnologia</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🎯 Contexto:</div>
+                                <div class="car-content">Necessidade de metodologia ágil personalizada para diferentes times</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">⚡ Ação:</div>
+                                <div class="car-content">Evoluiu modelo de gestão ágil (Scrum, Kanban, Flight Levels) customizado</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🏆 Resultado:</div>
+                                <div class="car-content">
+                                    <ul class="results-list">
+                                        <li>Agilidade adaptativa personalizada</li>
+                                        <li>Metodologia customizada por time técnico</li>
+                                        <li>Melhoria na produtividade das equipes</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2011-2015 -->
+                    <div class="timeline-item">
+                        <div class="case-card">
+                            <div class="case-header">
+                                <div class="case-period">🔧 2011-2015</div>
+                                <div class="case-title">Desenvolvimento de Produto Pioneiro</div>
+                                <div class="case-company">Papel: Gerente de Software e Cloud</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🎯 Contexto:</div>
+                                <div class="car-content">Mercado sem solução especializada para gestão de documentação legal/fiscal</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">⚡ Ação:</div>
+                                <div class="car-content">Desenvolveu solução pioneira para gestão de documentação legal e fiscal de colaboradores</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🏆 Resultado:</div>
+                                <div class="car-content">
+                                    <ul class="results-list">
+                                        <li>Produto inovador para construção civil</li>
+                                        <li>Solução pioneira no segmento</li>
+                                        <li>Nova categoria de produto criada</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2005-2011 -->
+                    <div class="timeline-item">
+                        <div class="case-card">
+                            <div class="case-header">
+                                <div class="case-period">☁️ 2005-2011</div>
+                                <div class="case-title">Migração para Cloud</div>
+                                <div class="case-company">Papel: Líder Técnico de Software e Cloud</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🎯 Contexto:</div>
+                                <div class="car-content">Infraestrutura tradicional limitante com data center restringindo crescimento</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">⚡ Ação:</div>
+                                <div class="car-content">Liderou migração completa de data center tradicional para AWS</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🏆 Resultado:</div>
+                                <div class="car-content">
+                                    <ul class="results-list">
+                                        <li>Redução significativa de custos</li>
+                                        <li>Aumento da disponibilidade dos sistemas</li>
+                                        <li>Escalabilidade ilimitada</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2003-2005 -->
+                    <div class="timeline-item">
+                        <div class="case-card">
+                            <div class="case-header">
+                                <div class="case-period">🌱 2003-2005</div>
+                                <div class="case-title">Primeiro SaaS para Construção Civil</div>
+                                <div class="case-company">Papel: Desenvolvedor e Arquiteto de Software</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🎯 Contexto:</div>
+                                <div class="car-content">Mercado sem SaaS especializado para construção civil</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">⚡ Ação:</div>
+                                <div class="car-content">Desenvolveu primeiro sistema SaaS de gestão de Qualidade para construtoras</div>
+                            </div>
+                            <div class="car-section">
+                                <div class="car-label">🏆 Resultado:</div>
+                                <div class="car-content">
+                                    <ul class="results-list">
+                                        <li>Sistema pioneiro para certificação de qualidade</li>
+                                        <li>Primeiro SaaS especializado no setor</li>
+                                        <li>Base para crescimento futuro</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education Section -->
+        <div class="card">
+            <div class="section">
+                <h2>🎓 Formação Acadêmica</h2>
+                <div class="education-grid">
+                    <div class="education-card">
+                        <div class="education-year">2025</div>
+                        <div class="education-institution">Full Cycle</div>
+                        <div class="education-degree">Master of Business Administration - MBA<br>Arquitetura Full Cycle</div>
+                        <div class="education-keywords">
+                            <span class="education-tag">Arquitetura de Software</span>
+                            <span class="education-tag">Full Stack Development</span>
+                            <span class="education-tag">DevOps</span>
+                            <span class="education-tag">Microserviços</span>
+                            <span class="education-tag">Cloud Native</span>
+                        </div>
+                    </div>
+
+                    <div class="education-card">
+                        <div class="education-year">2024</div>
+                        <div class="education-institution">Strides Tech Community</div>
+                        <div class="education-degree">Programa Executivo de Liderança Tech</div>
+                        <div class="education-keywords">
+                            <span class="education-tag">Liderança Técnica</span>
+                            <span class="education-tag">Gestão de Equipes</span>
+                            <span class="education-tag">Estratégia Tecnológica</span>
+                            <span class="education-tag">Transformação Digital</span>
+                            <span class="education-tag">People Management</span>
+                        </div>
+                    </div>
+
+                    <div class="education-card">
+                        <div class="education-year">2023</div>
+                        <div class="education-institution">Insper</div>
+                        <div class="education-degree">Formação Executiva CTO</div>
+                        <div class="education-keywords">
+                            <span class="education-tag">Chief Technology Officer</span>
+                            <span class="education-tag">Estratégia de TI</span>
+                            <span class="education-tag">Governança Tecnológica</span>
+                            <span class="education-tag">Inovação</span>
+                            <span class="education-tag">Digital Leadership</span>
+                        </div>
+                    </div>
+
+                    <div class="education-card">
+                        <div class="education-year">2019-2020</div>
+                        <div class="education-institution">FIAP</div>
+                        <div class="education-degree">Master of Business Administration - MBA<br>Big Data / Data Science</div>
+                        <div class="education-keywords">
+                            <span class="education-tag">Big Data</span>
+                            <span class="education-tag">Data Science</span>
+                            <span class="education-tag">Machine Learning</span>
+                            <span class="education-tag">Analytics</span>
+                            <span class="education-tag">Data Engineering</span>
+                        </div>
+                    </div>
+
+                    <div class="education-card">
+                        <div class="education-year">2012-2013</div>
+                        <div class="education-institution">FIAP</div>
+                        <div class="education-degree">Master of Business Administration - MBA<br>Engenharia de Software Orientado a Serviços - SOA</div>
+                        <div class="education-keywords">
+                            <span class="education-tag">Service-Oriented Architecture</span>
+                            <span class="education-tag">Web Services</span>
+                            <span class="education-tag">Enterprise Integration</span>
+                            <span class="education-tag">Software Engineering</span>
+                            <span class="education-tag">ESB</span>
+                        </div>
+                    </div>
+
+                    <div class="education-card">
+                        <div class="education-year">2005-2008</div>
+                        <div class="education-institution">Faculdade Impacta Tecnologia</div>
+                        <div class="education-degree">Bacharelado em Sistemas de Informação<br>Gestão de Sistemas de Informação</div>
+                        <div class="education-keywords">
+                            <span class="education-tag">Sistemas de Informação</span>
+                            <span class="education-tag">Gestão de TI</span>
+                            <span class="education-tag">Análise de Sistemas</span>
+                            <span class="education-tag">Banco de Dados</span>
+                            <span class="education-tag">Desenvolvimento de Software</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Specializations Section -->
+        <div class="card specializations">
+            <div class="section">
+                <h2>🎯 Especializações</h2>
+                <div class="specializations-grid">
+                    <div class="specialization-card">
+                        <div class="specialization-year">2025</div>
+                        <div class="specialization-mentor">Mentoria com Elemar Junior</div>
+                        <div class="specialization-title">Arquitetura de Software com IA</div>
+                        <div class="specialization-keywords">
+                            <span class="specialization-tag">AI-Driven Architecture</span>
+                            <span class="specialization-tag">Intelligent Systems</span>
+                            <span class="specialization-tag">LLM Integration</span>
+                            <span class="specialization-tag">Software Design</span>
+                            <span class="specialization-tag">AI Ethics</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certifications -->
+        <div class="card certifications">
+            <div class="section">
+                <h2>🏆 Certificações</h2>
+                <div class="cert-grid">
+                    <div class="cert-item">
+                        <i class="fab fa-aws aws-icon"></i>
+                        <h4>AWS Solutions Architect Associate</h4>
+                        <div class="cert-keywords">
+                            <span class="cert-tag">Cloud Architecture</span>
+                            <span class="cert-tag">Infrastructure</span>
+                            <span class="cert-tag">Scalability</span>
+                        </div>
+                    </div>
+                    <div class="cert-item">
+                        <i class="fab fa-aws aws-icon"></i>
+                        <h4>AWS Developer Associate</h4>
+                        <div class="cert-keywords">
+                            <span class="cert-tag">Serverless</span>
+                            <span class="cert-tag">APIs</span>
+                            <span class="cert-tag">DevOps</span>
+                        </div>
+                    </div>
+                    <div class="cert-item">
+                        <i class="fab fa-aws aws-icon"></i>
+                        <h4>AWS Cloud Practitioner</h4>
+                        <div class="cert-keywords">
+                            <span class="cert-tag">Cloud Fundamentals</span>
+                            <span class="cert-tag">Cost Optimization</span>
+                        </div>
+                    </div>
+                    <div class="cert-item">
+                        <i class="fab fa-aws aws-icon"></i>
+                        <h4>AWS AI Practitioner</h4>
+                        <small>(Early Adopter)</small>
+                        <div class="cert-keywords">
+                            <span class="cert-tag">Machine Learning</span>
+                            <span class="cert-tag">AI Services</span>
+                            <span class="cert-tag">GenAI</span>
+                        </div>
+                    </div>
+                    <div class="cert-item">
+                        <i class="fas fa-tasks kanban-icon"></i>
+                        <h4>Kanban Management Professional (KMP)</h4>
+                        <div class="cert-keywords">
+                            <span class="cert-tag">Agile</span>
+                            <span class="cert-tag">Flow Management</span>
+                            <span class="cert-tag">Lean</span>
+                        </div>
+                    </div>
+                    <div class="cert-item">
+                        <i class="fas fa-heart cx-icon"></i>
+                        <h4>Customer Experience Professional (CXP)</h4>
+                        <div class="cert-keywords">
+                            <span class="cert-tag">UX Strategy</span>
+                            <span class="cert-tag">Customer Journey</span>
+                        </div>
+                    </div>
+                    <div class="cert-item">
+                        <i class="fas fa-layer-group flight-icon"></i>
+                        <h4>Flight Levels Systems Architecture (FLSA)</h4>
+                        <div class="cert-keywords">
+                            <span class="cert-tag">Systems Thinking</span>
+                            <span class="cert-tag">Organizational Design</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects -->
+        <div class="card">
+            <div class="section">
+                <h2>🚀 Projetos em Destaque</h2>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3>🏗️ System Design Concepts</h3>
+                            <p>Conceitos fundamentais de design de sistemas</p>
+                        </div>
+                        <div class="project-body">
+                            <p>Repositório com conceitos essenciais para arquitetura de sistemas distribuídos e escaláveis.</p>
+                            <div class="project-tags">
+                                <span class="tag">System Design</span>
+                                <span class="tag">Architecture</span>
+                                <span class="tag">Scalability</span>
+                            </div>
+                            <a href="https://github.com/tiagonpsilva/system-design-concepts" class="github-link" target="_blank">
+                                <i class="fab fa-github"></i> Ver no GitHub
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3>📊 Modern Data Stack Training</h3>
+                            <p>Treinamento completo em engenharia de dados</p>
+                        </div>
+                        <div class="project-body">
+                            <p>Curso prático sobre ferramentas modernas de engenharia de dados e pipelines.</p>
+                            <div class="project-tags">
+                                <span class="tag">Data Engineering</span>
+                                <span class="tag">Airflow</span>
+                                <span class="tag">dbt</span>
+                                <span class="tag">Spark</span>
+                            </div>
+                            <a href="https://github.com/tiagonpsilva/treinamento-modern-data-stack-01" class="github-link" target="_blank">
+                                <i class="fab fa-github"></i> Ver no GitHub
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3>🤖 GenAI LangChain Tutorial</h3>
+                            <p>Tutorial prático de IA Generativa</p>
+                        </div>
+                        <div class="project-body">
+                            <p>Guia completo para desenvolvimento de aplicações com LangChain e IA Generativa.</p>
+                            <div class="project-tags">
+                                <span class="tag">AI</span>
+                                <span class="tag">LangChain</span>
+                                <span class="tag">LLM</span>
+                                <span class="tag">GenAI</span>
+                            </div>
+                            <a href="https://github.com/tiagonpsilva/genai-langchain-tutorial" class="github-link" target="_blank">
+                                <i class="fab fa-github"></i> Ver no GitHub
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3>📝 Architecture Decision Records</h3>
+                            <p>Template e exemplos de ADRs</p>
+                        </div>
+                        <div class="project-body">
+                            <p>Coleção de templates e exemplos para documentação de decisões arquiteturais.</p>
+                            <div class="project-tags">
+                                <span class="tag">ADR</span>
+                                <span class="tag">Documentation</span>
+                                <span class="tag">Architecture</span>
+                            </div>
+                            <a href="https://github.com/tiagonpsilva/architecture-decision-records" class="github-link" target="_blank">
+                                <i class="fab fa-github"></i> Ver no GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="card contact">
+            <div class="section">
+                <h2>💬 Vamos Conversar?</h2>
+                <p>Interessado em discutir arquitetura de sistemas, cloud computing ou IA? Entre em contato! 😊</p>
+                
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fab fa-github"></i>
+                        <span>github.com/tiagonpsilva</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-linkedin"></i>
+                        <span>linkedin.com/in/tiagonpsilva</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>tiagonpsilva@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
