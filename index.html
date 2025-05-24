@@ -351,31 +351,19 @@
         .case-card .details-toggle {
             background: none;
             border: none;
-            color: #1976d2;
-            font-size: 1.08rem;
-            font-weight: 600;
+            color: #4a6fa1;
+            font-size: 0.89rem;
+            font-weight: 500;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin: 1.2rem auto 0 auto;
-            transition: color 0.2s;
-            outline: none;
-            box-shadow: none;
-            text-decoration: none;
+            text-decoration: underline;
+            margin: 0.15rem 0 0 auto;
+            padding: 0;
+            display: inline;
+            transition: color 0.18s;
         }
         .case-card .details-toggle:hover {
-            color: #764ba2;
-            text-decoration: underline;
+            color: #1976d2;
         }
-        .case-card .details-toggle .chevron {
-            transition: transform 0.25s;
-            font-size: 1.1em;
-        }
-        .case-card .details-toggle.open .chevron {
-            transform: rotate(180deg);
-        }
-
         .case-details-content {
             display: none;
             animation: fadeIn 0.3s;
@@ -920,6 +908,14 @@
                 padding: 1.2rem 0.5rem 1.2rem 0.5rem;
             }
         }
+        .case-desc {
+            font-size: 0.83rem;
+            color: #fff;
+            margin-bottom: 0.3rem;
+            margin-top: -0.2rem;
+            font-weight: 400;
+            opacity: 0.93;
+        }
     </style>
 </head>
 <body>
@@ -1070,7 +1066,7 @@
                             <div class="case-header">
                                 <div class="case-period">🚀 2024-2025</div>
                                 <div class="case-title"><i class="fas fa-robot"></i> Implantação de IA em Times de Tecnologia</div>
-                                <div class="case-company">Papel: Líder da Iniciativa</div>
+                                <div class="case-desc">Transformação da produtividade e qualidade de entregas com uso estratégico de IA e automação.</div>
                             </div>
                             <div class="case-details-content">
                                 <div class="car-section">
@@ -1094,9 +1090,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes" onclick="toggleCaseDetails(this)">
-                                <span class="toggle-text">+ Detalhes</span>
-                                <i class="fas fa-chevron-down chevron"></i>
+                            <button class="details-toggle" title="Ver detalhes do case">
+                                veja mais
                             </button>
                         </div>
                     </div>
@@ -1107,7 +1102,7 @@
                             <div class="case-header">
                                 <div class="case-period">🚀 2022-2025</div>
                                 <div class="case-title"><i class="fas fa-lightbulb"></i> Inovação em IA Generativa</div>
-                                <div class="case-company">Papel: Head de Engenharia, Dados e Cloud/CTO</div>
+                                <div class="case-desc">Desenvolvimento de soluções inovadoras e arquitetura de referência para LLMs, impulsionando novos negócios.</div>
                             </div>
                             <div class="case-details-content">
                                 <div class="car-section">
@@ -1129,9 +1124,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes" onclick="toggleCaseDetails(this)">
-                                <span class="toggle-text">+ Detalhes</span>
-                                <i class="fas fa-chevron-down chevron"></i>
+                            <button class="details-toggle" title="Ver detalhes do case">
+                                veja mais
                             </button>
                         </div>
                     </div>
@@ -1141,7 +1135,7 @@
                             <div class="case-header">
                                 <div class="case-period">🚀 2022-2025</div>
                                 <div class="case-title">Processo de M&A e Integração Tecnológica</div>
-                                <div class="case-company">Papel: Head de Engenharia, Dados e Cloud/CTO</div>
+                                <div class="case-desc">Unificação de equipes, sistemas e cultura após aquisição, garantindo sinergia e crescimento sustentável.</div>
                             </div>
                             <div class="case-details-content">
                                 <div class="car-section">
@@ -1163,9 +1157,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes" onclick="toggleCaseDetails(this)">
-                                <span class="toggle-text">+ Detalhes</span>
-                                <i class="fas fa-chevron-down chevron"></i>
+                            <button class="details-toggle" title="Ver detalhes do case">
+                                veja mais
                             </button>
                         </div>
                     </div>
@@ -1175,7 +1168,7 @@
                             <div class="case-header">
                                 <div class="case-period">🚀 2022-2025</div>
                                 <div class="case-title">Democratização de Dados</div>
-                                <div class="case-company">Papel: Head de Engenharia, Dados e Cloud/CTO</div>
+                                <div class="case-desc">Implementação de Data Lake e governança, promovendo acesso ágil e seguro à informação.</div>
                             </div>
                             <div class="case-details-content">
                                 <div class="car-section">
@@ -1197,9 +1190,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes" onclick="toggleCaseDetails(this)">
-                                <span class="toggle-text">+ Detalhes</span>
-                                <i class="fas fa-chevron-down chevron"></i>
+                            <button class="details-toggle" title="Ver detalhes do case">
+                                veja mais
                             </button>
                         </div>
                     </div>
@@ -1209,7 +1201,7 @@
                             <div class="case-header">
                                 <div class="case-period">🚀 2022-2025</div>
                                 <div class="case-title">Modernização de Arquitetura</div>
-                                <div class="case-company">Papel: Head de Engenharia, Dados e Cloud/CTO</div>
+                                <div class="case-desc">Migração de sistemas legados para arquitetura moderna, suportando crescimento exponencial de clientes.</div>
                             </div>
                             <div class="case-details-content">
                                 <div class="car-section">
@@ -1231,9 +1223,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes" onclick="toggleCaseDetails(this)">
-                                <span class="toggle-text">+ Detalhes</span>
-                                <i class="fas fa-chevron-down chevron"></i>
+                            <button class="details-toggle" title="Ver detalhes do case">
+                                veja mais
                             </button>
                         </div>
                     </div>
@@ -1244,7 +1235,7 @@
                             <div class="case-header">
                                 <div class="case-period">💼 2015-2021</div>
                                 <div class="case-title">Inovação IoT para Construção Civil</div>
-                                <div class="case-company">Papel: Head de Tecnologia</div>
+                                <div class="case-desc">Desenvolvimento de solução pioneira de controle de acesso em canteiros de obras com IoT.</div>
                             </div>
                             <div class="case-details-content">
                                 <div class="car-section">
@@ -1266,9 +1257,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes" onclick="toggleCaseDetails(this)">
-                                <span class="toggle-text">+ Detalhes</span>
-                                <i class="fas fa-chevron-down chevron"></i>
+                            <button class="details-toggle" title="Ver detalhes do case">
+                                veja mais
                             </button>
                         </div>
                     </div>
@@ -1278,7 +1268,7 @@
                             <div class="case-header">
                                 <div class="case-period">💼 2015-2021</div>
                                 <div class="case-title">Transformação de Processos Ágeis</div>
-                                <div class="case-company">Papel: Head de Tecnologia</div>
+                                <div class="case-desc">Adaptação de metodologias ágeis para diferentes times, elevando produtividade e engajamento.</div>
                             </div>
                             <div class="case-details-content">
                                 <div class="car-section">
@@ -1300,9 +1290,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes" onclick="toggleCaseDetails(this)">
-                                <span class="toggle-text">+ Detalhes</span>
-                                <i class="fas fa-chevron-down chevron"></i>
+                            <button class="details-toggle" title="Ver detalhes do case">
+                                veja mais
                             </button>
                         </div>
                     </div>
@@ -1313,7 +1302,7 @@
                             <div class="case-header">
                                 <div class="case-period">🔧 2011-2015</div>
                                 <div class="case-title">Desenvolvimento de Produto Pioneiro</div>
-                                <div class="case-company">Papel: Gerente de Software e Cloud</div>
+                                <div class="case-desc">Criação de solução inédita para gestão legal/fiscal no setor de construção civil.</div>
                             </div>
                             <div class="case-details-content">
                                 <div class="car-section">
@@ -1335,6 +1324,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <button class="details-toggle" title="Ver detalhes do case">
+                                veja mais
+                            </button>
                         </div>
                     </div>
 
@@ -1344,7 +1336,7 @@
                             <div class="case-header">
                                 <div class="case-period">☁️ 2005-2011</div>
                                 <div class="case-title">Migração para Cloud</div>
-                                <div class="case-company">Papel: Líder Técnico de Software e Cloud</div>
+                                <div class="case-desc">Redução de custos e aumento de disponibilidade com transição de data center tradicional para nuvem.</div>
                             </div>
                             <div class="case-details-content">
                                 <div class="car-section">
@@ -1366,9 +1358,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes" onclick="toggleCaseDetails(this)">
-                                <span class="toggle-text">+ Detalhes</span>
-                                <i class="fas fa-chevron-down chevron"></i>
+                            <button class="details-toggle" title="Ver detalhes do case">
+                                veja mais
                             </button>
                         </div>
                     </div>
@@ -1379,7 +1370,7 @@
                             <div class="case-header">
                                 <div class="case-period">🌱 2003-2005</div>
                                 <div class="case-title">Primeiro SaaS para Construção Civil</div>
-                                <div class="case-company">Papel: Desenvolvedor e Arquiteto de Software</div>
+                                <div class="case-desc">Desenvolvimento do primeiro sistema SaaS para gestão de qualidade no setor.</div>
                             </div>
                             <div class="case-details-content">
                                 <div class="car-section">
@@ -1401,9 +1392,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes" onclick="toggleCaseDetails(this)">
-                                <span class="toggle-text">+ Detalhes</span>
-                                <i class="fas fa-chevron-down chevron"></i>
+                            <button class="details-toggle" title="Ver detalhes do case">
+                                veja mais
                             </button>
                         </div>
                     </div>
@@ -1707,10 +1697,39 @@
         </div>
     </div>
     <script>
-    function openCaseModal(contentHtml) {
+    function openCaseModalFromCard(card) {
         const modal = document.getElementById('caseModal');
         const body = document.getElementById('caseModalBody');
-        body.innerHTML = contentHtml;
+        // Pega o cabeçalho do case
+        const header = card.querySelector('.case-header');
+        // Pega o conteúdo dos detalhes
+        const details = card.querySelector('.case-details-content');
+        if (!header || !details) return;
+        // Clona o cabeçalho e ajusta o estilo para o modal
+        const headerClone = header.cloneNode(true);
+        headerClone.classList.add('modal-case-header');
+        // Remove qualquer .case-company do clone (por segurança)
+        const company = headerClone.querySelector('.case-company');
+        if (company) company.remove();
+        // Aplica cor de destaque se for IA
+        if (card.classList.contains('ai-highlight')) {
+            headerClone.style.background = 'linear-gradient(135deg, #ff6b6b, #ee5a52)';
+        } else {
+            headerClone.style.background = 'linear-gradient(135deg, #64b5f6, #42a5f5)';
+        }
+        headerClone.style.color = 'white';
+        headerClone.style.padding = '1.2rem 1.5rem 1.2rem 1.5rem';
+        headerClone.style.margin = '-2rem -2rem 2rem -2rem';
+        headerClone.style.borderRadius = '18px 18px 0 0';
+        headerClone.style.position = 'relative';
+        // Monta o HTML do modal
+        body.innerHTML = '';
+        body.appendChild(headerClone);
+        // Adiciona o conteúdo dos detalhes
+        const detailsClone = details.cloneNode(true);
+        detailsClone.style.display = 'block';
+        detailsClone.classList.add('modal-case-details');
+        body.appendChild(detailsClone);
         modal.classList.add('open');
         document.body.style.overflow = 'hidden';
     }
@@ -1729,10 +1748,7 @@
     document.querySelectorAll('.details-toggle').forEach(function(btn) {
         btn.onclick = function() {
             const card = btn.closest('.case-card');
-            const details = card.querySelector('.case-details-content');
-            if (details) {
-                openCaseModal(details.innerHTML);
-            }
+            openCaseModalFromCard(card);
         };
     });
     </script>
