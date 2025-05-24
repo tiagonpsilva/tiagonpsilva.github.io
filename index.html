@@ -308,10 +308,30 @@
         .case-card.ai-highlight {
             border-left: 5px solid #ff6b6b;
             background: linear-gradient(135deg, #fff5f5 0%, #ffffff 50%);
+            position: relative;
+            overflow: visible;
         }
 
-        .case-card.ai-highlight .case-header {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+        /* Bullet para IA no canto superior direito */
+        .ai-bullet-badge {
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #ff6b6b 60%, #ee5a52 100%);
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.08rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.18);
+            z-index: 10;
+            pointer-events: none;
+            user-select: none;
+            text-shadow: 0 1px 4px rgba(44,62,80,0.13);
         }
 
         .case-header {
@@ -1062,7 +1082,7 @@
                     <!-- 2024-2025 -->
                     <div class="timeline-item">
                         <div class="case-card ai-highlight">
-                            <div class="ai-badge">🤖 IA DESTAQUE</div>
+                            <div class="ai-bullet-badge">IA</div>
                             <div class="case-header">
                                 <div class="case-period">🚀 2024-2025</div>
                                 <div class="case-title"><i class="fas fa-robot"></i> Implantação de IA em Times de Tecnologia</div>
@@ -1098,7 +1118,7 @@
 
                     <div class="timeline-item">
                         <div class="case-card ai-highlight">
-                            <div class="ai-badge">🤖 IA DESTAQUE</div>
+                            <div class="ai-bullet-badge">IA</div>
                             <div class="case-header">
                                 <div class="case-period">🚀 2022-2025</div>
                                 <div class="case-title"><i class="fas fa-lightbulb"></i> Inovação em IA Generativa</div>
@@ -1704,6 +1724,9 @@
         const header = card.querySelector('.case-header');
         // Pega o conteúdo dos detalhes
         const details = card.querySelector('.case-details-content');
+        // Pega o título e a descrição
+        const title = card.querySelector('.case-title');
+        const desc = card.querySelector('.case-desc');
         if (!header || !details) return;
         // Clona o cabeçalho e ajusta o estilo para o modal
         const headerClone = header.cloneNode(true);
@@ -1724,6 +1747,24 @@
         headerClone.style.position = 'relative';
         // Monta o HTML do modal
         body.innerHTML = '';
+        // Adiciona título e descrição acima do cabeçalho, se existirem
+        if (title) {
+            const titleClone = title.cloneNode(true);
+            titleClone.style.fontSize = '1.35rem';
+            titleClone.style.fontWeight = 'bold';
+            titleClone.style.marginBottom = '0.3rem';
+            titleClone.style.color = '#2c3e50';
+            titleClone.style.display = 'block';
+            body.appendChild(titleClone);
+        }
+        if (desc) {
+            const descClone = desc.cloneNode(true);
+            descClone.style.fontSize = '1.05rem';
+            descClone.style.color = '#555';
+            descClone.style.marginBottom = '1.2rem';
+            descClone.style.display = 'block';
+            body.appendChild(descClone);
+        }
         body.appendChild(headerClone);
         // Adiciona o conteúdo dos detalhes
         const detailsClone = details.cloneNode(true);
