@@ -41,7 +41,7 @@
         .hero {
             background: linear-gradient(135deg, #232526 0%, #414345 100%);
             color: white;
-            padding: 4rem 2rem;
+            padding: 2.2rem 2rem;
             text-align: center;
             position: relative;
         }
@@ -63,10 +63,10 @@
         }
 
         .profile-img {
-            width: 150px;
-            height: 150px;
+            width: 270px;
+            height: 270px;
             border-radius: 50%;
-            margin: 0 auto 2rem;
+            margin: 0 auto 1rem;
             border: 5px solid #64b5f6;
             background: linear-gradient(45deg, #64b5f6, #42a5f5);
             display: flex;
@@ -96,10 +96,49 @@
             letter-spacing: -0.02em;
         }
 
+        .hero-badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.7rem;
+            margin: 1.2rem 0 0.5rem 0;
+        }
+        .hero-badge {
+            background: linear-gradient(45deg, #64b5f6, #42a5f5);
+            color: white;
+            font-weight: 600;
+            border-radius: 20px;
+            padding: 0.5rem 1.2rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 8px rgba(100,181,246,0.10);
+        }
+        .hero-badge .fa-aws {
+            color: #ff9900;
+            font-size: 1.3rem;
+        }
+        .hero-badge .fa-cloud {
+            color: #42a5f5;
+            font-size: 1.2rem;
+        }
+        .hero-badge .fa-rocket {
+            color: #43e97b;
+            font-size: 1.2rem;
+        }
+
         .hero .subtitle {
             font-size: 1.3rem;
-            margin-bottom: 2rem;
+            margin-bottom: 0.7rem;
             opacity: 0.9;
+        }
+
+        .hero .short-desc {
+            font-size: 1.1rem;
+            color: #e3f2fd;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
         }
 
         .social-links {
@@ -703,8 +742,15 @@
                 </div>
                 <h1>Tiago Pinto Silva</h1>
                 <p class="subtitle">Head de Tecnologia</p>
-                <p>20+ anos de experiência com Tecnologia da Informação 🚀</p>
-                <p>4x AWS Certified ☁️ | Especialista em Cloud Computing 🌐</p>
+                <p class="short-desc">Especialista em Arquitetura, Cloud e IA</p>
+                <div class="hero-badges">
+                    <span class="hero-badge"><i class="fas fa-chess-king"></i>Liderança Executiva</span>
+                    <span class="hero-badge"><i class="fas fa-brain"></i>IA Generativa</span>
+                    <span class="hero-badge"><i class="fas fa-cloud"></i>Arquitetura Cloud-native</span>
+                    <span class="hero-badge"><i class="fas fa-code"></i>Engenharia de Software</span>
+                    <span class="hero-badge"><i class="fas fa-database"></i>Modern Data Stack</span>
+                    <span class="hero-badge"><i class="fas fa-users"></i>Gestão de Pessoas</span>
+                </div>
                 
                 <div class="social-links">
                     <a href="https://github.com/tiagonpsilva" target="_blank">
