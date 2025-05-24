@@ -97,11 +97,14 @@
         }
 
         .hero-badges {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.7rem 1.2rem;
             justify-content: center;
-            gap: 0.7rem;
             margin: 1.2rem 0 0.5rem 0;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .hero-badge {
             background: linear-gradient(45deg, #64b5f6, #42a5f5);
@@ -729,6 +732,32 @@
                 left: 0;
             }
         }
+
+        @media (max-width: 600px) {
+            .hero-badges {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hero-exp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, #764ba2, #667eea);
+            color: #fff;
+            font-weight: 700;
+            border-radius: 18px;
+            padding: 0.45rem 1.3rem;
+            font-size: 1.13rem;
+            margin: 0.7rem auto 0.7rem auto;
+            box-shadow: 0 2px 8px rgba(118,75,162,0.10);
+            letter-spacing: 0.01em;
+            justify-content: center;
+        }
+        .hero-exp-badge .fa-rocket {
+            color: #fff;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
@@ -742,15 +771,9 @@
                 </div>
                 <h1>Tiago Pinto Silva</h1>
                 <p class="subtitle">Head de Tecnologia</p>
-                <p class="short-desc">Especialista em Arquitetura, Cloud e IA</p>
-                <div class="hero-badges">
-                    <span class="hero-badge"><i class="fas fa-chess-king"></i>Liderança Executiva</span>
-                    <span class="hero-badge"><i class="fas fa-brain"></i>IA Generativa</span>
-                    <span class="hero-badge"><i class="fas fa-cloud"></i>Arquitetura Cloud-native</span>
-                    <span class="hero-badge"><i class="fas fa-code"></i>Engenharia de Software</span>
-                    <span class="hero-badge"><i class="fas fa-database"></i>Modern Data Stack</span>
-                    <span class="hero-badge"><i class="fas fa-users"></i>Gestão de Pessoas</span>
-                </div>
+                <div class="hero-exp-badge"><i class="fas fa-rocket"></i> 20+ Anos de Experiência</div>
+               
+                
                 
                 <div class="social-links">
                     <a href="https://github.com/tiagonpsilva" target="_blank">
@@ -772,62 +795,97 @@
                 <h2>Áreas de Expertise</h2>
                 <div class="expertise-grid">
                     <div class="expertise-card">
-                        <h3><i class="fas fa-project-diagram"></i> System Design & Arquitetura</h3>
+                        <h3><i class="fas fa-chess-king"></i> Liderança Executiva</h3>
                         <ul>
-                            <li>Concepção de arquiteturas distribuídas escaláveis</li>
-                            <li>Design de sistemas de alta disponibilidade</li>
-                            <li>Architecture Decision Records (ADR)</li>
-                            <li>Padrões de arquitetura empresarial</li>
+                            <li>Roadmap de Tecnologia e Inovação</li>
+                            <li>Guidance Tecnológico</li>
+                            <li>Benchmarks do Setor</li>
+                            <li>Parceirias Estratégicas</li>
+                            <li>Apoio à Gestão Financeira</li>
+                            <li>Gestão de Recursos de Projetos</li>
+                            <li>Segurança e Privacidade</li>
                         </ul>
                     </div>
-                    
                     <div class="expertise-card">
-                        <h3><i class="fas fa-cloud"></i> Cloud Computing</h3>
+                        <h3><i class="fas fa-chart-line"></i>KPIs Estratégicos</h3>
                         <ul>
-                            <li>AWS Solutions Architecture</li>
-                            <li>Migração e modernização para nuvem</li>
-                            <li>Infraestrutura como código</li>
-                            <li>Estratégias multi-cloud</li>
+                            <li>Engenharia: Deployment Frequency, Lead Time for Changes, Change Failure Rate, Time to Restore Service</li>
+                            <li>Cloud Computing: Availability/Uptime, Cost Optimization, Performance/Latency</li>
+                            <li>Negócio: Time to Market, NPS, CSAT, ROI</li>
+                            <li>Pessoas: eNPS, Turnover Rate</li>
+                            <li>Financeiras: Budget Previsto vs Realizado</li>
+                           
                         </ul>
                     </div>
-                    
                     <div class="expertise-card">
-                        <h3><i class="fas fa-database"></i> Engenharia de Dados</h3>
+                        <h3><i class="fas fa-users"></i> Gestão de Talentos</h3>
                         <ul>
-                            <li>Modern Data Stack</li>
-                            <li>Apache Airflow, Spark, DBT</li>
-                            <li>Data Lakes e Data Warehouses</li>
-                            <li>Pipelines de dados em tempo real</li>
+                            <li>Formação e desenvolvimento de pessoas</li>
+                            <li>Gestão de equipes multidisciplinares</li>
+                            <li>Mentoria e liderança técnica</li>
+                            <li>People Management</li>
+                            <li>Processos Seletivos</li>
+                            <li>Avaliação de Desempenho</li>
                         </ul>
                     </div>
-                    
                     <div class="expertise-card">
                         <h3><i class="fas fa-brain"></i> IA Generativa</h3>
                         <ul>
-                            <li>LangChain e frameworks de IA</li>
-                            <li>Model Context Protocol (MCP)</li>
-                            <li>Automação com IA</li>
-                            <li>Integração de IA em produtos</li>
+                            <li>Aumento de Produtividade de Times</li>
+                            <li>IA Aplicada a Produtos</li>
+                            <li>Arquiteturas de Referência com IA</li>
+                            <li>IA Responsável (Responsible AI)</li>
+                            <li>Automações Inteligentes</li>
+                            <li>Integração de LLMs em Sistemas</li>
+                            <li>Frameworks e Ferramentas de IA Generativa</li>
                         </ul>
                     </div>
-                    
                     <div class="expertise-card">
-                        <h3><i class="fas fa-users-cog"></i> Liderança Técnica</h3>
+                        <h3><i class="fas fa-project-diagram"></i> Arquitetura de Sistemas</h3>
                         <ul>
-                            <li>Direção de times multidisciplinares</li>
-                            <li>Metodologias ágeis (Kanban, Scrum)</li>
-                            <li>Gestão orientada a dados</li>
-                            <li>Customer Experience (CX)</li>
+                            <li>System Design </li>
+                            <li>Arquitetura As-Is, Roadmap e To-Be</li>
+                            <li>Documentação de Decisões Arquiteturais (ADR)</li>
+                            <li>Padrões Arquiteturais</li>
+                            <li>Governança de Arquitetura e Compliance</li>
+                            <li>Observabilidade e Resiliência</li>
+                            <li>Modernização e Integração de Sistemas Legados</li>
                         </ul>
                     </div>
-                    
                     <div class="expertise-card">
-                        <h3><i class="fas fa-cogs"></i> Engenharia de Software</h3>
+                        <h3><i class="fas fa-database"></i> Modern Data Stack</h3>
                         <ul>
-                            <li>Go, Python, JavaScript</li>
-                            <li>Microserviços e APIs</li>
-                            <li>DevOps e CI/CD</li>
-                            <li>Gestão de sistemas legados</li>
+                            <li>Orquestração de Dados (Airflow, Prefect)</li>
+                            <li>Data Lakes e Data Warehouses</li>
+                            <li>ETL/ELT Moderno</li>
+                            <li>Modelagem e Transformação de Dados (dbt)</li>
+                            <li>Analytics Avançado e BI</li>
+                            <li>Governança, Qualidade e Segurança de Dados</li>
+                            <li>Processamento em Larga Escala (Spark, BigQuery, Redshift)</li>
+                        </ul>
+                    </div>
+                    <div class="expertise-card">
+                        <h3><i class="fas fa-code"></i> Engenharia de Software</h3>
+                        <ul>
+                            <li>Desenvolvimento Full Stack </li>
+                            <li>Microserviços e Arquitetura Modular</li>
+                            <li>APIs REST</li>
+                            <li>Testes Automatizados e Qualidade de Código</li>
+                            <li>Clean Code e Boas Práticas</li>
+                            <li>Integração Contínua e Entrega Contínua (CI/CD)</li>
+                            <li>Gestão e Modernização de Sistemas Legados</li>
+                        </ul>
+                    </div>
+                    <div class="expertise-card">
+                        <h3><i class="fas fa-cloud"></i> Cloud Computing</h3>
+                        <ul>
+                            <li>Arquitetura Cloud-native</li>
+                            <li>Migração e Modernização para Nuvem</li>
+                            <li>Infraestrutura como Código (IaC)</li>
+                            <li>Estratégias Multi-cloud e Híbridas</li>
+                            <li>DevOps e CI/CD em Cloud</li>
+                            <li>FinOps e Otimização de Custos</li>
+                            <li>Segurança, Compliance e Governança em Cloud</li>
                         </ul>
                     </div>
                 </div>
