@@ -936,6 +936,80 @@
             font-weight: 400;
             opacity: 0.93;
         }
+        .specialization-badge {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1976d2;
+            font-size: 0.72rem;
+            font-weight: 400;
+            border-radius: 7px;
+            padding: 0.04rem 0.32rem;
+            margin-left: 0.5rem;
+            letter-spacing: 0.01em;
+            box-shadow: none;
+            border: none;
+            vertical-align: middle;
+        }
+        .specialization-badge.completed {
+            background: #e8f5e9;
+            color: #388e3c;
+            font-weight: 600;
+        }
+        .specialization-card.strides-highlight, .education-card.strides-highlight {
+            border-left: 7px solid #ff9800;
+            background: linear-gradient(135deg, #fffef8 0%, #fff9c4 100%);
+            box-shadow: 0 6px 24px rgba(255,152,0,0.13);
+            position: relative;
+        }
+        .inst-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.2rem;
+        }
+        /* Novo cabeçalho do modal de case */
+        .modal-case-header {
+            background: #fff !important;
+            color: #222 !important;
+            padding: 2.1rem 1.5rem 1.2rem 1.5rem !important;
+            margin: -2rem -2rem 2rem -2rem !important;
+            border-radius: 18px 18px 0 0 !important;
+            border-bottom: 3px solid #e3f2fd !important;
+            box-shadow: 0 2px 8px rgba(33,150,243,0.04);
+            position: relative;
+            text-align: center;
+        }
+        .modal-case-header .case-title {
+            color: #222 !important;
+            font-size: 1.7rem !important;
+            font-weight: 800 !important;
+            margin-bottom: 0.5rem !important;
+            justify-content: center;
+            gap: 0.7rem;
+        }
+        .modal-case-header .case-period {
+            color: #1976d2 !important;
+            font-size: 1.05rem !important;
+            font-weight: 600 !important;
+            margin-bottom: 0.3rem !important;
+        }
+        .modal-case-header .case-desc {
+            color: #444 !important;
+            font-size: 1.08rem !important;
+            font-weight: 400 !important;
+            margin-bottom: 0.7rem !important;
+            margin-top: 0.2rem !important;
+        }
+        .education-card.strides-highlight {
+            border-left: 7px solid #ff9800;
+            background: linear-gradient(135deg, #fffef8 0%, #fff9c4 100%);
+            box-shadow: 0 6px 24px rgba(255,152,0,0.13);
+            position: relative;
+        }
+        .education-card > div[style*="font-size"], .specialization-card > div[style*="font-size"] {
+            font-size: 0.89rem !important;
+            color: #888 !important;
+        }
     </style>
 </head>
 <body>
@@ -963,6 +1037,10 @@
                     <a href="mailto:tiagonpsilva@gmail.com">
                         <i class="fas fa-envelope"></i>
                     </a>
+                    <a href="https://wa.me/5511996531591" target="_blank" >
+                        <i class="fab fa-whatsapp" style="font-size:1.5rem;"></i> 
+                    </a>
+                    
                 </div>
             </div>
         </div>
@@ -1428,7 +1506,10 @@
                 <div class="education-grid">
                     <div class="education-card">
                         <div class="education-year">2025</div>
-                        <div class="education-institution">Full Cycle</div>
+                        <div class="inst-row">
+                            <div class="education-institution">Full Cycle</div>
+                            <span class="specialization-badge">Em Andamento</span>
+                        </div>
                         <div class="education-degree">MBA<br>Arquitetura Full Cycle</div>
                         <div class="education-keywords">
                             <span class="education-tag">Arquitetura de Software</span>
@@ -1437,10 +1518,33 @@
                             <span class="education-tag">Microserviços</span>
                             <span class="education-tag">Cloud Native</span>
                         </div>
+                        <div style="font-size:0.97rem;color:#444;margin-top:0.7rem;line-height:1.5;">
+                            Ênfase em liderança, arquitetura e desenvolvimento de soluções de grande porte para grandes organizações. O programa aborda Arquitetura de Soluções e Software "do jeito certo", além de temas essenciais como DevOps, SRE, Containers e Kubernetes. Também desenvolve soft skills fundamentais, como liderança, trabalho em equipe e marketing pessoal. Conta ainda com participações especiais de grandes nomes do mercado, como Uncle Bob, Alistair Cockburn, Vaughn Vernon, Elemar Jr, Greg Young, entre outros.
+                            <a href="https://mba.fullcycle.com.br/mba/" target="_blank" style="color:#1976d2;text-decoration:underline;font-size:0.95rem;display:block;margin-top:0.7em;">Saiba mais</a>
+                        </div>
+                    </div>
+                    <div class="education-card strides-highlight">
+                        <div class="education-year">2022</div>
+                        <div class="education-institution">CTO Academy</div>
+                        <div class="education-degree">Executive Program<br>CTO & Liderança em Tecnologia</div>
+                        <div class="education-keywords">
+                            <span class="education-tag">Liderança em Tecnologia</span>
+                            <span class="education-tag">Gestão de Times</span>
+                            <span class="education-tag">Estratégia de TI</span>
+                            <span class="education-tag">Desenvolvimento de Carreira</span>
+                    
+                        </div>
+                        <div style="font-size:0.97rem;color:#444;margin-top:0.7rem;line-height:1.5;">
+                            Programa executivo internacional voltado para o desenvolvimento de competências de liderança, gestão de times de tecnologia, estratégia organizacional e preparação para o cargo de CTO. Ênfase em práticas modernas de gestão, soft skills e networking global.<br>
+                            <a href="https://cto.academy" target="_blank" style="color:#1976d2;text-decoration:underline;font-size:0.95rem;">Saiba mais</a>
+                        </div>
                     </div>
                     <div class="education-card">
                         <div class="education-year">2019-2020</div>
-                        <div class="education-institution">FIAP</div>
+                        <div class="inst-row">
+                            <div class="education-institution">FIAP</div>
+                            <span class="specialization-badge completed">Concluído</span>
+                        </div>
                         <div class="education-degree">MBA<br>Big Data / Data Science</div>
                         <div class="education-keywords">
                             <span class="education-tag">Big Data</span>
@@ -1449,40 +1553,61 @@
                             <span class="education-tag">Analytics</span>
                             <span class="education-tag">Data Engineering</span>
                         </div>
+                        <div style="font-size:0.89rem;color:#888;margin-top:0.7rem;line-height:1.5;">
+                            Formação voltada para profissionais que desejam liderar projetos de dados, analytics e inteligência artificial. O curso aborda desde fundamentos de Big Data, Data Science e Machine Learning até arquitetura de dados, engenharia de dados, visualização, governança e aplicações práticas em negócios. Ênfase em tecnologias modernas, projetos reais e preparação para desafios do mercado digital.
+                            <a href="https://www.fiap.com.br/wp-content/themes/fiap2016/documents/fiap/cpa/mba-on/2022/MBA-em-Big-Data-Data-Science-BDT-ON-LINE.pdf" target="_blank" style="color:#1976d2;text-decoration:underline;font-size:0.95rem;display:block;margin-top:0.7em;">Saiba mais</a>
+                        </div>
                     </div>
                     <div class="education-card">
                         <div class="education-year">2012-2013</div>
-                        <div class="education-institution">FIAP</div>
+                        <div class="inst-row">
+                            <div class="education-institution">FIAP</div>
+                            <span class="specialization-badge completed">Concluído</span>
+                        </div>
                         <div class="education-degree">MBA<br>Engenharia de Software Orientado a Serviços - SOA</div>
                         <div class="education-keywords">
                             <span class="education-tag">Service-Oriented Architecture</span>
                             <span class="education-tag">Web Services</span>
                             <span class="education-tag">Enterprise Integration</span>
                             <span class="education-tag">Software Engineering</span>
-                            <span class="education-tag">ESB</span>
+                    
+                        </div>
+                        <div style="font-size:0.89rem;color:#888;margin-top:0.7rem;line-height:1.5;">
+                            MBA com foco em arquitetura orientada a serviços (SOA), integração de sistemas corporativos, web services, ESB e práticas avançadas de engenharia de software. Ênfase em soluções escaláveis, interoperabilidade e governança de TI para ambientes empresariais complexos.
                         </div>
                     </div>
                     <div class="education-card">
                         <div class="education-year">2005-2008</div>
-                        <div class="education-institution">Faculdade Impacta Tecnologia</div>
+                        <div class="inst-row">
+                            <div class="education-institution">Faculdade Impacta Tecnologia</div>
+                            <span class="specialization-badge completed">Concluído</span>
+                        </div>
                         <div class="education-degree">Bacharelado<br/> Gestão de Sistemas de Informação</div>
                         <div class="education-keywords">
-                            <span class="education-tag">Sistemas de Informação</span>
                             <span class="education-tag">Gestão de TI</span>
                             <span class="education-tag">Análise de Sistemas</span>
                             <span class="education-tag">Banco de Dados</span>
                             <span class="education-tag">Desenvolvimento de Software</span>
                         </div>
+                        <div style="font-size:0.89rem;color:#888;margin-top:0.7rem;line-height:1.5;">
+                            Bacharelado voltado para a gestão estratégica de tecnologia da informação, análise e modelagem de sistemas, administração de bancos de dados e desenvolvimento de software. Formação abrangente em processos, infraestrutura e governança de TI.
+                        </div>
                     </div>
                     <div class="education-card">
                         <div class="education-year">2003-2004</div>
-                        <div class="education-institution">Faculdade Anhembi Morumbi</div>
+                        <div class="inst-row">
+                            <div class="education-institution">Faculdade Anhembi Morumbi</div>
+                            <span class="specialization-badge completed">Concluído</span>
+                        </div>
                         <div class="education-degree">Tecnólogo<br/>Redes de Computadores</div>
                         <div class="education-keywords">
                             <span class="education-tag">Redes</span>
                             <span class="education-tag">Infraestrutura</span>
                             <span class="education-tag">Protocolos</span>
                             <span class="education-tag">Administração de Sistemas</span>
+                        </div>
+                        <div style="font-size:0.89rem;color:#888;margin-top:0.7rem;line-height:1.5;">
+                            Curso tecnólogo com foco em redes de computadores, infraestrutura de TI, protocolos de comunicação, segurança de redes e administração de sistemas. Ênfase em projetos práticos e ambientes corporativos.
                         </div>
                     </div>
                 </div>
@@ -1496,38 +1621,81 @@
                 <div class="specializations-grid">
                     <div class="specialization-card">
                         <div class="specialization-year">2025</div>
-                        <div class="specialization-mentor">Mentoria com Elemar Junior</div>
-                        <div class="specialization-title">Arquitetura de Software com IA</div>
+                        <div class="inst-row">
+                            <div class="specialization-mentor">LINUXtips</div>
+                            <span class="specialization-badge">Em Andamento</span>
+                        </div>
+                        <div class="specialization-title">PICK (Programa Intensivo em Containers e Kubernetes)</div>
                         <div class="specialization-keywords">
-                            <span class="specialization-tag">AI-Driven Architecture</span>
-                            <span class="specialization-tag">Intelligent Systems</span>
-                            <span class="specialization-tag">LLM Integration</span>
-                            <span class="specialization-tag">Software Design</span>
-                            <span class="specialization-tag">AI Ethics</span>
+                            <span class="specialization-tag">Containers</span>
+                            <span class="specialization-tag">Kubernetes</span>
+                            <span class="specialization-tag">Mentoria</span>
+                            <span class="specialization-tag">Hands-on</span>
+                            <span class="specialization-tag">Carreira</span>
+                            <span class="specialization-tag">Especialista</span>
+                        </div>
+                        <div style="font-size:0.89rem;color:#888;margin-top:0.7rem;line-height:1.5;">
+                            Programa avançado que alia visão estratégica e domínio técnico em containers e Kubernetes, preparando profissionais para liderar iniciativas de modernização, automação e escalabilidade em ambientes corporativos. Foco em transformação de carreira, mentorias com especialistas do mercado e experiências práticas que habilitam tanto a tomada de decisão executiva quanto a excelência operacional em cloud native.
+                            <a href="https://linuxtips.io/treinamentos/" target="_blank" style="color:#1976d2;text-decoration:underline;font-size:0.95rem;display:block;margin-top:0.7em;">Saiba mais</a>
                         </div>
                     </div>
                     <div class="specialization-card">
+                        <div class="specialization-year">2025</div>
+                        <div class="inst-row">
+                            <div class="specialization-mentor">Elemar Júnior</div>
+                            <span class="specialization-badge">Em Andamento</span>
+                        </div>
+                        <div class="specialization-title">Arquitetura de Software com ênfase em IA</div>
+                        <div class="specialization-keywords">
+                            <span class="specialization-tag">Arquitetura de Software</span>
+                            <span class="specialization-tag">Domain-Driven Design</span>
+                            <span class="specialization-tag">Padrões Arquiteturais</span>
+                            <span class="specialization-tag">Mentoria</span>
+         
+                        </div>
+                        <div style="font-size:0.97rem;color:#444;margin-top:0.7rem;line-height:1.5;">
+                            Formação avançada com foco em arquitetura de software, DDD, padrões arquiteturais e mentoria direta com Elemar Júnior. Ênfase em prática, análise de cenários reais e desenvolvimento de soluções robustas para sistemas complexos.<br>
+                            <a href="https://elemarjr.com/ofertas/mentoria-em-arquitetura-de-software-com-enfase-em-ia-lp/" target="_blank" style="color:#1976d2;text-decoration:underline;font-size:0.95rem;">Saiba mais</a>
+                        </div>
+                    </div>
+                    <div class="specialization-card strides-highlight">
                         <div class="specialization-year">2024</div>
-                        <div class="specialization-mentor">Strides Tech Community</div>
-                        <div class="specialization-title">Programa Executivo de Liderança Tech</div>
+                        <div class="inst-row">
+                            <div class="specialization-mentor">Strides Tech Community</div>
+                            <span class="specialization-badge completed">Concluído</span>
+                        </div>
+                        <div class="specialization-title">Head de Tecnologia 5.0</div>
                         <div class="specialization-keywords">
-                            <span class="specialization-tag">Liderança Técnica</span>
-                            <span class="specialization-tag">Gestão de Equipes</span>
-                            <span class="specialization-tag">Estratégia Tecnológica</span>
-                            <span class="specialization-tag">Transformação Digital</span>
-                            <span class="specialization-tag">People Management</span>
+                            <span class="specialization-tag">Liderança Tech</span>
+                            <span class="specialization-tag">Networking</span>
+                            <span class="specialization-tag">Benchmark</span>
+                            <span class="specialization-tag">Mentoria com C-Levels</span>
+                            <span class="specialization-tag">Resolução de Problemas</span>
+                            <span class="specialization-tag">Aprendizado Contínuo</span>
+                        </div>
+                        <div style="font-size:0.97rem;color:#444;margin-top:0.7rem;line-height:1.5;">
+                            Programa executivo para líderes de tecnologia que buscam acelerar sua carreira, ampliar networking e trocar experiências com executivos das melhores empresas do Brasil. Encontros ao vivo, discussões de casos reais, mentorias com C-Levels e desenvolvimento de competências essenciais para liderar times e resolver desafios práticos do mercado tech.<br>
+                            <a href="https://www.strides.com.br/programas/head-de-tecnologia" target="_blank" style="color:#1976d2;text-decoration:underline;font-size:0.95rem;">Saiba mais</a>
                         </div>
                     </div>
-                    <div class="specialization-card">
+                    <div class="specialization-card strides-highlight">
                         <div class="specialization-year">2023</div>
-                        <div class="specialization-mentor">Insper</div>
-                        <div class="specialization-title">Formação Executiva CTO</div>
+                        <div class="inst-row">
+                            <div class="specialization-mentor">Insper</div>
+                            <span class="specialization-badge completed">Concluído</span>
+                        </div>
+                        <div class="specialization-title">CTO: Chief Technology Officer</div>
                         <div class="specialization-keywords">
                             <span class="specialization-tag">Chief Technology Officer</span>
                             <span class="specialization-tag">Estratégia de TI</span>
                             <span class="specialization-tag">Governança Tecnológica</span>
                             <span class="specialization-tag">Inovação</span>
                             <span class="specialization-tag">Digital Leadership</span>
+                            <span class="specialization-tag">Transformação Digital</span>
+                        </div>
+                        <div style="font-size:0.97rem;color:#444;margin-top:0.7rem;line-height:1.5;">
+                            Formação executiva voltada para transformação digital e liderança estratégica em tecnologia. Aborda desafios do CTO moderno, integração com áreas de negócio (CMO, CFO, CHRO), métodos ágeis, tecnologias emergentes e desenvolvimento de competências essenciais para atuação em empresas inovadoras.<br>
+                            <a href="https://app.diplomasafe.com/pt-PT/certificates/dd1e31e04cc5fa9fdb6bd1a8054ddc07553607719" target="_blank" style="color:#1976d2;text-decoration:underline;font-size:0.95rem;display:block;margin-top:0.7em;">Saiba mais</a>
                         </div>
                     </div>
                 </div>
@@ -1547,6 +1715,9 @@
                             <span class="cert-tag">Infrastructure</span>
                             <span class="cert-tag">Scalability</span>
                         </div>
+                        <div style="font-size:0.85rem;color:#888;margin-top:0.5rem;line-height:1.4;">
+                            Arquitetura de soluções em nuvem, infraestrutura escalável, alta disponibilidade e boas práticas AWS.
+                        </div>
                     </div>
                     <div class="cert-item">
                         <i class="fab fa-aws aws-icon"></i>
@@ -1556,6 +1727,9 @@
                             <span class="cert-tag">APIs</span>
                             <span class="cert-tag">DevOps</span>
                         </div>
+                        <div style="font-size:0.85rem;color:#888;margin-top:0.5rem;line-height:1.4;">
+                            Desenvolvimento de aplicações serverless, integração de APIs, automação de pipelines e práticas DevOps na AWS.
+                        </div>
                     </div>
                     <div class="cert-item">
                         <i class="fab fa-aws aws-icon"></i>
@@ -1563,6 +1737,9 @@
                         <div class="cert-keywords">
                             <span class="cert-tag">Cloud Fundamentals</span>
                             <span class="cert-tag">Cost Optimization</span>
+                        </div>
+                        <div style="font-size:0.85rem;color:#888;margin-top:0.5rem;line-height:1.4;">
+                            Fundamentos de computação em nuvem, conceitos de segurança, modelos de serviço e otimização de custos AWS.
                         </div>
                     </div>
                     <div class="cert-item">
@@ -1574,6 +1751,9 @@
                             <span class="cert-tag">AI Services</span>
                             <span class="cert-tag">GenAI</span>
                         </div>
+                        <div style="font-size:0.85rem;color:#888;margin-top:0.5rem;line-height:1.4;">
+                            Serviços de IA na AWS, fundamentos de machine learning, GenAI e aplicações práticas de inteligência artificial.
+                        </div>
                     </div>
                     <div class="cert-item">
                         <i class="fas fa-tasks kanban-icon"></i>
@@ -1583,6 +1763,9 @@
                             <span class="cert-tag">Flow Management</span>
                             <span class="cert-tag">Lean</span>
                         </div>
+                        <div style="font-size:0.85rem;color:#888;margin-top:0.5rem;line-height:1.4;">
+                            Gestão de fluxo de trabalho, práticas ágeis, melhoria contínua e implementação de sistemas Lean Kanban.
+                        </div>
                     </div>
                     <div class="cert-item">
                         <i class="fas fa-heart cx-icon"></i>
@@ -1590,6 +1773,9 @@
                         <div class="cert-keywords">
                             <span class="cert-tag">UX Strategy</span>
                             <span class="cert-tag">Customer Journey</span>
+                        </div>
+                        <div style="font-size:0.85rem;color:#888;margin-top:0.5rem;line-height:1.4;">
+                            Estratégias de experiência do usuário, mapeamento de jornada do cliente e otimização de pontos de contato.
                         </div>
                     </div>
                     <div class="cert-item">
@@ -1599,6 +1785,9 @@
                             <span class="cert-tag">Systems Thinking</span>
                             <span class="cert-tag">Organizational Design</span>
                         </div>
+                        <div style="font-size:0.85rem;color:#888;margin-top:0.5rem;line-height:1.4;">
+                            Pensamento sistêmico, arquitetura de níveis organizacionais e alinhamento estratégico entre times e negócios.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1607,7 +1796,7 @@
         <!-- Projects -->
         <div class="card">
             <div class="section">
-                <h2>🚀 Projetos em Destaque</h2>
+                <h2><i class="fab fa-github"></i> Projetos Compartilhados</h2>
                 <div class="projects-grid">
                     <div class="project-card">
                         <div class="project-header">
@@ -1705,8 +1894,16 @@
                         <i class="fas fa-envelope"></i>
                         <a href="mailto:tiagonpsilva@gmail.com">tiagonpsilva@gmail.com</a>
                     </div>
+                    <div class="contact-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <a href="https://wa.me/5511996531591" target="_blank">+55 11 99653-1591</a>
+                    </div>
+                    
                 </div>
             </div>
+        </div>
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <img src="files/background-blog.png" alt="Ilustração de tecnologia e cloud" style="width: 100%; max-width: 100%; border-radius: 20px; box-shadow: 0 4px 24px rgba(44,62,80,0.10); display: block;" />
         </div>
     </div>
     <!-- Modal de Detalhes do Case -->
@@ -1724,9 +1921,6 @@
         const header = card.querySelector('.case-header');
         // Pega o conteúdo dos detalhes
         const details = card.querySelector('.case-details-content');
-        // Pega o título e a descrição
-        const title = card.querySelector('.case-title');
-        const desc = card.querySelector('.case-desc');
         if (!header || !details) return;
         // Clona o cabeçalho e ajusta o estilo para o modal
         const headerClone = header.cloneNode(true);
@@ -1734,37 +1928,8 @@
         // Remove qualquer .case-company do clone (por segurança)
         const company = headerClone.querySelector('.case-company');
         if (company) company.remove();
-        // Aplica cor de destaque se for IA
-        if (card.classList.contains('ai-highlight')) {
-            headerClone.style.background = 'linear-gradient(135deg, #ff6b6b, #ee5a52)';
-        } else {
-            headerClone.style.background = 'linear-gradient(135deg, #64b5f6, #42a5f5)';
-        }
-        headerClone.style.color = 'white';
-        headerClone.style.padding = '1.2rem 1.5rem 1.2rem 1.5rem';
-        headerClone.style.margin = '-2rem -2rem 2rem -2rem';
-        headerClone.style.borderRadius = '18px 18px 0 0';
-        headerClone.style.position = 'relative';
         // Monta o HTML do modal
         body.innerHTML = '';
-        // Adiciona título e descrição acima do cabeçalho, se existirem
-        if (title) {
-            const titleClone = title.cloneNode(true);
-            titleClone.style.fontSize = '1.35rem';
-            titleClone.style.fontWeight = 'bold';
-            titleClone.style.marginBottom = '0.3rem';
-            titleClone.style.color = '#2c3e50';
-            titleClone.style.display = 'block';
-            body.appendChild(titleClone);
-        }
-        if (desc) {
-            const descClone = desc.cloneNode(true);
-            descClone.style.fontSize = '1.05rem';
-            descClone.style.color = '#555';
-            descClone.style.marginBottom = '1.2rem';
-            descClone.style.display = 'block';
-            body.appendChild(descClone);
-        }
         body.appendChild(headerClone);
         // Adiciona o conteúdo dos detalhes
         const detailsClone = details.cloneNode(true);
