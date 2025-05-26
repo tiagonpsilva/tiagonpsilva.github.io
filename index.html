@@ -1127,6 +1127,98 @@
             font-weight: 400;
             font-size: 1em;
         }
+        .case-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            justify-content: center;
+            margin-bottom: 2.2rem;
+        }
+        .case-filter-checkbox {
+            border-radius: 16px;
+            padding: 0.22rem 0.9rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            font-family: inherit;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            user-select: none;
+            border: none;
+            background: #f3f4f6;
+            color: #444;
+        }
+        .case-filter-checkbox input[type='checkbox'] {
+            accent-color: #1976d2;
+            margin-right: 0.4em;
+        }
+        .case-filter-checkbox input[type='checkbox']:focus {
+            outline: 2px solid #1976d2;
+        }
+        /* Cores das categorias aplicadas também nos filtros */
+        .case-filter-checkbox.case-category-ai,
+        .case-filter-checkbox.case-category-ai span {
+            background: #ffe0e0 !important;
+            color: #d81b60 !important;
+        }
+        .case-filter-checkbox.case-category-arquitetura,
+        .case-filter-checkbox.case-category-arquitetura span {
+            background: #e1f5fe !important;
+            color: #0288d1 !important;
+        }
+        .case-filter-checkbox.case-category-dados,
+        .case-filter-checkbox.case-category-dados span {
+            background: #f3e5f5 !important;
+            color: #8e24aa !important;
+        }
+        .case-filter-checkbox.case-category-lideranca,
+        .case-filter-checkbox.case-category-lideranca span {
+            background: #fce4ec !important;
+            color: #ad1457 !important;
+        }
+        .case-filter-checkbox.case-category-gestao,
+        .case-filter-checkbox.case-category-gestao span {
+            background: #fffde7 !important;
+            color: #fbc02d !important;
+        }
+        .case-filter-checkbox.case-category-inovacao,
+        .case-filter-checkbox.case-category-inovacao span {
+            background: #e8f5e9 !important;
+            color: #388e3c !important;
+        }
+        .case-filter-checkbox.case-category-cloud,
+        .case-filter-checkbox.case-category-cloud span {
+            background: #e3f2fd !important;
+            color: #1976d2 !important;
+        }
+        .case-filter-checkbox.case-category-produto,
+        .case-filter-checkbox.case-category-produto span {
+            background: #fff9c4 !important;
+            color: #f57c00 !important;
+        }
+        .case-filter-checkbox.case-category-governanca,
+        .case-filter-checkbox.case-category-governanca span {
+            background: #e3f2fd !important;
+            color: #1565c0 !important;
+        }
+        .case-filter-checkbox.case-category-engajamento,
+        .case-filter-checkbox.case-category-engajamento span {
+            background: #e0f7fa !important;
+            color: #00897b !important;
+        }
+        /* Cor do texto das categorias aplicada nos filtros - máxima especificidade */
+        .case-filters .case-filter-checkbox.case-category-ai span { color: #d81b60 !important; }
+        .case-filters .case-filter-checkbox.case-category-arquitetura span { color: #0288d1 !important; }
+        .case-filters .case-filter-checkbox.case-category-dados span { color: #8e24aa !important; }
+        .case-filters .case-filter-checkbox.case-category-lideranca span { color: #ad1457 !important; }
+        .case-filters .case-filter-checkbox.case-category-gestao span { color: #fbc02d !important; }
+        .case-filters .case-filter-checkbox.case-category-inovacao span { color: #388e3c !important; }
+        .case-filters .case-filter-checkbox.case-category-cloud span { color: #1976d2 !important; }
+        .case-filters .case-filter-checkbox.case-category-produto span { color: #f57c00 !important; }
+        .case-filters .case-filter-checkbox.case-category-governanca span { color: #1565c0 !important; }
+        .case-filters .case-filter-checkbox.case-category-engajamento span { color: #00897b !important; }
     </style>
 </head>
 <body>
@@ -1328,9 +1420,9 @@
             <div class="section">
                 <h2>📈 Cases</h2>
                 <div class="case-leadership-card" style="max-width: 700px; margin: 0 auto 2.2rem auto;">
-                  
-                  Em todos os cases apresentados, atuei de forma estratégica, tática e/ou operacional, liderando ou executando diretamente as ações necessárias para o sucesso. Fui responsável por definir diretrizes de tecnologia, tomar decisões-chave, engajar e comandar times multidisciplinares, além de garantir a entrega dos resultados esperados para o negócio.
+                    Em todos os cases apresentados, atuei de forma estratégica, tática e/ou operacional, liderando ou executando diretamente as ações necessárias para o sucesso. Fui responsável por definir diretrizes de tecnologia, tomar decisões-chave, engajar e comandar times multidisciplinares, além de garantir a entrega dos resultados esperados para o negócio.
                 </div>
+                <div id="case-filters" class="case-filters"></div>
                 
                 <div class="timeline">
                     <!-- 1. Soluções Integradas com GenAI -->
@@ -2233,6 +2325,52 @@
             const card = btn.closest('.case-card');
             openCaseModalFromCard(card);
         };
+    });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 1. Descobrir todas as categorias presentes nos cases
+        const caseCards = document.querySelectorAll('.case-card');
+        const categoriesSet = new Set();
+        caseCards.forEach(card => {
+            const tag = card.querySelector('.case-category-tag');
+            if (tag) categoriesSet.add(tag.textContent.trim());
+        });
+        const categories = Array.from(categoriesSet);
+
+        // Mapeamento de categoria para classe de cor
+        const categoryClassMap = {};
+        caseCards.forEach(card => {
+            const tag = card.querySelector('.case-category-tag');
+            if (tag) {
+                const cat = tag.textContent.trim();
+                const classList = Array.from(tag.classList).filter(c => c.startsWith('case-category-'));
+                if (classList.length > 0) categoryClassMap[cat] = classList[0];
+            }
+        });
+
+        // 2. Criar os checkboxes dinamicamente
+        const filtersDiv = document.getElementById('case-filters');
+        categories.forEach(cat => {
+            const label = document.createElement('label');
+            label.className = 'case-filter-checkbox';
+            if (categoryClassMap[cat]) label.classList.add(categoryClassMap[cat]);
+            label.innerHTML = `<input type="checkbox" checked value="${cat}"><span>${cat}</span>`;
+            filtersDiv.appendChild(label);
+        });
+
+        // 3. Função para filtrar os cases
+        function filterCases() {
+            const checked = Array.from(filtersDiv.querySelectorAll('input[type=checkbox]:checked')).map(cb => cb.value);
+            caseCards.forEach(card => {
+                const tag = card.querySelector('.case-category-tag');
+                if (!tag) return;
+                card.parentElement.style.display = checked.includes(tag.textContent.trim()) ? '' : 'none';
+            });
+        }
+
+        // 4. Adicionar evento nos checkboxes
+        filtersDiv.addEventListener('change', filterCases);
     });
     </script>
 </body>
