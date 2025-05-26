@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tiago Silva - System Design & Software Architecture</title>
+    <title>Tiago Pinto - Portfólio Profissional</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🤖</text></svg>">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Google tag (gtag.js) -->
@@ -320,28 +321,6 @@
             overflow: visible;
         }
 
-        /* Bullet para IA no canto superior direito */
-        .ai-bullet-badge {
-            position: absolute;
-            top: 4px;
-            right: 8px;
-            width: 38px;
-            height: 38px;
-            background: linear-gradient(135deg, #ff6b6b 60%, #ee5a52 100%);
-            color: #fff;
-            font-weight: bold;
-            font-size: 1.08rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.18);
-            z-index: 10;
-            pointer-events: none;
-            user-select: none;
-            text-shadow: 0 1px 4px rgba(44,62,80,0.13);
-        }
-
         .case-header {
             background: linear-gradient(135deg, #64b5f6, #42a5f5);
             color: white;
@@ -349,12 +328,6 @@
             margin: -2rem -2rem 1.5rem -2rem;
             border-radius: 15px 15px 0 0;
             position: relative;
-        }
-
-        .case-period {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin-bottom: 0.5rem;
         }
 
         .case-title {
@@ -519,7 +492,7 @@
             color: #2e7d32;
             padding: 0.3rem 0.8rem;
             border-radius: 15px;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: 500;
         }
 
@@ -995,12 +968,6 @@
             justify-content: center;
             gap: 0.7rem;
         }
-        .modal-case-header .case-period {
-            color: #1976d2 !important;
-            font-size: 1.05rem !important;
-            font-weight: 600 !important;
-            margin-bottom: 0.3rem !important;
-        }
         .modal-case-header .case-desc {
             color: #444 !important;
             font-size: 1.08rem !important;
@@ -1017,6 +984,148 @@
         .education-card > div[style*="font-size"], .specialization-card > div[style*="font-size"] {
             font-size: 0.89rem !important;
             color: #888 !important;
+        }
+        .expertise-desc-card {
+            background: rgba(240, 240, 240, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 1px 6px rgba(44,62,80,0.04);
+            padding: 0.85rem 1.1rem;
+            margin-top: 0.7rem;
+            margin-bottom: 1.2rem;
+            font-size: 0.89rem;
+            color: #888;
+            line-height: 1.5;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            border: 1px solid #f3f3f3;
+        }
+        .case-year-tag {
+            position: absolute;
+            top: 7px;
+            right: 10px;
+            background: #1976d2;
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 500;
+            padding: 0.09rem 0.85rem 0.09rem 0.85rem;
+            border-radius: 999px;
+            box-shadow: none;
+            z-index: 2;
+            letter-spacing: 0.02em;
+            border: none;
+            min-width: 36px;
+            text-align: center;
+            display: inline-block;
+        }
+        /* Remover o prego */
+        .case-year-tag::before {
+            display: none !important;
+        }
+        .case-tag {
+            background: #f3f6fa;
+            color: #1976d2;
+            font-size: 0.78rem;
+            font-weight: 600;
+            border-radius: 12px;
+            padding: 0.18rem 0.75rem;
+            border: 1px solid #e3f2fd;
+            letter-spacing: 0.01em;
+            opacity: 0.85;
+        }
+        .case-ia-tag {
+            display: inline-block;
+            background: linear-gradient(45deg, #e3f2fd, #bbdefb);
+            color: #1976d2;
+            font-size: 0.82rem;
+            font-weight: 600;
+            border-radius: 12px;
+            padding: 0.18rem 0.95rem;
+            border: 1px solid #e3f2fd;
+            letter-spacing: 0.01em;
+            margin-left: 0.7rem;
+            vertical-align: middle;
+        }
+        .case-category-tag {
+            font-size: 0.82rem;
+            font-weight: 400;
+            border-radius: 12px;
+            padding: 0.18rem 0.95rem;
+            border: 1px solid #e0e0e0;
+            letter-spacing: 0.01em;
+            margin-left: 0;
+            margin-right: 0.7rem;
+            vertical-align: middle;
+            opacity: 0.92;
+            display: inline-block;
+        }
+        .case-category-ai {
+            background: #ffe0e0;
+            color: #d81b60;
+            border: 1px solid #ffe0e0;
+        }
+        .case-category-arquitetura {
+            background: #e1f5fe;
+            color: #0288d1;
+            border: 1px solid #e1f5fe;
+        }
+        .case-category-dados {
+            background: #f3e5f5;
+            color: #8e24aa;
+            border: 1px solid #f3e5f5;
+        }
+        .case-category-lideranca {
+            background: #fce4ec;
+            color: #ad1457;
+            border: 1px solid #fce4ec;
+        }
+        .case-category-gestao {
+            background: #fffde7;
+            color: #fbc02d;
+            border: 1px solid #fffde7;
+        }
+        .case-category-inovacao {
+            background: #e8f5e9;
+            color: #388e3c;
+            border: 1px solid #e8f5e9;
+        }
+        .case-category-cloud {
+            background: #e3f2fd;
+            color: #1976d2;
+            border: 1px solid #e3f2fd;
+        }
+        .case-category-produto {
+            background: #fff9c4;
+            color: #f57c00;
+            border: 1px solid #fff9c4;
+        }
+        .case-category-governanca {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 1px solid #e3f2fd;
+        }
+        .case-category-engajamento {
+            background: #e0f7fa;
+            color: #00897b;
+            border: 1px solid #e0f7fa;
+        }
+        .case-leadership-card {
+            background: #f3f4f6;
+            border-radius: 14px;
+            padding: 1.1rem 1.2rem;
+            margin: 0 auto 2.2rem auto;
+            font-size: 0.89rem;
+            color: #888;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            box-shadow: none;
+            border: none;
+            max-width: 700px;
+        }
+        .case-leadership-card strong {
+            color: #666;
+            font-weight: 400;
+            font-size: 1em;
         }
     </style>
 </head>
@@ -1080,6 +1189,9 @@
                 <div class="expertise-grid">
                     <div class="expertise-card">
                         <h3><i class="fas fa-chess-king"></i> Liderança Executiva</h3>
+                        <div class="expertise-desc-card">
+                            Formação voltada para o desenvolvimento de competências estratégicas em liderança de times de tecnologia, definição de roadmaps de inovação e parcerias, além do apoio à gestão financeira e à criação de ambientes colaborativos. O foco está em alinhar tecnologia aos objetivos do negócio, promovendo resultados sustentáveis, segurança e crescimento organizacional, sempre com base nas melhores práticas do setor.
+                        </div>
                         <ul>
                             <li>Roadmap de Tecnologia e Inovação</li>
                             <li>Guidance Tecnológico</li>
@@ -1092,6 +1204,9 @@
                     </div>
                     <div class="expertise-card">
                         <h3><i class="fas fa-chart-line"></i>KPIs Estratégicos</h3>
+                        <div class="expertise-desc-card">
+                            Abordagem completa sobre a definição, acompanhamento e análise de indicadores-chave de performance (KPIs) em diferentes dimensões, como engenharia, cloud, negócio, pessoas e finanças. O objetivo é utilizar métricas para orientar decisões estratégicas, otimizar processos e garantir que a tecnologia esteja sempre alinhada aos resultados e metas da organização.
+                        </div>
                         <ul>
                             <li>Engenharia: Deployment Frequency, Lead Time for Changes, Change Failure Rate, Time to Restore Service</li>
                             <li>Cloud Computing: Availability/Uptime, Cost Optimization, Performance/Latency</li>
@@ -1103,6 +1218,9 @@
                     </div>
                     <div class="expertise-card">
                         <h3><i class="fas fa-users"></i> Gestão de Talentos</h3>
+                        <div class="expertise-desc-card">
+                            Ênfase no desenvolvimento de pessoas e times de alta performance, com foco em formação, mentoria, gestão de equipes multidisciplinares e avaliação de desempenho. A proposta é criar uma cultura de aprendizado contínuo, colaboração e protagonismo técnico, preparando profissionais para os desafios do mercado de tecnologia e para a evolução constante das demandas organizacionais.
+                        </div>
                         <ul>
                             <li>Formação e desenvolvimento de pessoas</li>
                             <li>Gestão de equipes multidisciplinares</li>
@@ -1114,6 +1232,9 @@
                     </div>
                     <div class="expertise-card">
                         <h3><i class="fas fa-brain"></i> IA Generativa</h3>
+                        <div class="expertise-desc-card">
+                            Exploração prática e estratégica da inteligência artificial generativa, com aplicação em automação de processos, inovação em produtos e aumento de produtividade dos times. O conteúdo abrange desde a integração de LLMs e definição de arquiteturas de referência até a disseminação de práticas responsáveis de IA, sempre priorizando segurança, ética e resultados concretos para o negócio.
+                        </div>
                         <ul>
                             <li>Aumento de Produtividade de Times</li>
                             <li>IA Aplicada a Produtos</li>
@@ -1126,6 +1247,9 @@
                     </div>
                     <div class="expertise-card">
                         <h3><i class="fas fa-project-diagram"></i> Arquitetura de Sistemas</h3>
+                        <div class="expertise-desc-card">
+                            Estruturação, modernização e governança de sistemas corporativos, com foco em escalabilidade, resiliência e integração eficiente entre soluções. O conteúdo aborda desde o system design, documentação de decisões arquiteturais e implementação de padrões até a evolução sustentável das soluções de tecnologia, garantindo aderência às necessidades do negócio e à inovação contínua.
+                        </div>
                         <ul>
                             <li>System Design </li>
                             <li>Arquitetura As-Is, Roadmap e To-Be</li>
@@ -1138,6 +1262,9 @@
                     </div>
                     <div class="expertise-card">
                         <h3><i class="fas fa-database"></i> Modern Data Stack</h3>
+                        <div class="expertise-desc-card">
+                            Formação abrangente em implementação de plataformas e pipelines de dados modernos, incluindo orquestração, modelagem, governança e analytics avançado. O objetivo é democratizar o acesso à informação, garantir a qualidade dos dados e gerar insights estratégicos para o negócio, utilizando tecnologias de ponta e práticas consolidadas de engenharia de dados.
+                        </div>
                         <ul>
                             <li>Orquestração de Dados (Airflow, Prefect)</li>
                             <li>Data Lakes e Data Warehouses</li>
@@ -1150,6 +1277,9 @@
                     </div>
                     <div class="expertise-card">
                         <h3><i class="fas fa-code"></i> Engenharia de Software</h3>
+                        <div class="expertise-desc-card">
+                            Desenvolvimento de soluções robustas e escaláveis, com ênfase em práticas modernas de engenharia, automação de testes, integração contínua e clean code. O conteúdo prepara profissionais para atuar em projetos full stack, microserviços e modernização de sistemas legados, sempre priorizando qualidade, eficiência e alinhamento com as demandas do mercado.
+                        </div>
                         <ul>
                             <li>Desenvolvimento Full Stack </li>
                             <li>Microserviços e Arquitetura Modular</li>
@@ -1162,6 +1292,9 @@
                     </div>
                     <div class="expertise-card">
                         <h3><i class="fas fa-cloud"></i> Cloud Computing</h3>
+                        <div class="expertise-desc-card">
+                            Abordagem completa sobre arquitetura, migração e operação de ambientes em nuvem, com experiência em cloud-native, infraestrutura como código, estratégias multi-cloud e DevOps. O foco é capacitar profissionais para automatizar, garantir segurança, otimizar custos e promover inovação contínua, suportando o crescimento e a transformação digital das organizações.
+                        </div>
                         <ul>
                             <li>Arquitetura Cloud-native</li>
                             <li>Migração e Modernização para Nuvem</li>
@@ -1172,6 +1305,20 @@
                             <li>Segurança, Compliance e Governança em Cloud</li>
                         </ul>
                     </div>
+                    <div class="expertise-card">
+                        <h3><i class="fas fa-tasks"></i> Gestão Ágil de Projetos e Processos</h3>
+                        <div class="expertise-desc-card">
+                            Estruturação, acompanhamento e evolução de projetos e processos com foco em agilidade, previsibilidade e colaboração entre times multidisciplinares. O conteúdo abrange métodos modernos, métricas e ferramentas para maximizar entregas, promover transparência e garantir resultados consistentes em ambientes dinâmicos e competitivos.
+                        </div>
+                        <ul>
+                            <li>Topologia e reorganização de times</li>
+                            <li>Arquitetura de work-items (Iniciativas &gt; Épicos &gt; Histórias)</li>
+                            <li>Gestão de fluxo com Método Kanban</li>
+                            <li>Aplicação de metodologias ágeis (Scrum, Kanban, Lean, etc.)</li>
+                            <li>Métricas de performance e previsibilidade de entregas</li>
+                            <li>Configuração e uso de ferramentas: Jira, Confluence</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1180,18 +1327,21 @@
         <div class="card">
             <div class="section">
                 <h2>📈 Cases</h2>
-                <p style="text-align: center; color: #666; margin-bottom: 3rem;">
-                    Principais realizações ao longo de +20 anos de experiência
-                </p>
+                <div class="case-leadership-card" style="max-width: 700px; margin: 0 auto 2.2rem auto;">
+                  
+                  Em todos os cases apresentados, atuei de forma estratégica, tática e/ou operacional, liderando ou executando diretamente as ações necessárias para o sucesso. Fui responsável por definir diretrizes de tecnologia, tomar decisões-chave, engajar e comandar times multidisciplinares, além de garantir a entrega dos resultados esperados para o negócio.
+                </div>
                 
                 <div class="timeline">
                     <!-- 1. Soluções Integradas com GenAI -->
                     <div class="timeline-item">
                         <div class="case-card ai-highlight">
-                            <div class="ai-bullet-badge">IA</div>
+                            <div class="case-year-tag">2025</div>
                             <div class="case-header">
-                                <div class="case-period">🚀 2022-2025</div>
-                                <div class="case-title"><i class="fas fa-lightbulb"></i> Soluções Integradas com GenAI</div>
+                                <div class="case-title" style="flex-direction: column; align-items: center; gap: 0.1rem; display: flex;">
+                                    <i class="fas fa-lightbulb" style="font-size:1.7rem; margin-bottom:0.18rem;"></i>
+                                    Soluções Integradas com GenAI
+                                </div>
                                 <div class="case-desc">Desenvolvimento das arquiteturas de referência para integração com LLMs, de forma escalável, econômica e segura.</div>
                             </div>
                             <div class="case-details-content">
@@ -1214,18 +1364,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes do case">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1.1rem;">
+                              <span class="case-category-tag case-category-ai">Inteligência Artificial</span>
+                              <button class="details-toggle" title="Ver detalhes do case">
                                 veja mais
-                            </button>
+                              </button>
+                            </div>
                         </div>
                     </div>
                     <!-- 2. Implantação de IA em Processos de Tecnologia -->
                     <div class="timeline-item">
                         <div class="case-card ai-highlight">
-                            <div class="ai-bullet-badge">IA</div>
+                            <div class="case-year-tag">2024</div>
                             <div class="case-header">
-                                <div class="case-period">🚀 2024-2025</div>
-                                <div class="case-title"><i class="fas fa-robot"></i> Implantação de IA em Processos de Tecnologia</div>
+                                <div class="case-title" style="flex-direction: column; align-items: center; gap: 0.1rem; display: flex;">
+                                    <i class="fas fa-robot" style="font-size:1.7rem; margin-bottom:0.18rem;"></i>
+                                    Implantação de IA em Processos de Tecnologia
+                                </div>
                                 <div class="case-desc">Aplicação de ferramentas de IA nos fluxos de trabalho dos times de tecnologia visando aumento de qualidade e ganho de produtividade.</div>
                             </div>
                             <div class="case-details-content">
@@ -1250,17 +1405,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes do case">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1.1rem;">
+                              <span class="case-category-tag case-category-ai">Inteligência Artificial</span>
+                              <button class="details-toggle" title="Ver detalhes do case">
                                 veja mais
-                            </button>
+                              </button>
+                            </div>
                         </div>
                     </div>
                     <!-- 3. Modernização de Arquitetura -->
                     <div class="timeline-item">
                         <div class="case-card">
+                            <div class="case-year-tag">2024</div>
                             <div class="case-header">
-                                <div class="case-period">🚀 2024-2025</div>
-                                <div class="case-title"><i class="fas fa-sync-alt"></i> Modernização de Sistema Legado Crítico</div>
+                                <div class="case-title" style="flex-direction: column; align-items: center; gap: 0.1rem; display: flex;">
+                                    <i class="fas fa-sync-alt" style="font-size:1.7rem; margin-bottom:0.18rem;"></i>
+                                    Modernização de Sistema Legado Crítico
+                                </div>
                                 <div class="case-desc">Implementação de novas arquiteturas, experiências de usuário, tecnologias e times. Reestruturação do produto mais crítico para o negócio.</div>
                             </div>
                             <div class="case-details-content">
@@ -1283,17 +1444,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes do case">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1.1rem;">
+                              <span class="case-category-tag case-category-arquitetura">Arquitetura</span>
+                              <button class="details-toggle" title="Ver detalhes do case">
                                 veja mais
-                            </button>
+                              </button>
+                            </div>
                         </div>
                     </div>
                     <!-- 4. Democratização de Dados -->
                     <div class="timeline-item">
                         <div class="case-card">
+                            <div class="case-year-tag">2024</div>
                             <div class="case-header">
-                                <div class="case-period">🚀 2022-2025</div>
-                                <div class="case-title"><i class="fas fa-database"></i> Democratização de Dados</div>
+                                <div class="case-title" style="flex-direction: column; align-items: center; gap: 0.1rem; display: flex;">
+                                    <i class="fas fa-database" style="font-size:1.7rem; margin-bottom:0.18rem;"></i>
+                                    Democratização de Dados
+                                </div>
                                 <div class="case-desc">Implementação da Plataforma de Dados que possibilitou a democratização do acesso ao conjunto de dados da empresa por áreas técnicas e negócios.</div>
                             </div>
                             <div class="case-details-content">
@@ -1316,17 +1483,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes do case">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1.1rem;">
+                              <span class="case-category-tag case-category-dados">Dados</span>
+                              <button class="details-toggle" title="Ver detalhes do case">
                                 veja mais
-                            </button>
+                              </button>
+                            </div>
                         </div>
                     </div>
                     <!-- 5. Processo de M&A e Integração Tecnológica -->
                     <div class="timeline-item">
                         <div class="case-card">
+                            <div class="case-year-tag">2022</div>
                             <div class="case-header">
-                                <div class="case-period">🚀 2022-2025</div>
-                                <div class="case-title"><i class="fas fa-handshake"></i> Processo de M&A e Integração Tecnológica</div>
+                                <div class="case-title" style="flex-direction: column; align-items: center; gap: 0.1rem; display: flex;">
+                                    <i class="fas fa-handshake" style="font-size:1.7rem; margin-bottom:0.18rem;"></i>
+                                    Processo de M&A e Integração Tecnológica
+                                </div>
                                 <div class="case-desc">Unificação de equipes, sistemas e cultura após aquisição, garantindo sinergia e crescimento sustentável.</div>
                             </div>
                             <div class="case-details-content">
@@ -1349,17 +1522,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes do case">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1.1rem;">
+                              <span class="case-category-tag case-category-lideranca">Liderança</span>
+                              <button class="details-toggle" title="Ver detalhes do case">
                                 veja mais
-                            </button>
+                              </button>
+                            </div>
                         </div>
                     </div>
                     <!-- 6. Due Dilligence de Tecnologia -->
                     <div class="timeline-item">
                         <div class="case-card">
+                            <div class="case-year-tag">2022</div>
                             <div class="case-header">
-                                <div class="case-period">🚀 2022-2025</div>
-                                <div class="case-title"><i class="fas fa-search-dollar"></i> Due Dilligence de Tecnologia</div>
+                                <div class="case-title" style="flex-direction: column; align-items: center; gap: 0.1rem; display: flex;">
+                                    <i class="fas fa-search-dollar" style="font-size:1.7rem; margin-bottom:0.18rem;"></i>
+                                    Due Dilligence de Tecnologia
+                                </div>
                                 <div class="case-desc">Processo de auditoria de todo processo de tecnologia e geração de artefatos para processo de M&A.</div>
                             </div>
                             <div class="case-details-content">
@@ -1382,17 +1561,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes do case">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1.1rem;">
+                              <span class="case-category-tag case-category-governanca">Governança</span>
+                              <button class="details-toggle" title="Ver detalhes do case">
                                 veja mais
-                            </button>
+                              </button>
+                            </div>
                         </div>
                     </div>
                     <!-- Tech Day – Jornada de Inovação e Conhecimento -->
                     <div class="timeline-item">
                         <div class="case-card">
+                            <div class="case-year-tag">2017</div>
                             <div class="case-header">
-                                <div class="case-period">2017</div>
-                                <div class="case-title"><i class="fas fa-users"></i> Tech Day – Jornada de Inovação e Conhecimento</div>
+                                <div class="case-title" style="flex-direction: column; align-items: center; gap: 0.1rem; display: flex;">
+                                    <i class="fas fa-users" style="font-size:1.7rem; margin-bottom:0.18rem;"></i>
+                                    Tech Day 
+                                </div>
                                 <div class="case-desc">Evento recorrente do time de tecnologia, promovendo troca de conhecimentos, tendências e experiências práticas em temas como IA, Cloud, Arquitetura, Engenharia de Software e Metodologias Ágeis. O Tech Day reforça a cultura colaborativa e inovadora, conectando diferentes áreas e estimulando o surgimento de novos projetos.</div>
                             </div>
                             <div class="case-details-content">
@@ -1420,17 +1605,23 @@
                                     <div class="car-content">Ambiente seguro e colaborativo para troca de ideias, incentivo à experimentação e protagonismo, tornando o Tech Day um pilar da cultura de inovação da empresa.</div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes do case">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1.1rem;">
+                              <span class="case-category-tag case-category-engajamento">Engajamento</span>
+                              <button class="details-toggle" title="Ver detalhes do case">
                                 veja mais
-                            </button>
+                              </button>
+                            </div>
                         </div>
                     </div>
                     <div class="timeline-item">
                         <div class="case-card">
+                            <div class="case-year-tag">2018</div>
                             <div class="case-header">
-                                <div class="case-period">2018</div>
-                                <div class="case-title"><i class="fas fa-hard-hat"></i> Plataforma para Gestão de Mão-de-Obra em Canteiros</div>
-                                <div class="case-desc">Solução SaaS pioneira para gestão legal e fiscal de documentos de trabalhadores em obras, integrando IoT, reconhecimento facial e automação de processos. Controle de acesso físico via catraca inteligente, parametrização de exigências documentais e geração de dados estratégicos para o setor.</div>
+                                <div class="case-title" style="flex-direction: column; align-items: center; gap: 0.1rem; display: flex;">
+                                    <i class="fas fa-hard-hat" style="font-size:1.7rem; margin-bottom:0.18rem;"></i>
+                                    Solução para Gestão de Mão-de-Obra em Canteiros
+                                </div>
+                                <div class="case-desc">Solução SaaS/HaaS pioneira para gestão legal e fiscal de documentos de trabalhadores em obras, integrando IoT, reconhecimento facial e automação de processos. Controle de acesso físico via catraca inteligente, parametrização de exigências documentais e geração de dados estratégicos para o setor.</div>
                             </div>
                             <div class="case-details-content">
                                 <div class="car-section">
@@ -1459,16 +1650,21 @@
                                     <div class="car-content">Solução totalmente adaptada ao contexto de obras, pioneira na integração de IoT, automação documental e analytics para o setor da construção.</div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes do case">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1.1rem;">
+                              <span class="case-category-tag case-category-produto">Produto</span>
+                              <button class="details-toggle" title="Ver detalhes do case">
                                 veja mais
-                            </button>
+                              </button>
+                            </div>
                         </div>
                     </div>
                     <div class="timeline-item">
                         <div class="case-card">
+                            <div class="case-year-tag">2014</div>
                             <div class="case-header">
-                                <div class="case-period">2014</div>
-                                <div class="case-title"><i class="fas fa-cloud-upload-alt"></i> Migração Lift and Shift para Cloud Computing</div>
+                                <div class="case-title" style="flex-direction: column; align-items: center; gap: 0.1rem; display: flex;">
+                                    <i class="fas fa-cloud-upload-alt"></i> Migração Lift and Shift para Cloud Computing
+                                </div>
                                 <div class="case-desc">Migração estratégica de cerca de 10 aplicações, incluindo 2 sistemas críticos, de servidores virtualizados para a AWS, utilizando a abordagem Lift and Shift. Projeto conduzido majoritariamente pela equipe interna, com apoio gerencial de um parceiro, envolvendo planejamento detalhado, execução da migração de dados e adequação das aplicações para o novo ambiente em nuvem.</div>
                             </div>
                             <div class="case-details-content">
@@ -1492,16 +1688,22 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes do case">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1.1rem;">
+                              <span class="case-category-tag case-category-cloud">Cloud Computing</span>
+                              <button class="details-toggle" title="Ver detalhes do case">
                                 veja mais
-                            </button>
+                              </button>
+                            </div>
                         </div>
                     </div>
                     <div class="timeline-item">
                         <div class="case-card">
+                            <div class="case-year-tag">2005</div>
                             <div class="case-header">
-                                <div class="case-period">2005</div>
-                                <div class="case-title"><i class="fas fa-rocket"></i> Lançamento do 2o. Produto SaaS</div>
+                                <div class="case-title" style="flex-direction: column; align-items: center; gap: 0.1rem; display: flex;">
+                                    <i class="fas fa-rocket" style="font-size:1.7rem; margin-bottom:0.18rem;"></i>
+                                    2o. Produto SaaS
+                                </div>
                                 <div class="case-desc">Desenvolvimento e lançamento do segundo produto SaaS, voltado para gestão colaborativa de arquivos de projetos de edificações, com workflow especilizado, garantindo rastreabilidade, controle de versão e comunicação adequada entre as empresas envolvidas.</div>
                             </div>
                             <div class="case-details-content">
@@ -1524,17 +1726,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes do case">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1.1rem;">
+                              <span class="case-category-tag case-category-produto">Produto</span>
+                              <button class="details-toggle" title="Ver detalhes do case">
                                 veja mais
-                            </button>
+                              </button>
+                            </div>
                         </div>
                     </div>
 
                     <div class="timeline-item">
                         <div class="case-card">
+                            <div class="case-year-tag">2003</div>
                             <div class="case-header">
-                                <div class="case-period">2003-2004</div>
-                                <div class="case-title"><i class="fas fa-rocket"></i> Lançamento do 1o. Produto SaaS</div>
+                                <div class="case-title" style="flex-direction: column; align-items: center; gap: 0.1rem; display: flex;">
+                                    <i class="fas fa-rocket" style="font-size:1.7rem; margin-bottom:0.18rem;"></i>
+                                1o. Produto SaaS
+                                </div>
                                 <div class="case-desc">Desenvolvimento e lançamento do primeiro SaaS, voltado para o apoio a certificação de empresas nas normas ISO-9001 e PBQP-H.</div>
                             </div>
                             <div class="case-details-content">
@@ -1557,9 +1765,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="details-toggle" title="Ver detalhes do case">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1.1rem;">
+                              <span class="case-category-tag case-category-produto">Produto</span>
+                              <button class="details-toggle" title="Ver detalhes do case">
                                 veja mais
-                            </button>
+                              </button>
+                            </div>
                         </div>
                     </div>
                 </div>
