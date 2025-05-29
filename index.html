@@ -1235,6 +1235,9 @@
         .case-filters .case-filter-checkbox.case-category-governanca span { color: #1565c0 !important; }
         .case-filters .case-filter-checkbox.case-category-engajamento span { color: #00897b !important; }
     </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+    <!-- Slim Select CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/slim-select@2.8.0/dist/slimselect.min.css" rel="stylesheet" />
 </head>
 <body>
     <div class="container">
@@ -1458,8 +1461,10 @@
                 <div class="case-leadership-card" style="max-width: 700px; margin: 0 auto 2.2rem auto;">
                     Em todos os cases apresentados, atuei de forma estratégica, tática e/ou operacional, liderando ou executando diretamente as ações necessárias para o sucesso. Fui responsável por definir diretrizes de tecnologia, tomar decisões-chave, engajar e comandar times multidisciplinares, além de garantir a entrega dos resultados esperados para o negócio.
                 </div>
-                <div id="case-filters" class="case-filters"></div>
-                
+                <!-- Filtro multi-select -->
+                <div style="max-width: 400px; margin: 0 auto 2.2rem auto; text-align: center;">
+                  <select id="case-category-select" multiple></select>
+                </div>
                 <div class="timeline">
                     <!-- 1. Soluções Integradas com GenAI -->
                     <div class="timeline-item">
@@ -2419,46 +2424,78 @@
         // 1. Descobrir todas as categorias presentes nos cases
         const caseCards = document.querySelectorAll('.case-card');
         const categoriesSet = new Set();
-        caseCards.forEach(card => {
-            const tag = card.querySelector('.case-category-tag');
-            if (tag) categoriesSet.add(tag.textContent.trim());
-        });
-        const categories = Array.from(categoriesSet);
-
-        // Mapeamento de categoria para classe de cor
         const categoryClassMap = {};
         caseCards.forEach(card => {
             const tag = card.querySelector('.case-category-tag');
             if (tag) {
                 const cat = tag.textContent.trim();
+                categoriesSet.add(cat);
+                // Pega a classe de cor da tag
                 const classList = Array.from(tag.classList).filter(c => c.startsWith('case-category-'));
                 if (classList.length > 0) categoryClassMap[cat] = classList[0];
             }
         });
+        const categories = Array.from(categoriesSet).sort();
 
-        // 2. Criar os checkboxes dinamicamente
-        const filtersDiv = document.getElementById('case-filters');
-        categories.forEach(cat => {
-            const label = document.createElement('label');
-            label.className = 'case-filter-checkbox';
-            if (categoryClassMap[cat]) label.classList.add(categoryClassMap[cat]);
-            label.innerHTML = `<input type="checkbox" checked value="${cat}"><span>${cat}</span>`;
-            filtersDiv.appendChild(label);
-        });
-
-        // 3. Função para filtrar os cases
-        function filterCases() {
-            const checked = Array.from(filtersDiv.querySelectorAll('input[type=checkbox]:checked')).map(cb => cb.value);
-            caseCards.forEach(card => {
-                const tag = card.querySelector('.case-category-tag');
-                if (!tag) return;
-                card.parentElement.style.display = checked.includes(tag.textContent.trim()) ? '' : 'none';
+        // 2. Preencher o select
+        const select = document.getElementById('case-category-select');
+        if (select) {
+            select.innerHTML = '';
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                option.selected = true;
+                // Adiciona a classe de cor como data attribute
+                if (categoryClassMap[cat]) option.setAttribute('data-category-class', categoryClassMap[cat]);
+                select.appendChild(option);
             });
         }
 
-        // 4. Adicionar evento nos checkboxes
-        filtersDiv.addEventListener('change', filterCases);
+        // 3. Inicializar Slim Select
+        const slim = new SlimSelect({
+            select: '#case-category-select',
+            settings: {
+                closeOnSelect: false,
+                showSearch: true,
+                searchPlaceholder: 'Buscar categoria...'
+            },
+            events: {
+                afterChange: filterCases
+            }
+        });
+
+        // 4. Aplicar as cores das tags nas opções do dropdown
+        function applyTagColors() {
+            document.querySelectorAll('.ss-list .ss-option').forEach(opt => {
+                const value = opt.getAttribute('data-value');
+                const catClass = categoryClassMap[value];
+                if (catClass) {
+                    opt.className = 'ss-option ' + catClass;
+                }
+            });
+        }
+        setTimeout(applyTagColors, 100);
+        // Atualiza as cores ao abrir o dropdown
+        document.querySelector('.ss-main').addEventListener('click', function() {
+            setTimeout(applyTagColors, 10);
+        });
+
+        // 5. Função para filtrar os cases
+        function filterCases() {
+            const selected = slim.selected();
+            caseCards.forEach(card => {
+                const tag = card.querySelector('.case-category-tag');
+                if (!tag) return;
+                card.parentElement.style.display = selected.includes(tag.textContent.trim()) ? '' : 'none';
+            });
+        }
+        // Filtra ao carregar
+        filterCases();
     });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <!-- Slim Select JS -->
+    <script src="https://cdn.jsdelivr.net/npm/slim-select@2.8.0/dist/slimselect.min.js"></script>
 </body>
 </html>
