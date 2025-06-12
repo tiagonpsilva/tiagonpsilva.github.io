@@ -1,25 +1,23 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Blog from './pages/Blog';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Header from './components/Header'
+import Hero from './components/Hero'
+import Expertise from './components/Expertise'
+import Cases from './components/Cases'
+import Education from './components/Education'
+import Projects from './components/Projects'
+import Contact from './components/Contact'
 
-const App: React.FC = () => {
+function App() {
   return (
-    <Router>
-      <div className="flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/blog" element={<Blog />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
-  );
-};
+    <div className="min-h-screen bg-white">
+      <Header />
+      <Hero />
+      <Expertise />
+      <Cases />
+      <Education />
+      <Projects />
+      <Contact />
+    </div>
+  )
+}
 
-export default App;
+export default App
