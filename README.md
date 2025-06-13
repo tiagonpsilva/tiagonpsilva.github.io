@@ -91,4 +91,4 @@ Todo o conteúdo é baseado na experiência profissional real de Tiago Pinto:
 
 ---
 
-**Desenvolvido com ❤️ por Tiago Pinto**
+**Desenvolvido por Tiago Pinto**
