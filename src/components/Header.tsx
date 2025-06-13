@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Sun, Moon } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useTheme } from '../contexts/ThemeContext'
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const { isDarkMode, toggleDarkMode } = useTheme()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,7 +41,7 @@ const Header: React.FC = () => {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         isScrolled
-          ? 'glass-effect border-b border-gray-200'
+          ? 'glass-effect border-b border-border'
           : 'bg-transparent'
       )}
     >
@@ -48,9 +50,11 @@ const Header: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-2xl font-bold"
+            className="flex items-center text-2xl font-bold"
           >
-            <span className="gradient-text">TP</span>
+            <span className="text-gray-400 dark:text-gray-500 font-mono">&lt;</span>
+            <span className="text-gray-500 dark:text-gray-400 font-mono">Tiago</span>
+            <span className="text-gray-400 dark:text-gray-500 font-mono">/&gt;</span>
           </motion.div>
 
           {/* Desktop Navigation */}
@@ -62,24 +66,53 @@ const Header: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 onClick={() => scrollToSection(item.href)}
-                className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium text-base tracking-wide"
+                className="text-foreground hover:text-primary transition-colors duration-200 font-medium text-base tracking-wide"
               >
                 {item.label}
               </motion.button>
             ))}
+            
+            {/* Theme Toggle */}
+            <motion.button
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: navItems.length * 0.1 }}
+              onClick={toggleDarkMode}
+              className="p-2 text-foreground hover:text-primary transition-colors duration-200 ml-4"
+              aria-label={isDarkMode ? 'Ativar modo claro' : 'Ativar modo escuro'}
+            >
+              {isDarkMode ? (
+                <Sun className="h-5 w-5" />
+              ) : (
+                <Moon className="h-5 w-5" />
+              )}
+            </motion.button>
           </nav>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="lg:hidden p-2 text-gray-700 hover:text-blue-600 transition-colors duration-200"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
+          {/* Mobile Menu & Theme Toggle */}
+          <div className="lg:hidden flex items-center gap-2">
+            <button
+              onClick={toggleDarkMode}
+              className="p-2 text-foreground hover:text-primary transition-colors duration-200"
+              aria-label={isDarkMode ? 'Ativar modo claro' : 'Ativar modo escuro'}
+            >
+              {isDarkMode ? (
+                <Sun className="h-5 w-5" />
+              ) : (
+                <Moon className="h-5 w-5" />
+              )}
+            </button>
+            <button
+              className="p-2 text-foreground hover:text-primary transition-colors duration-200"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
@@ -88,14 +121,14 @@ const Header: React.FC = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden mt-4 pb-4 border-t border-gray-200"
+            className="lg:hidden mt-4 pb-4 border-t border-border"
           >
             <div className="flex flex-col space-y-4 pt-4">
               {navItems.map((item) => (
                 <button
                   key={item.href}
                   onClick={() => scrollToSection(item.href)}
-                  className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium text-left"
+                  className="text-foreground hover:text-primary transition-colors duration-200 font-medium text-left"
                 >
                   {item.label}
                 </button>

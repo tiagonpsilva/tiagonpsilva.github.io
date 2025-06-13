@@ -70,7 +70,7 @@ const Contact: React.FC = () => {
   ]
 
   return (
-    <section id="contact" className="section-padding bg-gray-50">
+    <section id="contact" className="section-padding bg-muted">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -83,10 +83,10 @@ const Contact: React.FC = () => {
             <Send className="h-4 w-4" />
             Vamos Conversar
           </div>
-          <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-gray-900">
+          <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-foreground">
             <span className="gradient-text">Entre em Contato</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Pronto para transformar sua visão tecnológica em realidade? Vamos discutir como posso ajudar.
           </p>
         </motion.div>
@@ -99,24 +99,24 @@ const Contact: React.FC = () => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-2xl font-bold text-gray-900 mb-8">
+            <h3 className="text-2xl font-bold text-foreground mb-8">
               Formas de Contato
             </h3>
             <div className="space-y-6">
               {contactMethods.map((method, index) => (
                 <MagicCard key={index} className="p-6">
                   <div className="flex items-start gap-4">
-                    <div className="p-3 bg-gray-50 rounded-xl">
+                    <div className="p-3 bg-muted rounded-xl">
                       {method.icon}
                     </div>
                     <div className="flex-1">
-                      <h4 className="text-lg font-bold text-gray-900 mb-1">
+                      <h4 className="text-lg font-bold text-card-foreground mb-1">
                         {method.title}
                       </h4>
                       <p className="text-blue-600 font-medium mb-2 mono-font">
                         {method.value}
                       </p>
-                      <p className="text-gray-600 text-sm mb-4">
+                      <p className="text-muted-foreground text-sm mb-4">
                         {method.description}
                       </p>
                       <a
@@ -142,7 +142,7 @@ const Contact: React.FC = () => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-2xl font-bold text-gray-900 mb-8">
+            <h3 className="text-2xl font-bold text-foreground mb-8">
               Como Posso Ajudar
             </h3>
             <div className="space-y-6">
@@ -151,10 +151,10 @@ const Contact: React.FC = () => {
                   <div className="flex items-start gap-4">
                     <div className="text-3xl">{service.icon}</div>
                     <div>
-                      <h4 className="text-lg font-bold text-gray-900 mb-2">
+                      <h4 className="text-lg font-bold text-card-foreground mb-2">
                         {service.title}
                       </h4>
-                      <p className="text-gray-600 leading-relaxed">
+                      <p className="text-muted-foreground leading-relaxed">
                         {service.description}
                       </p>
                     </div>
@@ -185,7 +185,7 @@ const Contact: React.FC = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
                   href="mailto:tiagonpsilva@gmail.com?subject=Oportunidade de Consultoria&body=Olá Tiago,%0D%0A%0D%0AGostaria de conversar sobre uma oportunidade de consultoria/projeto.%0D%0A%0D%0DDetalhes do projeto:%0D%0A%0D%0D%0D%0DObrigado!"
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-600 font-semibold rounded-xl hover:bg-gray-50 transition-colors duration-300"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-card text-blue-600 font-semibold rounded-xl hover:bg-muted transition-colors duration-300"
                 >
                   <Mail className="h-5 w-5" />
                   Enviar Proposta
@@ -227,9 +227,9 @@ const Contact: React.FC = () => {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           viewport={{ once: true }}
-          className="text-center mt-16 pt-8 border-t border-gray-200"
+          className="text-center mt-16 pt-8 border-t border-border"
         >
-          <p className="text-gray-500 mb-4">
+          <p className="text-muted-foreground mb-4">
             © 2025 Tiago Pinto. Head de Tecnologia • 20+ Anos de Experiência
           </p>
           <div className="flex justify-center space-x-6">
@@ -237,7 +237,7 @@ const Contact: React.FC = () => {
               href="https://github.com/tiagonpsilva"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+              className="text-muted-foreground/60 hover:text-muted-foreground transition-colors duration-200"
             >
               <Github className="h-5 w-5" />
             </a>
@@ -245,13 +245,13 @@ const Contact: React.FC = () => {
               href="https://linkedin.com/in/tiagonpsilva"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+              className="text-muted-foreground/60 hover:text-muted-foreground transition-colors duration-200"
             >
               <Linkedin className="h-5 w-5" />
             </a>
             <a
               href="mailto:tiagonpsilva@gmail.com"
-              className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+              className="text-muted-foreground/60 hover:text-muted-foreground transition-colors duration-200"
             >
               <Mail className="h-5 w-5" />
             </a>

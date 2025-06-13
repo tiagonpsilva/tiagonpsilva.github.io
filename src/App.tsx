@@ -5,18 +5,21 @@ import Cases from './components/Cases'
 import Education from './components/Education'
 import Projects from './components/Projects'
 import Contact from './components/Contact'
+import { ThemeProvider } from './contexts/ThemeContext'
 
 function App() {
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      <Hero />
-      <Expertise />
-      <Cases />
-      <Education />
-      <Projects />
-      <Contact />
-    </div>
+    <ThemeProvider>
+      <div className="min-h-screen bg-background transition-colors duration-300">
+        <Header />
+        <Hero />
+        <Expertise />
+        <Cases />
+        <Education />
+        <Projects />
+        <Contact />
+      </div>
+    </ThemeProvider>
   )
 }
 

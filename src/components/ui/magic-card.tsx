@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 
 interface MagicCardProps {
@@ -12,14 +12,40 @@ interface MagicCardProps {
 export const MagicCard: React.FC<MagicCardProps> = ({
   children,
   className,
-  gradientColor = '#3b82f6',
-  gradientOpacity = 0.8,
-  gradientSize = 200,
+  gradientColor,
+  gradientOpacity = 0.5,
+  gradientSize = 300,
 }) => {
   const divRef = useRef<HTMLDivElement>(null)
   const [isFocused, setIsFocused] = useState(false)
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [opacity, setOpacity] = useState(0)
+  const [isDarkMode, setIsDarkMode] = useState(false)
+
+  useEffect(() => {
+    const checkDarkMode = () => {
+      setIsDarkMode(document.documentElement.classList.contains('dark'))
+    }
+    
+    checkDarkMode()
+    
+    // Observer para mudanças no tema
+    const observer = new MutationObserver(checkDarkMode)
+    observer.observe(document.documentElement, { 
+      attributes: true, 
+      attributeFilter: ['class'] 
+    })
+    
+    return () => observer.disconnect()
+  }, [])
+
+  // Cor padrão baseada no tema - usando RGBA para melhor controle
+  const lightModeOpacity = gradientOpacity * 0.6 // 40% mais claro no light mode
+  const defaultGradientColor = isDarkMode 
+    ? `rgba(218, 165, 32, ${gradientOpacity})` // Dourado suave no dark mode
+    : `rgba(147, 197, 253, ${lightModeOpacity})` // Azul bem claro no light mode
+  
+  const actualGradientColor = gradientColor || defaultGradientColor
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!divRef.current || isFocused) return
@@ -57,16 +83,14 @@ export const MagicCard: React.FC<MagicCardProps> = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        'relative overflow-hidden rounded-xl border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm',
+        'relative overflow-hidden rounded-xl border border-border bg-card p-6 shadow-lg backdrop-blur-sm',
         className
       )}
     >
       <div
         className="pointer-events-none absolute -inset-px opacity-0 transition duration-300"
         style={{
-          background: `radial-gradient(${gradientSize}px circle at ${position.x}px ${position.y}px, ${gradientColor}${Math.round(
-            gradientOpacity * 255
-          ).toString(16)}, transparent 40%)`,
+          background: `radial-gradient(${gradientSize}px circle at ${position.x}px ${position.y}px, ${actualGradientColor}, transparent 40%)`,
           opacity,
         }}
       />
