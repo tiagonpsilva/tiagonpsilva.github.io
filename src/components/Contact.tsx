@@ -204,6 +204,23 @@ const Contact: React.FC = () => {
           </MagicCard>
         </motion.div>
 
+        {/* Background Image Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="mt-16"
+        >
+          <MagicCard className="p-0 overflow-hidden">
+            <img 
+              src="/background-blog.png" 
+              alt="Background" 
+              className="w-full h-auto"
+            />
+          </MagicCard>
+        </motion.div>
+
         {/* Footer */}
         <motion.div
           initial={{ opacity: 0 }}
