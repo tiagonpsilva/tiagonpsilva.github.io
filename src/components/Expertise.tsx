@@ -157,7 +157,7 @@ const Expertise: React.FC = () => {
   }
 
   return (
-    <section id="expertise" className="section-padding bg-gray-50">
+    <section id="expertise" className="section-padding bg-muted">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -170,10 +170,10 @@ const Expertise: React.FC = () => {
             <Crown className="h-4 w-4" />
             Áreas de Expertise
           </div>
-          <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-gray-900">
+          <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-foreground">
             <span className="gradient-text">Especializações Técnicas</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Expertise consolidada em tecnologia, liderança e inovação para transformação digital de empresas.
           </p>
         </motion.div>
@@ -189,26 +189,26 @@ const Expertise: React.FC = () => {
             >
               <MagicCard className={`p-6 h-full transition-all duration-300 ${area.color}`}>
                 <div className="flex items-start justify-between mb-4">
-                  <div className="p-3 bg-gray-50 rounded-xl">
+                  <div className="p-3 bg-muted rounded-xl">
                     {area.icon}
                   </div>
                   <button
                     onClick={() => toggleExpand(index)}
-                    className="p-2 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                    className="p-2 hover:bg-muted rounded-lg transition-colors duration-200"
                   >
                     {expandedCard === index ? (
-                      <ChevronUp className="h-5 w-5 text-gray-500" />
+                      <ChevronUp className="h-5 w-5 text-muted-foreground" />
                     ) : (
-                      <ChevronDown className="h-5 w-5 text-gray-500" />
+                      <ChevronDown className="h-5 w-5 text-muted-foreground" />
                     )}
                   </button>
                 </div>
                 
-                <h3 className="text-xl font-bold mb-3 text-gray-900">
+                <h3 className="text-xl font-bold mb-3 text-foreground">
                   {area.title}
                 </h3>
                 
-                <p className="text-gray-600 text-base mb-4">
+                <p className="text-muted-foreground text-base mb-4">
                   {area.shortDesc}
                 </p>
 
@@ -218,11 +218,11 @@ const Expertise: React.FC = () => {
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="border-t border-gray-200 pt-4"
+                    className="border-t border-border pt-4"
                   >
                     <ul className="space-y-2">
                       {area.details.map((detail, idx) => (
-                        <li key={idx} className="text-base text-gray-600 flex items-start">
+                        <li key={idx} className="text-base text-muted-foreground flex items-start">
                           <span className="w-2 h-2 bg-blue-500 rounded-full mr-3 mt-2 flex-shrink-0" />
                           {detail}
                         </li>

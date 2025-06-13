@@ -20,7 +20,7 @@ const Cases: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('Todos')
 
   const categories = [
-    { name: 'Todos', count: 11, color: 'bg-gray-100 text-gray-800 hover:bg-gray-200' },
+    { name: 'Todos', count: 11, color: 'bg-muted text-foreground hover:bg-muted/80' },
     { name: 'Inteligência Artificial', count: 2, color: 'bg-purple-100 text-purple-800 hover:bg-purple-200' },
     { name: 'Arquitetura', count: 1, color: 'bg-indigo-100 text-indigo-800 hover:bg-indigo-200' },
     { name: 'Dados', count: 1, color: 'bg-cyan-100 text-cyan-800 hover:bg-cyan-200' },
@@ -212,7 +212,7 @@ const Cases: React.FC = () => {
   }
 
   return (
-    <section id="cases" className="section-padding bg-white">
+    <section id="cases" className="section-padding bg-background">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -225,10 +225,10 @@ const Cases: React.FC = () => {
             <TrendingUp className="h-4 w-4" />
             Cases Profissionais
           </div>
-          <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-gray-900">
+          <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-foreground">
             <span className="gradient-text">Projetos de Impacto</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Cases reais de transformação digital, liderança técnica e inovação que geraram resultados mensuráveis.
           </p>
         </motion.div>
@@ -247,7 +247,7 @@ const Cases: React.FC = () => {
             {selectedCategory !== 'Todos' && (
               <button
                 onClick={() => setSelectedCategory('Todos')}
-                className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-600 transition-colors duration-200"
+                className="inline-flex items-center gap-1 px-3 py-1 bg-muted hover:bg-muted/80 rounded-full text-sm text-muted-foreground transition-colors duration-200"
               >
                 <X className="h-3 w-3" />
                 Limpar filtro
@@ -267,7 +267,7 @@ const Cases: React.FC = () => {
                 } ${category.color}`}
               >
                 {category.name}
-                <span className="bg-white/60 px-2 py-0.5 rounded-full text-xs font-bold">
+                <span className="bg-background/60 px-2 py-0.5 rounded-full text-xs font-bold">
                   {category.count}
                 </span>
               </button>
@@ -299,7 +299,7 @@ const Cases: React.FC = () => {
                     className="relative"
                   >
                     {/* Timeline dot */}
-                    <div className="absolute left-6 w-4 h-4 bg-white border-4 border-blue-500 rounded-full z-10 hidden lg:block" />
+                    <div className="absolute left-6 w-4 h-4 bg-background border-4 border-blue-500 rounded-full z-10 hidden lg:block" />
                     
                     <div className="lg:ml-20">
                       <MagicCard className="p-6">
@@ -313,24 +313,24 @@ const Cases: React.FC = () => {
                                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${categoryColors[caseItem.category]}`}>
                                   {caseItem.category}
                                 </span>
-                                <div className="flex items-center gap-1 text-gray-500 text-sm">
+                                <div className="flex items-center gap-1 text-muted-foreground text-sm">
                                   <Calendar className="h-4 w-4" />
                                   {caseItem.year}
                                 </div>
                               </div>
-                              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                              <h3 className="text-xl font-bold text-card-foreground mb-2">
                                 {caseItem.title}
                               </h3>
                             </div>
                           </div>
                           <button
                             onClick={() => toggleExpand(index)}
-                            className="p-2 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                            className="p-2 hover:bg-muted rounded-lg transition-colors duration-200"
                           >
                             {expandedCase === index ? (
-                              <ChevronUp className="h-5 w-5 text-gray-500" />
+                              <ChevronUp className="h-5 w-5 text-muted-foreground" />
                             ) : (
-                              <ChevronDown className="h-5 w-5 text-gray-500" />
+                              <ChevronDown className="h-5 w-5 text-muted-foreground" />
                             )}
                           </button>
                         </div>
@@ -342,23 +342,23 @@ const Cases: React.FC = () => {
                               animate={{ opacity: 1, height: 'auto' }}
                               exit={{ opacity: 0, height: 0 }}
                               transition={{ duration: 0.3 }}
-                              className="border-t border-gray-200 pt-6 space-y-6 overflow-hidden"
+                              className="border-t border-border pt-6 space-y-6 overflow-hidden"
                             >
                               <div>
-                                <h4 className="font-semibold text-gray-900 mb-2">Contexto:</h4>
-                                <p className="text-gray-600 leading-relaxed">{caseItem.context}</p>
+                                <h4 className="font-semibold text-card-foreground mb-2">Contexto:</h4>
+                                <p className="text-muted-foreground leading-relaxed">{caseItem.context}</p>
                               </div>
 
                               <div>
-                                <h4 className="font-semibold text-gray-900 mb-2">Ação:</h4>
-                                <p className="text-gray-600 leading-relaxed">{caseItem.action}</p>
+                                <h4 className="font-semibold text-card-foreground mb-2">Ação:</h4>
+                                <p className="text-muted-foreground leading-relaxed">{caseItem.action}</p>
                               </div>
 
                               <div>
-                                <h4 className="font-semibold text-gray-900 mb-3">Resultados:</h4>
+                                <h4 className="font-semibold text-card-foreground mb-3">Resultados:</h4>
                                 <ul className="space-y-2">
                                   {caseItem.results.map((result, idx) => (
-                                    <li key={idx} className="text-gray-600 flex items-start">
+                                    <li key={idx} className="text-muted-foreground flex items-start">
                                       <span className="w-2 h-2 bg-green-500 rounded-full mr-3 mt-2 flex-shrink-0" />
                                       {result}
                                     </li>

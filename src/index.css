@@ -27,6 +27,28 @@
   --radius: 0.75rem;
 }
 
+.dark {
+  --background: 30 30% 12%; /* Marrom escuro */
+  --foreground: 45 30% 90%; /* Texto claro com tom amarelado */
+  --card: 30 25% 15%; /* Marrom escuro para cards */
+  --card-foreground: 45 30% 90%;
+  --popover: 30 25% 15%;
+  --popover-foreground: 45 30% 90%;
+  --primary: 45 100% 50%; /* Amarelo */
+  --primary-foreground: 30 30% 12%;
+  --secondary: 30 20% 20%;
+  --secondary-foreground: 45 30% 90%;
+  --muted: 30 15% 25%;
+  --muted-foreground: 45 20% 70%;
+  --accent: 45 90% 45%; /* Amarelo para acentos */
+  --accent-foreground: 30 30% 12%;
+  --destructive: 0 62.8% 50%;
+  --destructive-foreground: 45 30% 90%;
+  --border: 30 20% 25%;
+  --input: 30 20% 25%;
+  --ring: 45 100% 50%;
+}
+
 * {
   border-color: hsl(var(--border));
 }
@@ -58,6 +80,12 @@ body {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass-effect {
+  background: rgba(25, 20, 15, 0.95); /* Marrom escuro com transparência */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(69, 56, 41, 0.3); /* Borda marrom */
 }
 
 .mono-font {

@@ -71,7 +71,7 @@ const Experience: React.FC = () => {
   ]
 
   return (
-    <section id="experience" className="section-padding bg-white">
+    <section id="experience" className="section-padding bg-background">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 50 }}

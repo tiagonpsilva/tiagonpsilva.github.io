@@ -162,7 +162,7 @@ const Education: React.FC = () => {
 
 
   return (
-    <section id="education" className="section-padding bg-gray-50">
+    <section id="education" className="section-padding bg-muted">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -175,23 +175,23 @@ const Education: React.FC = () => {
             <GraduationCap className="h-4 w-4" />
             Formação Acadêmica & Certificações
           </div>
-          <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-gray-900">
+          <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-foreground">
             <span className="gradient-text">Educação Continuada</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Formação sólida e certificações técnicas que fundamentam a expertise em tecnologia e liderança.
           </p>
         </motion.div>
 
         {/* Tab Navigation */}
         <div className="flex justify-center mb-12">
-          <div className="bg-white rounded-xl p-2 shadow-lg border border-gray-200">
+          <div className="bg-card rounded-xl p-2 shadow-lg border border-border">
             <button
               onClick={() => setActiveTab('education')}
               className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
                 activeTab === 'education'
                   ? 'bg-blue-500 text-white shadow-md'
-                  : 'text-gray-600 hover:text-blue-600'
+                  : 'text-muted-foreground hover:text-blue-600'
               }`}
             >
               <div className="flex items-center gap-2">
@@ -204,7 +204,7 @@ const Education: React.FC = () => {
               className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
                 activeTab === 'certifications'
                   ? 'bg-blue-500 text-white shadow-md'
-                  : 'text-gray-600 hover:text-blue-600'
+                  : 'text-muted-foreground hover:text-blue-600'
               }`}
             >
               <div className="flex items-center gap-2">
@@ -219,7 +219,7 @@ const Education: React.FC = () => {
           <div className="space-y-8">
             {/* Academic Education */}
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <h3 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
                 <GraduationCap className="h-6 w-6 text-blue-500" />
                 Formação Acadêmica (6 Cursos)
               </h3>
@@ -235,7 +235,7 @@ const Education: React.FC = () => {
                     <MagicCard className={`p-6 h-full ${item.color}`}>
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-1 text-gray-500 text-sm">
+                          <div className="flex items-center gap-1 text-muted-foreground text-sm">
                             <Calendar className="h-4 w-4" />
                             {item.year}
                           </div>
@@ -255,7 +255,7 @@ const Education: React.FC = () => {
                         </div>
                       </div>
 
-                      <h4 className="text-lg font-bold text-gray-900 mb-2">
+                      <h4 className="text-lg font-bold text-card-foreground mb-2">
                         {item.course}
                       </h4>
                       <p className="text-sm font-medium text-blue-600 mb-3">
@@ -264,18 +264,18 @@ const Education: React.FC = () => {
 
                       <div className="flex flex-wrap gap-2 mb-4">
                         {item.tags.slice(0, 3).map((tag, idx) => (
-                          <span key={idx} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                          <span key={idx} className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">
                             {tag}
                           </span>
                         ))}
                         {item.tags.length > 3 && (
-                          <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                          <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">
                             +{item.tags.length - 3} mais
                           </span>
                         )}
                       </div>
 
-                      <p className="text-gray-600 text-base leading-relaxed">
+                      <p className="text-muted-foreground text-base leading-relaxed">
                         {item.description}
                       </p>
                     </MagicCard>
@@ -286,7 +286,7 @@ const Education: React.FC = () => {
 
             {/* Specializations */}
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <h3 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
                 <Star className="h-6 w-6 text-purple-500" />
                 Especializações (4 Programas)
               </h3>
@@ -302,7 +302,7 @@ const Education: React.FC = () => {
                     <MagicCard className={`p-6 h-full ${item.color}`}>
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-1 text-gray-500 text-sm">
+                          <div className="flex items-center gap-1 text-muted-foreground text-sm">
                             <Calendar className="h-4 w-4" />
                             {item.year}
                           </div>
@@ -322,7 +322,7 @@ const Education: React.FC = () => {
                         </div>
                       </div>
 
-                      <h4 className="text-lg font-bold text-gray-900 mb-2">
+                      <h4 className="text-lg font-bold text-card-foreground mb-2">
                         {item.program}
                       </h4>
                       <p className="text-sm font-medium text-purple-600 mb-3">
@@ -331,18 +331,18 @@ const Education: React.FC = () => {
 
                       <div className="flex flex-wrap gap-2 mb-4">
                         {item.tags.slice(0, 3).map((tag, idx) => (
-                          <span key={idx} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                          <span key={idx} className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">
                             {tag}
                           </span>
                         ))}
                         {item.tags.length > 3 && (
-                          <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                          <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">
                             +{item.tags.length - 3} mais
                           </span>
                         )}
                       </div>
 
-                      <p className="text-gray-600 text-base leading-relaxed">
+                      <p className="text-muted-foreground text-base leading-relaxed">
                         {item.description}
                       </p>
                     </MagicCard>
@@ -355,7 +355,7 @@ const Education: React.FC = () => {
 
         {activeTab === 'certifications' && (
           <div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <h3 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
               <Award className="h-6 w-6 text-green-500" />
               Certificações Técnicas (7 Certificações)
             </h3>
@@ -373,7 +373,7 @@ const Education: React.FC = () => {
                       <Award className="h-6 w-6 text-green-500" />
                     </div>
 
-                    <h4 className="text-lg font-bold text-gray-900 mb-3">
+                    <h4 className="text-lg font-bold text-card-foreground mb-3">
                       {cert.name}
                     </h4>
 

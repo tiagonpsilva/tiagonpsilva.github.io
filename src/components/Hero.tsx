@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { ArrowDown, Github, Linkedin, Mail, MessageSquare } from 'lucide-react'
+import { MagicCard } from './ui/magic-card'
 
 const Hero: React.FC = () => {
   const scrollToNext = () => {
@@ -42,7 +43,7 @@ const Hero: React.FC = () => {
   ]
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-gray-50">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-background to-gray-50 dark:from-[hsl(var(--background))] dark:via-[hsl(var(--background))] dark:to-[hsl(var(--card))]">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Subtle grid */}
@@ -55,7 +56,7 @@ const Hero: React.FC = () => {
         }} />
         
         {/* Floating orbs */}
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-r from-emerald-300/20 to-teal-300/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse" />
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-r from-blue-300/20 to-cyan-300/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse" />
         <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-gradient-to-r from-purple-300/20 to-violet-300/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-1000" />
         <div className="absolute bottom-1/4 left-1/3 w-64 h-64 bg-gradient-to-r from-blue-300/20 to-indigo-300/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-2000" />
       </div>
@@ -74,7 +75,7 @@ const Hero: React.FC = () => {
               <img 
                 src="https://github.com/tiagonpsilva.png" 
                 alt="Tiago Pinto"
-                className="w-full h-full rounded-full object-cover ring-4 ring-white shadow-2xl"
+                className="w-full h-full rounded-full object-cover ring-4 ring-background shadow-2xl"
               />
             </div>
           </motion.div>
@@ -87,15 +88,15 @@ const Hero: React.FC = () => {
             className="mb-6"
           >
             <h1 className="text-6xl lg:text-8xl font-bold mb-4 tracking-tight">
-              <span className="bg-gradient-to-r from-slate-800 via-slate-700 to-slate-900 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-foreground via-foreground/80 to-foreground bg-clip-text text-transparent">
                 Tiago Pinto
               </span>
             </h1>
             <div className="space-y-2">
-              <p className="text-2xl lg:text-3xl font-semibold text-slate-700">
+              <p className="text-2xl lg:text-3xl font-semibold text-foreground">
                 Head de Tecnologia
               </p>
-              <p className="text-lg text-slate-500 font-medium">
+              <p className="text-lg text-muted-foreground font-medium">
                 20+ Anos transformando ideias em soluções digitais
               </p>
             </div>
@@ -114,23 +115,21 @@ const Hero: React.FC = () => {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
-                className="group relative"
               >
-                <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl blur-xl -z-10" />
-                <div className={`relative bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 hover:border-gray-300/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1`}>
+                <MagicCard className="p-6 h-full group hover:-translate-y-1 transition-transform duration-300">
                   <div className="text-4xl mb-4">{highlight.icon}</div>
                   <div className="text-left">
-                    <h3 className="font-bold text-slate-800 text-xl leading-tight">
+                    <h3 className="font-bold text-card-foreground text-xl leading-tight">
                       {highlight.title}
                     </h3>
                     <p className={`font-semibold text-base bg-gradient-to-r ${highlight.gradient} bg-clip-text text-transparent mb-3`}>
                       {highlight.subtitle}
                     </p>
-                    <p className="text-slate-600 text-sm leading-relaxed">
+                    <p className="text-muted-foreground text-sm leading-relaxed">
                       {highlight.description}
                     </p>
                   </div>
-                </div>
+                </MagicCard>
               </motion.div>
             ))}
           </motion.div>
@@ -140,7 +139,7 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-xl text-slate-600 mb-12 max-w-3xl mx-auto leading-relaxed"
+            className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed"
           >
             Especialista em arquitetura de sistemas, liderança de equipes e implementação de IA. 
             Desenvolvendo soluções inovadoras que impactam milhares de usuários e transformam negócios.
@@ -164,12 +163,13 @@ const Hero: React.FC = () => {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`group p-4 bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200/50 ${social.color} hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1`}
                 aria-label={social.label}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <social.icon className="h-6 w-6 text-slate-600 group-hover:text-white transition-colors duration-300" />
+                <MagicCard className={`p-4 group ${social.color} hover:text-white transition-all duration-300 hover:-translate-y-1`}>
+                  <social.icon className="h-6 w-6 text-muted-foreground group-hover:text-white transition-colors duration-300" />
+                </MagicCard>
               </motion.a>
             ))}
           </motion.div>
@@ -180,18 +180,18 @@ const Hero: React.FC = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 1.2 }}
             onClick={scrollToNext}
-            className="group flex flex-col items-center text-slate-500 hover:text-slate-700 transition-colors duration-300"
+            className="group flex flex-col items-center text-muted-foreground hover:text-foreground transition-colors duration-300"
           >
             <span className="text-sm mb-2 tracking-wide font-medium">Explorar expertise</span>
-            <div className="p-3 bg-white/80 backdrop-blur-sm rounded-full border border-gray-200/50 group-hover:border-gray-300/50 transition-all duration-300">
-              <ArrowDown className="h-5 w-5 animate-bounce group-hover:translate-y-1 transition-transform duration-300" />
-            </div>
+            <MagicCard className="p-3 rounded-full group-hover:-translate-y-1 transition-transform duration-300">
+              <ArrowDown className="h-5 w-5 animate-bounce" />
+            </MagicCard>
           </motion.button>
         </div>
       </div>
 
       {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
     </section>
   )
 }
