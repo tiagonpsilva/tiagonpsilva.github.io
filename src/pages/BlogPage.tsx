@@ -116,6 +116,43 @@ const BlogPage: React.FC = () => {
                 </p>
               </motion.div>
 
+              {/* Mobile Stats + Newsletter Button */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="flex md:hidden items-center justify-center gap-6 pt-2"
+              >
+                {/* Stats */}
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/40 to-purple-600/40 rounded-full blur-lg"></div>
+                    <div className="relative bg-background/90 backdrop-blur-sm w-14 h-14 rounded-full flex items-center justify-center border border-primary/30">
+                      <span className="text-xl font-bold text-primary">7</span>
+                    </div>
+                  </div>
+                  <div className="text-sm text-muted-foreground font-medium">
+                    Artigos<br/>Publicados
+                  </div>
+                </div>
+
+                {/* Newsletter Button */}
+                <a
+                  href="https://www.linkedin.com/newsletters/7331120186697138176/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-4 py-2.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group text-sm"
+                >
+                  <svg className="w-4 h-4 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                  Newsletter
+                  <svg className="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              </motion.div>
+
               {/* Topic Pills - Hidden on mobile */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -154,7 +191,7 @@ const BlogPage: React.FC = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.6 }}
-              className="flex md:hidden flex-row justify-center gap-8 mt-4 md:mt-0 md:flex-col md:items-center md:gap-3 md:flex-shrink-0"
+              className="hidden md:flex flex-col items-center gap-3 flex-shrink-0"
             >
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/40 to-purple-600/40 rounded-full blur-lg"></div>
@@ -170,8 +207,8 @@ const BlogPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Newsletter Subscription */}
-      <section className="pb-8 md:pb-12 px-4 md:px-6">
+      {/* Newsletter Subscription - Desktop Only */}
+      <section className="hidden md:block pb-12 px-6">
         <div className="container mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -182,7 +219,7 @@ const BlogPage: React.FC = () => {
             {/* Background gradient */}
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-600/10 rounded-2xl blur-xl"></div>
             
-            <div className="relative bg-background/90 backdrop-blur-sm border-2 border-primary/20 rounded-2xl p-4 md:p-6 text-center">
+            <div className="relative bg-background/90 backdrop-blur-sm border-2 border-primary/20 rounded-2xl p-6 text-center">
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -197,11 +234,11 @@ const BlogPage: React.FC = () => {
                   </div>
                 </div>
                 
-                <h3 className="text-lg md:text-xl font-bold text-foreground">
+                <h3 className="text-xl font-bold text-foreground">
                   📬 Newsletter Bantu Digital
                 </h3>
                 
-                <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
+                <p className="text-base text-muted-foreground max-w-2xl mx-auto">
                   Receba insights sobre <span className="text-primary font-semibold">IA</span>, 
                   <span className="text-primary font-semibold"> Dados</span> e 
                   <span className="text-primary font-semibold"> Engenharia de Software</span>{' '}
