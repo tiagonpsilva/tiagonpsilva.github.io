@@ -94,9 +94,24 @@ const Header: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 onClick={() => handleNavigation(item.href, item.isExternal)}
-                className="text-foreground hover:text-primary transition-colors duration-200 font-medium text-base tracking-wide"
+                className={
+                  item.label === 'Blog' 
+                    ? "relative group text-primary hover:text-blue-600 transition-colors duration-200 font-semibold text-base tracking-wide"
+                    : "text-foreground hover:text-primary transition-colors duration-200 font-medium text-base tracking-wide"
+                }
               >
-                {item.label}
+                {item.label === 'Blog' && (
+                  <>
+                    {/* Background gradient */}
+                    <div className="absolute inset-0 -inset-x-2 -inset-y-1 bg-gradient-to-r from-primary/10 to-blue-600/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    {/* Subtle glow */}
+                    <div className="absolute inset-0 -inset-x-2 -inset-y-1 bg-gradient-to-r from-primary/8 to-blue-600/8 rounded-lg blur-sm"></div>
+                  </>
+                )}
+                <span className="relative z-10">{item.label}</span>
+                {item.label === 'Blog' && (
+                  <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                )}
               </motion.button>
             ))}
             
@@ -156,9 +171,16 @@ const Header: React.FC = () => {
                 <button
                   key={item.href}
                   onClick={() => handleNavigation(item.href, item.isExternal)}
-                  className="text-foreground hover:text-primary transition-colors duration-200 font-medium text-left"
+                  className={
+                    item.label === 'Blog'
+                      ? "relative group text-primary hover:text-blue-600 transition-colors duration-200 font-semibold text-left"
+                      : "text-foreground hover:text-primary transition-colors duration-200 font-medium text-left"
+                  }
                 >
-                  {item.label}
+                  {item.label === 'Blog' && (
+                    <div className="absolute inset-0 -inset-x-2 -inset-y-1 bg-gradient-to-r from-primary/8 to-blue-600/8 rounded-lg"></div>
+                  )}
+                  <span className="relative z-10">{item.label}</span>
                 </button>
               ))}
             </div>
