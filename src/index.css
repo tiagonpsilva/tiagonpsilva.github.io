@@ -114,3 +114,68 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/* Fix prose typography colors for dark mode */
+.dark .prose {
+  color: hsl(var(--foreground));
+}
+
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4,
+.dark .prose h5,
+.dark .prose h6 {
+  color: hsl(var(--foreground));
+}
+
+.dark .prose p,
+.dark .prose li,
+.dark .prose ul,
+.dark .prose ol,
+.dark .prose blockquote,
+.dark .prose em,
+.dark .prose i,
+.dark .prose span {
+  color: hsl(var(--foreground));
+}
+
+.dark .prose a {
+  color: hsl(var(--primary));
+}
+
+.dark .prose a:hover {
+  color: hsl(var(--primary) / 0.8);
+}
+
+.dark .prose strong,
+.dark .prose b {
+  color: hsl(var(--foreground));
+  font-weight: 600;
+}
+
+.dark .prose code {
+  color: hsl(var(--primary));
+  background-color: hsl(var(--muted));
+}
+
+.dark .prose pre {
+  background-color: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
+}
+
+.dark .prose blockquote {
+  border-left-color: hsl(var(--border));
+  color: hsl(var(--muted-foreground));
+}
+
+.dark .prose table,
+.dark .prose th,
+.dark .prose td {
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--border));
+}
+
+.dark .prose th {
+  background-color: hsl(var(--muted));
+}

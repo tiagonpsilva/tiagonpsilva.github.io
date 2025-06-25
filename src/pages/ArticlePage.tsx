@@ -275,7 +275,7 @@ const ArticlePage: React.FC = () => {
             transition={{ delay: 0.2 }}
             className="glass-effect p-4 md:p-8 lg:p-12 rounded-xl border border-border"
           >
-            <div className="prose prose-sm md:prose-lg max-w-none prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-code:text-primary prose-pre:bg-muted prose-pre:border prose-pre:border-border">
+            <div className="prose prose-sm md:prose-lg max-w-none prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-code:text-primary prose-pre:bg-muted prose-pre:border prose-pre:border-border prose-li:text-foreground prose-ul:text-foreground prose-ol:text-foreground prose-blockquote:text-foreground prose-a:text-primary hover:prose-a:text-primary/80 prose-em:text-foreground prose-table:text-foreground prose-th:text-foreground prose-td:text-foreground">
               <ReactMarkdown 
                 components={{
                   img: ({ src, alt }) => (
