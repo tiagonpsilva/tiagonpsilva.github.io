@@ -93,7 +93,7 @@ const BlogPage: React.FC = () => {
                 <img 
                   src="/bantu01.png" 
                   alt="Bantu Digital Logo" 
-                  className="relative w-28 h-28 md:w-40 md:h-40 object-contain drop-shadow-2xl"
+                  className="relative w-48 h-48 md:w-40 md:h-40 object-contain drop-shadow-2xl"
                 />
               </div>
             </motion.div>
@@ -116,12 +116,12 @@ const BlogPage: React.FC = () => {
                 </p>
               </motion.div>
 
-              {/* Topic Pills */}
+              {/* Topic Pills - Hidden on mobile */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="flex flex-wrap gap-2 md:gap-4 justify-center md:justify-start"
+                className="hidden md:flex flex-wrap gap-4 justify-start"
               >
                 {[
                   { label: "IA", icon: "🧠", color: "from-blue-500 to-purple-600" },
