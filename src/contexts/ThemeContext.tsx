@@ -3,6 +3,8 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 interface ThemeContextType {
   isDarkMode: boolean
   toggleDarkMode: () => void
+  setDarkModeForBlog: () => void
+  restorePreviousTheme: () => void
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
@@ -32,10 +34,33 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode)
+    // Se o usuário mudou manualmente o tema, remover o tema salvo
+    // para que a preferência manual seja respeitada
+    localStorage.removeItem('preBlogTheme')
+  }
+
+  const setDarkModeForBlog = () => {
+    // Salvar o tema atual antes de ativar dark mode para o blog
+    const currentTheme = localStorage.getItem('darkMode')
+    localStorage.setItem('preBlogTheme', currentTheme || 'false')
+    setIsDarkMode(true)
+  }
+
+  const restorePreviousTheme = () => {
+    // Restaurar o tema que estava ativo antes de entrar no blog
+    const preBlogTheme = localStorage.getItem('preBlogTheme')
+    if (preBlogTheme !== null) {
+      const wasLightMode = JSON.parse(preBlogTheme) === false
+      if (wasLightMode) {
+        setIsDarkMode(false)
+      }
+      // Remove o tema salvo após restaurar
+      localStorage.removeItem('preBlogTheme')
+    }
   }
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
+    <ThemeContext.Provider value={{ isDarkMode, toggleDarkMode, setDarkModeForBlog, restorePreviousTheme }}>
       {children}
     </ThemeContext.Provider>
   )

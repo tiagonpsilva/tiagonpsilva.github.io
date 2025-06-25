@@ -76,7 +76,7 @@ npm run deploy
 
 Todo o conteúdo é baseado na experiência profissional real de Tiago Pinto:
 - 20+ anos de experiência em tecnologia
-- Head de Tecnologia na Bantu Digital
+- Head de Tecnologia
 - Expertise em IA, Arquitetura, Dados e Liderança
 - Cases de transformação digital com resultados mensuráveis
 

@@ -1,3 +1,5 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import Expertise from './components/Expertise'
@@ -5,20 +7,43 @@ import Cases from './components/Cases'
 import Education from './components/Education'
 import Projects from './components/Projects'
 import Contact from './components/Contact'
-import { ThemeProvider } from './contexts/ThemeContext'
+import BlogPage from './pages/BlogPage'
+import ArticlePage from './pages/ArticlePage'
+import { ThemeProvider, useTheme } from './contexts/ThemeContext'
+
+function HomePage() {
+  const { restorePreviousTheme } = useTheme()
+  
+  useEffect(() => {
+    // Restaurar tema anterior quando voltar para a página principal
+    restorePreviousTheme()
+  }, [restorePreviousTheme])
+
+  return (
+    <>
+      <Hero />
+      <Expertise />
+      <Cases />
+      <Education />
+      <Projects />
+      <Contact />
+    </>
+  )
+}
 
 function App() {
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-background transition-colors duration-300">
-        <Header />
-        <Hero />
-        <Expertise />
-        <Cases />
-        <Education />
-        <Projects />
-        <Contact />
-      </div>
+      <Router>
+        <div className="min-h-screen bg-background transition-colors duration-300">
+          <Header />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:slug" element={<ArticlePage />} />
+          </Routes>
+        </div>
+      </Router>
     </ThemeProvider>
   )
 }

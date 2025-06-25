@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Menu, X, Sun, Moon } from 'lucide-react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { useTheme } from '../contexts/ThemeContext'
 
@@ -8,6 +9,8 @@ const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { isDarkMode, toggleDarkMode } = useTheme()
+  const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,19 +20,44 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Efeito para fazer scroll automático quando navegamos para a página inicial com âncora
+  useEffect(() => {
+    if (location.pathname === '/' && location.hash) {
+      // Pequeno delay para garantir que o DOM foi renderizado
+      setTimeout(() => {
+        const element = document.querySelector(location.hash)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 300)
+    }
+  }, [location])
+
   const navItems = [
     { href: '#home', label: 'Início' },
     { href: '#expertise', label: 'Expertise' },
     { href: '#cases', label: 'Cases' },
     { href: '#education', label: 'Formação' },
     { href: '#projects', label: 'Projetos' },
+    { href: '/blog', label: 'Blog', isExternal: true },
     { href: '#contact', label: 'Contato' },
   ]
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
+  const handleNavigation = (href: string, isExternal?: boolean) => {
+    if (isExternal) {
+      navigate(href)
+    } else {
+      // Se estamos tentando navegar para uma seção e não estamos na página inicial
+      if (location.pathname !== '/') {
+        // Navegar para a página inicial com a âncora
+        navigate('/' + href)
+      } else {
+        // Se já estamos na página inicial, fazer scroll para a seção
+        const element = document.querySelector(href)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' })
+        }
+      }
     }
     setIsMobileMenuOpen(false)
   }
@@ -65,7 +93,7 @@ const Header: React.FC = () => {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                onClick={() => scrollToSection(item.href)}
+                onClick={() => handleNavigation(item.href, item.isExternal)}
                 className="text-foreground hover:text-primary transition-colors duration-200 font-medium text-base tracking-wide"
               >
                 {item.label}
@@ -127,7 +155,7 @@ const Header: React.FC = () => {
               {navItems.map((item) => (
                 <button
                   key={item.href}
-                  onClick={() => scrollToSection(item.href)}
+                  onClick={() => handleNavigation(item.href, item.isExternal)}
                   className="text-foreground hover:text-primary transition-colors duration-200 font-medium text-left"
                 >
                   {item.label}

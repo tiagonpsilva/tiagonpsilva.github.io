@@ -31,8 +31,10 @@ Note: The project also has automatic deployment via GitHub Actions on push to ma
 ### Project Structure
 - `/src/components/` - Feature-based component organization (Hero, Expertise, Cases, etc.)
 - `/src/components/ui/` - Reusable Magic UI components with glassmorphism and animation effects
-- `/src/lib/` - Utility functions including `cn()` for className merging
+- `/src/pages/` - Page components including BlogPage and ArticlePage
+- `/src/lib/` - Utility functions including `cn()` for className merging and articles data
 - `/src/types/` - TypeScript type definitions
+- `/public/content/blog/` - Static blog images and assets
 - Path aliases configured: `@/` maps to `/src/`
 
 ### Key Patterns
@@ -66,3 +68,50 @@ The project includes extensive Tailwind customizations:
 2. Use `npm run dev` to start the development server on http://localhost:5173
 3. The server runs continuously - the timeout in terminal is expected behavior
 4. If port 5173 is busy, Vite will automatically try the next available port
+
+## Blog System
+
+### Overview
+The blog section ("Bantu Digital") uses React Router for client-side routing and ReactMarkdown for content rendering. It features a landing page with branding and individual article pages.
+
+### Blog Structure
+- **Main Blog Page**: `/blog` - Displays Bantu Digital branding with topic cards and article list
+- **Individual Articles**: `/blog/:slug` - Shows full article content with markdown rendering
+- **Static Content**: Articles are stored in `/src/lib/articles.ts` with complete content and metadata
+
+### Blog Routes
+- `/blog` - BlogPage component with hero section and article cards
+- `/blog/:slug` - ArticlePage component for individual article display
+
+### Content Management
+- **Articles Data**: Each article is stored as a separate markdown file with frontmatter
+- **Article Files**: Located at `/public/content/blog/:article-slug/index.md`
+- **Images**: Placed in `/public/content/blog/:article-slug/` directory
+- **Image Display**: Articles images use 90% width and are centered
+- **Markdown Rendering**: Uses ReactMarkdown with custom image components
+- **Dynamic Loading**: Articles are fetched from markdown files at runtime using fetch API
+
+### Article Structure
+Each article markdown file requires frontmatter with:
+- `id`: Unique identifier
+- `title`: Article title
+- `excerpt`: Brief description for article cards
+- `publishedAt`: Publication date (YYYY-MM-DD format)
+- `tags`: Array of topic tags (format: [tag1, tag2, tag3])
+- `linkedinUrl`: Optional LinkedIn post URL
+- `readTime`: Estimated reading time in minutes
+
+### Adding New Articles
+1. Create directory at `/public/content/blog/:article-slug/`
+2. Create `index.md` file with proper frontmatter and markdown content
+3. Add the article slug to `articleSlugs` array in `/src/lib/articles.ts`
+4. Add cover image as `capa.png` and content images as `01.png`, `02.png`, etc.
+5. Reference images in markdown as `/content/blog/:article-slug/01.png`
+
+### Image Guidelines
+- Images should be placed in `/public/content/blog/:article-slug/` directories
+- **Standard naming convention**: `capa.png` for cover image, `01.png`, `02.png`, `03.png`, etc. for content images
+- Reference images in markdown using full public path: `/content/blog/:article-slug/01.png`
+- Cover images are displayed full-width at the top of article pages
+- Content images are automatically styled at 90% width and centered
+- Supported formats: PNG, JPG, WebP with rounded borders and shadows
