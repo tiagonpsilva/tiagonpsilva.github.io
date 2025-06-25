@@ -66,7 +66,7 @@ const BlogPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Compact Hero Section */}
-      <section className="pt-24 pb-12 px-6 relative overflow-hidden">
+      <section className="pt-24 pb-8 md:pb-12 px-4 md:px-6 relative overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 right-1/4 w-64 h-64 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full blur-3xl"></div>
@@ -79,7 +79,7 @@ const BlogPage: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="flex items-center gap-8 py-8"
+            className="flex flex-col md:flex-row items-center gap-6 md:gap-8 py-6 md:py-8"
           >
             {/* Logo & Title */}
             <motion.div
@@ -93,22 +93,22 @@ const BlogPage: React.FC = () => {
                 <img 
                   src="/bantu01.png" 
                   alt="Bantu Digital Logo" 
-                  className="relative w-40 h-40 object-contain drop-shadow-2xl"
+                  className="relative w-28 h-28 md:w-40 md:h-40 object-contain drop-shadow-2xl"
                 />
               </div>
             </motion.div>
 
             {/* Content */}
-            <div className="flex-1 space-y-5">
+            <div className="flex-1 space-y-4 md:space-y-5 text-center md:text-left">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3 bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
+                <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-3 bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
                   Bantu Digital
                 </h1>
-                <p className="text-xl text-muted-foreground leading-relaxed">
+                <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
                   Insights sobre <span className="text-primary font-semibold">IA</span>, 
                   <span className="text-primary font-semibold"> Dados</span>, 
                   <span className="text-primary font-semibold"> Arquitetura</span> e 
@@ -121,7 +121,7 @@ const BlogPage: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="flex flex-wrap gap-4"
+                className="flex flex-wrap gap-2 md:gap-4 justify-center md:justify-start"
               >
                 {[
                   { label: "IA", icon: "🧠", color: "from-blue-500 to-purple-600" },
@@ -154,7 +154,7 @@ const BlogPage: React.FC = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.6 }}
-              className="hidden md:flex flex-col items-center gap-3 flex-shrink-0"
+              className="flex md:hidden flex-row justify-center gap-8 mt-4 md:mt-0 md:flex-col md:items-center md:gap-3 md:flex-shrink-0"
             >
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/40 to-purple-600/40 rounded-full blur-lg"></div>
@@ -171,7 +171,7 @@ const BlogPage: React.FC = () => {
       </section>
 
       {/* Newsletter Subscription */}
-      <section className="pb-12 px-6">
+      <section className="pb-8 md:pb-12 px-4 md:px-6">
         <div className="container mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -182,7 +182,7 @@ const BlogPage: React.FC = () => {
             {/* Background gradient */}
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-600/10 rounded-2xl blur-xl"></div>
             
-            <div className="relative bg-background/90 backdrop-blur-sm border-2 border-primary/20 rounded-2xl p-6 text-center">
+            <div className="relative bg-background/90 backdrop-blur-sm border-2 border-primary/20 rounded-2xl p-4 md:p-6 text-center">
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -197,11 +197,11 @@ const BlogPage: React.FC = () => {
                   </div>
                 </div>
                 
-                <h3 className="text-xl font-bold text-foreground">
+                <h3 className="text-lg md:text-xl font-bold text-foreground">
                   📬 Newsletter Bantu Digital
                 </h3>
                 
-                <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+                <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
                   Receba insights sobre <span className="text-primary font-semibold">IA</span>, 
                   <span className="text-primary font-semibold"> Dados</span> e 
                   <span className="text-primary font-semibold"> Engenharia de Software</span>{' '}
@@ -239,7 +239,7 @@ const BlogPage: React.FC = () => {
       </section>
 
       {/* Articles Grid */}
-      <div className="pb-16 px-6">
+      <div className="pb-12 md:pb-16 px-4 md:px-6">
         <div className="container mx-auto max-w-4xl">
           <div className="space-y-8">
             {articles.map((article, index) => (
@@ -248,16 +248,16 @@ const BlogPage: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-gray-50/80 dark:bg-background/80 backdrop-blur-sm p-8 rounded-xl border border-border hover:border-primary/50 transition-all duration-300 group"
+                className="bg-gray-50/80 dark:bg-background/80 backdrop-blur-sm p-4 md:p-8 rounded-xl border border-border hover:border-primary/50 transition-all duration-300 group"
               >
-                <div className="flex gap-6">
+                <div className="flex flex-col md:flex-row gap-4 md:gap-6">
                   {/* Article Cover Image */}
                   <div className="flex-shrink-0">
                     <Link to={`/blog/${article.slug}`}>
                       <motion.div
                         whileHover={{ scale: 1.05 }}
                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                        className="w-48 h-36 rounded-lg overflow-hidden border border-border/50 group-hover:border-primary/30 transition-all duration-300"
+                        className="w-full md:w-48 h-32 md:h-36 rounded-lg overflow-hidden border border-border/50 group-hover:border-primary/30 transition-all duration-300"
                       >
                         <img 
                           src={getCoverImage(article.slug)}
@@ -273,7 +273,7 @@ const BlogPage: React.FC = () => {
                   </div>
 
                   {/* Article Content */}
-                  <div className="flex-1 flex flex-col space-y-4">
+                  <div className="flex-1 flex flex-col space-y-3 md:space-y-4">
                     {/* Article Header */}
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -281,11 +281,11 @@ const BlogPage: React.FC = () => {
                           to={`/blog/${article.slug}`}
                           className="block group-hover:text-primary transition-colors duration-200"
                         >
-                          <h2 className="text-2xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                          <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                             {article.title}
                           </h2>
                         </Link>
-                        <p className="text-muted-foreground text-lg leading-relaxed">
+                        <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
                           {article.excerpt}
                         </p>
                       </div>
@@ -304,11 +304,11 @@ const BlogPage: React.FC = () => {
                     </div>
 
                     {/* Tags */}
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1 md:gap-2">
                       {article.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full border border-primary/20"
+                          className="inline-flex items-center gap-1 px-2 md:px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full border border-primary/20"
                         >
                           <Tag className="w-3 h-3" />
                           {tag}
