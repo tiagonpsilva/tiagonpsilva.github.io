@@ -115,3 +115,74 @@ Each article markdown file requires frontmatter with:
 - Cover images are displayed full-width at the top of article pages
 - Content images are automatically styled at 90% width and centered
 - Supported formats: PNG, JPG, WebP with rounded borders and shadows
+
+## SEO Strategy
+
+### Overview
+Comprehensive SEO implementation across the entire site to maximize organic visibility and search engine rankings. The strategy covers technical SEO, content optimization, and performance enhancements.
+
+### SEO Implementation Guidelines
+
+#### Meta Tags Structure
+Each page requires optimized meta tags:
+- **Title**: 50-60 characters, keyword-focused
+- **Description**: 150-160 characters, compelling and descriptive
+- **Keywords**: Relevant terms for the page content
+- **Open Graph**: For social media sharing
+- **Twitter Cards**: For Twitter sharing optimization
+
+#### Schema Markup Requirements
+Implement JSON-LD structured data:
+- **Homepage**: Person + Organization schema
+- **Blog**: Blog + BlogPosting schema for articles
+- **Cases**: CreativeWork schema for portfolio projects
+- **Articles**: Article schema with author, publish date, and reading time
+
+#### Technical SEO Checklist
+- [ ] React Helmet Async for dynamic meta tags
+- [ ] Sitemap.xml generation (dynamic based on content)
+- [ ] Robots.txt optimization
+- [ ] Canonical URLs for all pages
+- [ ] Core Web Vitals optimization (LCP < 2.5s, FID < 100ms, CLS < 0.1)
+- [ ] Image optimization (WebP, lazy loading, proper alt texts)
+- [ ] Internal linking strategy implementation
+
+#### Content Optimization
+- **Heading Structure**: Proper H1→H2→H3 hierarchy
+- **Alt Texts**: Descriptive alt attributes for all images
+- **Internal Links**: Strategic cross-linking between related content
+- **Keyword Density**: Natural keyword distribution throughout content
+- **Reading Time**: Calculate and display estimated reading time for articles
+
+#### Performance Requirements
+- **Core Web Vitals**: Target >90 Lighthouse score
+- **Image Optimization**: WebP format with fallbacks
+- **Lazy Loading**: Implement for all images below the fold
+- **Bundle Optimization**: Code splitting and tree shaking
+- **Caching Strategy**: Leverage browser caching for static assets
+
+#### Analytics and Monitoring
+- **Google Analytics 4**: Custom events for user engagement tracking
+- **Google Search Console**: Monitor search performance and indexing
+- **Core Web Vitals**: Real user metrics monitoring
+- **Custom Events**: Track blog engagement, portfolio views, contact form interactions
+
+#### Target Keywords by Section
+- **Homepage**: "engenheiro software", "especialista IA", "desenvolvedor full stack"
+- **Expertise**: "React", "Python", "IA", "arquitetura software"
+- **Cases**: "portfólio projetos", "cases sucesso", "desenvolvimento web"
+- **Blog**: "blog IA", "tecnologia diversidade", "Bantu Digital"
+
+#### Link Building Strategy
+- **Internal Links**: Hub and spoke model with homepage as central hub
+- **Content Clusters**: Group related content around main topics
+- **Cross-linking**: Strategic links between blog posts and portfolio sections
+- **External Links**: Quality outbound links to authoritative sources
+
+### SEO Roadmap Reference
+Detailed implementation timeline and tasks are documented in `/management/SEO_ROADMAP.md`
+
+### Monitoring and Maintenance
+- **Weekly**: Core Web Vitals and Search Console checks
+- **Monthly**: Keyword rankings and traffic analysis
+- **Quarterly**: Content gap analysis and strategy updates

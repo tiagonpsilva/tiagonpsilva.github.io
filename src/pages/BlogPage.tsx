@@ -182,42 +182,42 @@ const BlogPage: React.FC = () => {
             {/* Background gradient */}
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-600/10 rounded-2xl blur-xl"></div>
             
-            <div className="relative bg-background/90 backdrop-blur-sm border-2 border-primary/20 rounded-2xl p-8 text-center">
+            <div className="relative bg-background/90 backdrop-blur-sm border-2 border-primary/20 rounded-2xl p-6 text-center">
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.4, duration: 0.6 }}
-                className="space-y-4"
+                className="space-y-3"
               >
                 <div className="flex justify-center">
-                  <div className="bg-gradient-to-br from-primary/20 to-blue-600/20 p-4 rounded-full">
-                    <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                  <div className="bg-gradient-to-br from-primary/20 to-blue-600/20 p-3 rounded-full">
+                    <svg className="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                     </svg>
                   </div>
                 </div>
                 
-                <h3 className="text-2xl font-bold text-foreground">
+                <h3 className="text-xl font-bold text-foreground">
                   📬 Newsletter Bantu Digital
                 </h3>
                 
-                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                <p className="text-base text-muted-foreground max-w-2xl mx-auto">
                   Receba insights sobre <span className="text-primary font-semibold">IA</span>, 
                   <span className="text-primary font-semibold"> Dados</span> e 
-                  <span className="text-primary font-semibold"> Engenharia de Software</span> 
+                  <span className="text-primary font-semibold"> Engenharia de Software</span>{' '}
                   diretamente no seu LinkedIn
                 </p>
                 
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="pt-4"
+                  className="pt-2"
                 >
                   <a
                     href="https://www.linkedin.com/newsletters/7331120186697138176/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
+                    className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
                   >
                     <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
