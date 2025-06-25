@@ -145,7 +145,7 @@ const ArticlePage: React.FC = () => {
               <img 
                 src="/content/blog/acelerando-entrega-de-valor-com-ia-sagemaker-bedrock-amazon-q/capa.png"
                 alt="Capa do artigo - AWS re:Invent 2024"
-                className="w-full h-auto object-cover"
+                className="w-full h-auto md:max-h-[60vh] md:object-contain object-cover"
               />
             </motion.div>
           </div>
@@ -164,7 +164,7 @@ const ArticlePage: React.FC = () => {
               <img 
                 src="/content/blog/ia-em-times-de-tecnologia-mais-valor-menos-esforco-parte-1/capa.png"
                 alt="Capa do artigo - IA em Times de Tecnologia"
-                className="w-full h-auto object-cover"
+                className="w-full h-auto md:max-h-[60vh] md:object-contain object-cover"
               />
             </motion.div>
           </div>
@@ -183,7 +183,7 @@ const ArticlePage: React.FC = () => {
               <img 
                 src="/content/blog/como-ia-esta-revolucionando-engenharia-de-software-mcp/capa.png"
                 alt="Capa do artigo - IA e MCP na Engenharia de Software"
-                className="w-full h-auto object-cover"
+                className="w-full h-auto md:max-h-[60vh] md:object-contain object-cover"
               />
             </motion.div>
           </div>
@@ -202,7 +202,7 @@ const ArticlePage: React.FC = () => {
               <img 
                 src="/content/blog/conversando-com-ia-da-forma-certa-engenharia-de-prompt/capa.png"
                 alt="Capa do artigo - Engenharia de Prompt"
-                className="w-full h-auto object-cover"
+                className="w-full h-auto md:max-h-[60vh] md:object-contain object-cover"
               />
             </motion.div>
           </div>
@@ -221,7 +221,7 @@ const ArticlePage: React.FC = () => {
               <img 
                 src="/content/blog/agentes-de-ia-revolucao-silenciosa/capa.png"
                 alt="Capa do artigo - Agentes de IA"
-                className="w-full h-auto object-cover"
+                className="w-full h-auto md:max-h-[60vh] md:object-contain object-cover"
               />
             </motion.div>
           </div>
@@ -240,7 +240,7 @@ const ArticlePage: React.FC = () => {
               <img 
                 src="https://media.licdn.com/dms/image/v2/D4D12AQFhNebaEJEm_w/article-cover_image-shrink_720_1280/B4DZefYGYvGkAM-/0/1750725591022?e=2147483647&v=beta&t=1BCGcJR0QqkPDeTT-NeAlpPdH7J0ZRuyaMmzPELh17Y"
                 alt="Capa do artigo - Kwanza Agent"
-                className="w-full h-auto object-cover"
+                className="w-full h-auto md:max-h-[60vh] md:object-contain object-cover"
               />
             </motion.div>
           </div>
@@ -259,7 +259,7 @@ const ArticlePage: React.FC = () => {
               <img 
                 src="/content/blog/da-resposta-ao-raciocinio-ia-que-pensa-em-voz-alta/capa.png"
                 alt="Capa do artigo - Da Resposta ao Raciocínio"
-                className="w-full h-auto object-cover"
+                className="w-full h-auto md:max-h-[60vh] md:object-contain object-cover"
               />
             </motion.div>
           </div>
@@ -279,11 +279,11 @@ const ArticlePage: React.FC = () => {
               <ReactMarkdown 
                 components={{
                   img: ({ src, alt }) => (
-                    <div className="my-4 md:my-8 flex justify-center">
+                    <div className="my-4 md:my-12 flex justify-center">
                       <img 
                         src={src} 
                         alt={alt} 
-                        className="w-full md:w-[90%] h-auto rounded-lg border border-border shadow-lg"
+                        className="w-full md:w-[90%] h-auto md:max-h-[70vh] md:object-contain rounded-lg border border-border shadow-lg"
                       />
                     </div>
                   )

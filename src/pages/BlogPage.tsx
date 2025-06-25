@@ -294,7 +294,7 @@ const BlogPage: React.FC = () => {
                       <motion.div
                         whileHover={{ scale: 1.05 }}
                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                        className="w-full md:w-48 h-32 md:h-36 rounded-lg overflow-hidden border border-border/50 group-hover:border-primary/30 transition-all duration-300"
+                        className="w-full md:w-64 h-32 md:h-48 rounded-lg overflow-hidden border border-border/50 group-hover:border-primary/30 transition-all duration-300"
                       >
                         <img 
                           src={getCoverImage(article.slug)}
@@ -307,6 +307,17 @@ const BlogPage: React.FC = () => {
                         />
                       </motion.div>
                     </Link>
+
+                    {/* Read More - Desktop only, below image */}
+                    <div className="hidden md:block pt-4 text-center">
+                      <Link
+                        to={`/blog/${article.slug}`}
+                        className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
+                      >
+                        Ler artigo completo
+                        <ExternalLink className="w-4 h-4" />
+                      </Link>
+                    </div>
                   </div>
 
                   {/* Article Content */}
@@ -353,8 +364,8 @@ const BlogPage: React.FC = () => {
                       ))}
                     </div>
 
-                    {/* Read More */}
-                    <div className="pt-4">
+                    {/* Read More - Mobile only */}
+                    <div className="block md:hidden pt-4">
                       <Link
                         to={`/blog/${article.slug}`}
                         className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
