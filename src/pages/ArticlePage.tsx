@@ -76,7 +76,7 @@ const ArticlePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Back to Blog */}
-      <div className="pt-24 pb-8 px-6">
+      <div className="pt-24 pb-8 px-4 md:px-6">
         <div className="container mx-auto max-w-4xl">
           <Link
             to="/blog"
@@ -89,30 +89,30 @@ const ArticlePage: React.FC = () => {
       </div>
 
       {/* Article Header */}
-      <div className="pb-8 px-6">
+      <div className="pb-8 px-4 md:px-6">
         <div className="container mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
+            <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
               {article.title}
             </h1>
             
-            <p className="text-xl text-muted-foreground leading-relaxed">
+            <p className="text-base md:text-xl text-muted-foreground leading-relaxed">
               {article.excerpt}
             </p>
 
             {/* Article Meta */}
-            <div className="flex flex-wrap items-center gap-6 text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-4 md:gap-6 text-muted-foreground">
               <div className="flex items-center gap-2">
-                <Calendar className="w-5 h-5" />
-                <span>{new Date(article.publishedAt).toLocaleDateString('pt-BR')}</span>
+                <Calendar className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="text-sm md:text-base">{new Date(article.publishedAt).toLocaleDateString('pt-BR')}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5" />
-                <span>{article.readTime} min de leitura</span>
+                <Clock className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="text-sm md:text-base">{article.readTime} min de leitura</span>
               </div>
             </div>
 
@@ -121,9 +121,9 @@ const ArticlePage: React.FC = () => {
               {article.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium bg-primary/10 text-primary rounded-full border border-primary/20"
+                  className="inline-flex items-center gap-1 px-2 md:px-3 py-1 text-xs md:text-sm font-medium bg-primary/10 text-primary rounded-full border border-primary/20"
                 >
-                  <Tag className="w-3 h-3" />
+                  <Tag className="w-3 h-3 md:w-4 md:h-4" />
                   {tag}
                 </span>
               ))}
@@ -134,13 +134,13 @@ const ArticlePage: React.FC = () => {
 
       {/* Article Cover Image */}
       {article.slug === 'acelerando-entrega-de-valor-com-ia-sagemaker-bedrock-amazon-q' && (
-        <div className="pb-12 px-6">
+        <div className="pb-6 md:pb-12 px-4 md:px-6">
           <div className="container mx-auto max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="rounded-xl overflow-hidden border border-border"
+              className="rounded-lg md:rounded-xl overflow-hidden border border-border"
             >
               <img 
                 src="/content/blog/acelerando-entrega-de-valor-com-ia-sagemaker-bedrock-amazon-q/capa.png"
@@ -153,13 +153,13 @@ const ArticlePage: React.FC = () => {
       )}
       
       {article.slug === 'ia-em-times-de-tecnologia-mais-valor-menos-esforco-parte-1' && (
-        <div className="pb-12 px-6">
+        <div className="pb-6 md:pb-12 px-4 md:px-6">
           <div className="container mx-auto max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="rounded-xl overflow-hidden border border-border"
+              className="rounded-lg md:rounded-xl overflow-hidden border border-border"
             >
               <img 
                 src="/content/blog/ia-em-times-de-tecnologia-mais-valor-menos-esforco-parte-1/capa.png"
@@ -172,13 +172,13 @@ const ArticlePage: React.FC = () => {
       )}
       
       {article.slug === 'como-ia-esta-revolucionando-engenharia-de-software-mcp' && (
-        <div className="pb-12 px-6">
+        <div className="pb-6 md:pb-12 px-4 md:px-6">
           <div className="container mx-auto max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="rounded-xl overflow-hidden border border-border"
+              className="rounded-lg md:rounded-xl overflow-hidden border border-border"
             >
               <img 
                 src="/content/blog/como-ia-esta-revolucionando-engenharia-de-software-mcp/capa.png"
@@ -191,13 +191,13 @@ const ArticlePage: React.FC = () => {
       )}
       
       {article.slug === 'conversando-com-ia-da-forma-certa-engenharia-de-prompt' && (
-        <div className="pb-12 px-6">
+        <div className="pb-6 md:pb-12 px-4 md:px-6">
           <div className="container mx-auto max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="rounded-xl overflow-hidden border border-border"
+              className="rounded-lg md:rounded-xl overflow-hidden border border-border"
             >
               <img 
                 src="/content/blog/conversando-com-ia-da-forma-certa-engenharia-de-prompt/capa.png"
@@ -210,13 +210,13 @@ const ArticlePage: React.FC = () => {
       )}
       
       {article.slug === 'agentes-de-ia-revolucao-silenciosa' && (
-        <div className="pb-12 px-6">
+        <div className="pb-6 md:pb-12 px-4 md:px-6">
           <div className="container mx-auto max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="rounded-xl overflow-hidden border border-border"
+              className="rounded-lg md:rounded-xl overflow-hidden border border-border"
             >
               <img 
                 src="/content/blog/agentes-de-ia-revolucao-silenciosa/capa.png"
@@ -229,13 +229,13 @@ const ArticlePage: React.FC = () => {
       )}
       
       {article.slug === 'kwanza-agent-primeira-sprint' && (
-        <div className="pb-12 px-6">
+        <div className="pb-6 md:pb-12 px-4 md:px-6">
           <div className="container mx-auto max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="rounded-xl overflow-hidden border border-border"
+              className="rounded-lg md:rounded-xl overflow-hidden border border-border"
             >
               <img 
                 src="https://media.licdn.com/dms/image/v2/D4D12AQFhNebaEJEm_w/article-cover_image-shrink_720_1280/B4DZefYGYvGkAM-/0/1750725591022?e=2147483647&v=beta&t=1BCGcJR0QqkPDeTT-NeAlpPdH7J0ZRuyaMmzPELh17Y"
@@ -248,13 +248,13 @@ const ArticlePage: React.FC = () => {
       )}
       
       {article.slug === 'da-resposta-ao-raciocinio-ia-que-pensa-em-voz-alta' && (
-        <div className="pb-12 px-6">
+        <div className="pb-6 md:pb-12 px-4 md:px-6">
           <div className="container mx-auto max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="rounded-xl overflow-hidden border border-border"
+              className="rounded-lg md:rounded-xl overflow-hidden border border-border"
             >
               <img 
                 src="/content/blog/da-resposta-ao-raciocinio-ia-que-pensa-em-voz-alta/capa.png"
@@ -267,23 +267,23 @@ const ArticlePage: React.FC = () => {
       )}
 
       {/* Article Content */}
-      <div className="pb-16 px-6">
+      <div className="pb-12 md:pb-16 px-4 md:px-6">
         <div className="container mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="glass-effect p-8 md:p-12 rounded-xl border border-border"
+            className="glass-effect p-4 md:p-8 lg:p-12 rounded-xl border border-border"
           >
-            <div className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-code:text-primary prose-pre:bg-muted prose-pre:border prose-pre:border-border">
+            <div className="prose prose-sm md:prose-lg max-w-none prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-code:text-primary prose-pre:bg-muted prose-pre:border prose-pre:border-border">
               <ReactMarkdown 
                 components={{
                   img: ({ src, alt }) => (
-                    <div className="my-8 flex justify-center">
+                    <div className="my-4 md:my-8 flex justify-center">
                       <img 
                         src={src} 
                         alt={alt} 
-                        className="w-[90%] h-auto rounded-lg border border-border shadow-lg"
+                        className="w-full md:w-[90%] h-auto rounded-lg border border-border shadow-lg"
                       />
                     </div>
                   )
@@ -298,14 +298,14 @@ const ArticlePage: React.FC = () => {
       </div>
 
       {/* Back to Blog Footer */}
-      <div className="pb-16 px-6">
+      <div className="pb-12 md:pb-16 px-4 md:px-6">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center">
             <Link
               to="/blog"
               className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
               Ver todos os artigos
             </Link>
           </div>
