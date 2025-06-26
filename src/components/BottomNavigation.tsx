@@ -32,9 +32,9 @@ const BottomNavigation: React.FC = () => {
       subItems: inicioSubItems
     },
     { href: '/cases', label: 'Cases', icon: <BarChart3 className="h-5 w-5" />, isExternal: true },
-    { href: '#projects', label: 'Projetos', icon: <Layers3 className="h-5 w-5" /> },
+    { href: '/labs', label: 'Labs', icon: <Layers3 className="h-5 w-5" />, isExternal: true },
     { href: '/blog', label: 'Blog', icon: <PenTool className="h-5 w-5" />, isExternal: true },
-    { href: '#contact', label: 'Contato', icon: <MessageCircle className="h-5 w-5" /> },
+    { href: '/contact', label: 'Contato', icon: <MessageCircle className="h-5 w-5" />, isExternal: true },
   ]
 
   const handleNavigation = (href: string, isExternal?: boolean, isExpandable?: boolean) => {

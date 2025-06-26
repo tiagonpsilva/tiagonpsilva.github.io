@@ -13,10 +13,8 @@ import {
   ChevronDown,
   ChevronUp,
   Filter,
-  X,
-  ArrowLeft
+  X
 } from 'lucide-react'
-import { Link } from 'react-router-dom'
 
 const CasesPage: React.FC = () => {
   const [expandedCase, setExpandedCase] = useState<number | null>(null)
@@ -242,21 +240,9 @@ const CasesPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Back to Home */}
-      <div className="pt-24 pb-4 px-6">
-        <div className="container mx-auto px-6">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Voltar ao Início
-          </Link>
-        </div>
-      </div>
 
       {/* Header */}
-      <section className="py-2 bg-background">
+      <section className="pt-32 lg:pt-24 py-2 bg-background">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -409,20 +395,8 @@ const CasesPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Back to Home Footer */}
-      <div className="pb-16 px-6">
-        <div className="container mx-auto px-6">
-          <div className="text-center">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Voltar ao Início
-            </Link>
-          </div>
-        </div>
-      </div>
+      {/* Bottom spacing */}
+      <div className="pb-20 lg:pb-16"></div>
     </div>
   )
 }

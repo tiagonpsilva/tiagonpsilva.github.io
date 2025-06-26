@@ -5,11 +5,11 @@ import BottomNavigation from './components/BottomNavigation'
 import Hero from './components/Hero'
 import Expertise from './components/Expertise'
 import Education from './components/Education'
-import Projects from './components/Projects'
-import Contact from './components/Contact'
 import BlogPage from './pages/BlogPage'
 import ArticlePage from './pages/ArticlePage'
 import CasesPage from './pages/CasesPage'
+import LabsPage from './pages/LabsPage'
+import ContactPage from './pages/ContactPage'
 import { ThemeProvider, useTheme } from './contexts/ThemeContext'
 
 function HomePage() {
@@ -25,8 +25,6 @@ function HomePage() {
       <Hero />
       <Expertise />
       <Education />
-      <Projects />
-      <Contact />
     </>
   )
 }
@@ -40,6 +38,9 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/cases" element={<CasesPage />} />
+            <Route path="/labs" element={<LabsPage />} />
+            <Route path="/projects" element={<LabsPage />} />
+            <Route path="/contact" element={<ContactPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<ArticlePage />} />
           </Routes>

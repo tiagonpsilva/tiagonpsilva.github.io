@@ -37,9 +37,9 @@ const Header: React.FC = () => {
     { href: '#expertise', label: 'Expertise' },
     { href: '#education', label: 'Formação' },
     { href: '/cases', label: 'Cases', isExternal: true },
-    { href: '#projects', label: 'Projetos' },
+    { href: '/labs', label: 'Labs', isExternal: true },
     { href: '/blog', label: 'Blog', isExternal: true },
-    { href: '#contact', label: 'Contato' },
+    { href: '/contact', label: 'Contato', isExternal: true },
   ]
 
   const handleNavigation = (href: string, isExternal?: boolean) => {
