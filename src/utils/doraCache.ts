@@ -16,6 +16,33 @@ interface CacheStore {
 
 // Mock data for development and fallback
 const mockDoraData: Record<string, DoraMetrics> = {
+  'Portfolio Profissional': {
+    deploymentFrequency: {
+      value: 5.2,
+      unit: 'per-week',
+      display: '5.2/semana',
+      score: 'elite'
+    },
+    leadTimeForChanges: {
+      value: 4,
+      unit: 'hours',
+      display: '4h',
+      score: 'elite'
+    },
+    changeFailureRate: {
+      value: 3.8,
+      unit: 'percentage',
+      display: '3.8%',
+      score: 'elite'
+    },
+    meanTimeToRecovery: {
+      value: 1,
+      unit: 'hours',
+      display: '1h',
+      score: 'elite'
+    },
+    overallScore: 'elite'
+  },
   'kwanza-agent': {
     deploymentFrequency: {
       value: 2.1,

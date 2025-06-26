@@ -39,6 +39,8 @@ const LabsPage: React.FC = () => {
   // Limpar cache expirado na inicialização
   useEffect(() => {
     cleanExpiredCache()
+    // Carregar métricas do repositório do site
+    loadDoraMetrics('Portfolio Profissional', 'https://github.com/tiagonpsilva/tiagonpsilva.github.io')
   }, [])
 
   // Função para carregar DORA Metrics com cache
@@ -200,6 +202,94 @@ const LabsPage: React.FC = () => {
       {/* Labs Projects Section */}
       <section className="section-padding bg-muted">
         <div className="container mx-auto px-6 space-y-12">
+
+          {/* Card Destacado - Repositório do Site */}
+          <div>
+            <h3 className="text-2xl font-bold text-foreground mb-8 flex items-center gap-2">
+              <Code className="h-6 w-6 text-primary" />
+              Projeto em Destaque
+            </h3>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <MagicCard className="p-6 border-primary/30 hover:border-primary/50 bg-gradient-to-br from-primary/5 to-blue-600/5 group relative overflow-hidden">
+                {/* Efeito de brilho destacado */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
+                
+                <div className="relative z-10 flex flex-col lg:flex-row lg:gap-8">
+                  {/* Left side - Main info */}
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="p-3 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors duration-300">
+                        <Code className="h-8 w-8 text-primary" />
+                      </div>
+                      <div className="flex gap-2">
+                        <div className="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">
+                          🚀 EM PRODUÇÃO
+                        </div>
+                        <a
+                          href="https://github.com/tiagonpsilva/tiagonpsilva.github.io"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 hover:bg-muted rounded-lg transition-colors duration-200"
+                        >
+                          <ExternalLink className="h-5 w-5 text-muted-foreground hover:text-primary" />
+                        </a>
+                      </div>
+                    </div>
+
+                    <h4 className="text-xl font-bold text-card-foreground mb-3">
+                      Portfolio Profissional
+                    </h4>
+
+                    <p className="text-muted-foreground text-base mb-4 leading-relaxed">
+                      Site pessoal e portfolio desenvolvido com React, TypeScript e Tailwind CSS. Inclui blog integrado, sistema de navegação mobile-first e métricas DORA em tempo real.
+                    </p>
+
+                    {/* Stats destacadas */}
+                    <div className="flex items-center gap-6 mb-4 text-sm">
+                      <div className="flex items-center gap-2 text-primary">
+                        <GitCommit className="h-4 w-4" />
+                        <span className="font-semibold">12+ commits</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-primary">
+                        <GitBranch className="h-4 w-4" />
+                        <span className="font-semibold">2 branches</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-primary">
+                        <Star className="h-4 w-4" />
+                        <span className="font-semibold">Este site!</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-primary ml-auto">
+                        <Calendar className="h-4 w-4" />
+                        <span className="font-semibold">Hoje</span>
+                      </div>
+                    </div>
+
+                    {/* Tags especiais */}
+                    <div className="flex flex-wrap gap-2 mb-4 lg:mb-0">
+                      {['React 18', 'TypeScript', 'Tailwind CSS', 'Vite', 'Framer Motion', 'GitHub Pages'].map((tag: string, idx: number) => (
+                        <span key={idx} className="px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right side - DORA Metrics destacadas */}
+                  <div className="lg:w-80 lg:flex-shrink-0">
+                    <DoraMetrics 
+                      metrics={doraMetrics['Portfolio Profissional']}
+                      isLoading={loadingMetrics['Portfolio Profissional'] || false}
+                    />
+                  </div>
+                </div>
+              </MagicCard>
+            </motion.div>
+          </div>
 
           {/* Produtos Experimentais */}
           <div>
