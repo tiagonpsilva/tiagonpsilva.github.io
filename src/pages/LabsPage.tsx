@@ -215,9 +215,7 @@ const LabsPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <MagicCard className="p-6 border-primary/30 hover:border-primary/50 bg-gradient-to-br from-primary/5 to-blue-600/5 group relative overflow-hidden">
-                {/* Efeito de brilho destacado */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
+              <MagicCard className="p-6 border-primary/30 bg-gradient-to-br from-primary/5 to-blue-600/5 group relative overflow-hidden">
                 
                 <div className="relative z-10 flex flex-col lg:flex-row lg:gap-8">
                   {/* Left side - Main info */}
