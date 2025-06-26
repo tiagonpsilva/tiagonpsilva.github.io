@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { 
   TrendingUp, 
@@ -6,7 +6,9 @@ import {
   AlertTriangle, 
   Wrench,
   Award,
-  Info
+  Info,
+  HelpCircle,
+  X
 } from 'lucide-react'
 import { DoraMetrics as DoraMetricsType, getDoraScoreBadge } from '../utils/doraMetrics'
 
@@ -20,9 +22,7 @@ const CompactMetricItem: React.FC<{
   label: string
   value: string
   score: 'elite' | 'high' | 'medium' | 'low'
-  description: string
-  calculation: string
-}> = ({ icon, label, value, score, description, calculation }) => {
+}> = ({ icon, label, value, score }) => {
   const getScoreColor = (score: string) => {
     switch (score) {
       case 'elite': return 'text-green-600'
@@ -35,37 +35,21 @@ const CompactMetricItem: React.FC<{
 
   return (
     <div className="flex items-center justify-between">
-      {/* Label com tooltip de descrição */}
-      <div className="flex items-center gap-2 group relative">
+      <div className="flex items-center gap-2">
         <div className={`${getScoreColor(score)}`}>
           {icon}
         </div>
-        <span className="text-xs font-medium text-foreground cursor-help">{label}</span>
-        
-        {/* Tooltip da descrição */}
-        <div className="absolute bottom-full left-0 mb-2 px-3 py-2 bg-black/90 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-20 w-48">
-          <div className="font-semibold mb-1">{label}</div>
-          <div className="text-gray-300">{description}</div>
-          <div className="absolute top-full left-4 border-4 border-transparent border-t-black/90"></div>
-        </div>
+        <span className="text-xs font-medium text-foreground">{label}</span>
       </div>
-      
-      {/* Valor com tooltip de cálculo */}
-      <div className="text-right group relative">
-        <div className={`text-xs font-bold ${getScoreColor(score)} cursor-help`}>{value}</div>
-        
-        {/* Tooltip do cálculo */}
-        <div className="absolute bottom-full right-0 mb-2 px-3 py-2 bg-black/90 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-20 w-56">
-          <div className="font-semibold mb-1">Cálculo:</div>
-          <div className="text-gray-300">{calculation}</div>
-          <div className="absolute top-full right-4 border-4 border-transparent border-t-black/90"></div>
-        </div>
+      <div className="text-right">
+        <div className={`text-xs font-bold ${getScoreColor(score)}`}>{value}</div>
       </div>
     </div>
   )
 }
 
 const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false }) => {
+  const [showInfo, setShowInfo] = useState(false)
   if (isLoading) {
     return (
       <div className="border-t border-muted pt-3">
@@ -105,17 +89,69 @@ const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false })
       transition={{ duration: 0.3 }}
       className="border-t border-muted pt-3"
     >
-      {/* Header compacto com badge */}
+      {/* Header compacto com badge e info */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-1">
           <TrendingUp className="h-3 w-3 text-muted-foreground" />
           <span className="text-xs font-semibold text-foreground">DORA</span>
+          <button
+            onClick={() => setShowInfo(!showInfo)}
+            className="p-0.5 hover:bg-muted rounded transition-colors duration-200"
+            aria-label="Informações sobre DORA Metrics"
+          >
+            <HelpCircle className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+          </button>
         </div>
         <div className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium ${badge.bgColor} ${badge.color}`}>
           <Award className="h-2.5 w-2.5" />
           {badge.label.split(' ')[0]}
         </div>
       </div>
+
+      {/* Painel informativo colapsível */}
+      {showInfo && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.2 }}
+          className="mb-3 p-2 bg-muted/50 rounded text-xs text-muted-foreground"
+        >
+          <div className="flex items-start justify-between mb-2">
+            <span className="font-semibold text-foreground">DORA Metrics</span>
+            <button
+              onClick={() => setShowInfo(false)}
+              className="p-0.5 hover:bg-muted rounded"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </div>
+          <div className="space-y-1.5">
+            <div>
+              <span className="font-medium text-green-600">• Deploy Freq:</span> Quantos deploys por semana
+            </div>
+            <div>
+              <span className="font-medium text-blue-600">• Lead Time:</span> Tempo do PR ao deploy
+            </div>
+            <div>
+              <span className="font-medium text-yellow-600">• Failure Rate:</span> % de deploys com falhas
+            </div>
+            <div>
+              <span className="font-medium text-red-600">• Recovery:</span> Tempo para corrigir falhas
+            </div>
+            <div className="pt-1 border-t border-muted">
+              <a 
+                href="https://cloud.google.com/blog/products/devops-sre/using-the-four-keys-to-measure-your-devops-performance" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                Saiba mais sobre DORA →
+              </a>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       {/* Métricas compactas em grid 2x2 */}
       <div className="grid grid-cols-1 gap-1.5 text-xs">
@@ -124,8 +160,6 @@ const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false })
           label="Deploy Freq"
           value={metrics.deploymentFrequency.display}
           score={metrics.deploymentFrequency.score}
-          description="Frequência de deploys em produção. Mede quão rapidamente a equipe consegue entregar código para usuários finais."
-          calculation="Baseado no número de releases públicas + commits na branch main nos últimos 3 meses. Se não há releases, usa commits como proxy."
         />
         
         <CompactMetricItem
@@ -133,8 +167,6 @@ const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false })
           label="Lead Time"
           value={metrics.leadTimeForChanges.display}
           score={metrics.leadTimeForChanges.score}
-          description="Tempo entre commit e deploy em produção. Mede a velocidade do pipeline de desenvolvimento."
-          calculation="Média do tempo entre criação e merge dos Pull Requests. Calcula (data merge - data criação) para todos os PRs."
         />
         
         <CompactMetricItem
@@ -142,8 +174,6 @@ const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false })
           label="Failure Rate"
           value={metrics.changeFailureRate.display}
           score={metrics.changeFailureRate.score}
-          description="Percentual de deploys que resultam em falhas ou precisam de hotfix. Mede a qualidade das releases."
-          calculation="Percentual de commits com palavras-chave de correção (fix, hotfix, bug, error, issue, patch) em relação ao total."
         />
         
         <CompactMetricItem
@@ -151,8 +181,6 @@ const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false })
           label="Recovery"
           value={metrics.meanTimeToRecovery.display}
           score={metrics.meanTimeToRecovery.score}
-          description="Tempo médio para restaurar o serviço após uma falha em produção. Mede a capacidade de resposta a incidentes."
-          calculation="Média do tempo entre commits de correção consecutivos. Analisa intervalos entre fixes para estimar velocidade de recuperação."
         />
       </div>
     </motion.div>
