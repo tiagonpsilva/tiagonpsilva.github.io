@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { MagicCard } from '../components/ui/magic-card'
 import { useTheme } from '../contexts/ThemeContext'
+import DoraMetrics from '../components/DoraMetrics'
+import { calculateDoraMetrics, DoraMetrics as DoraMetricsType } from '../utils/doraMetrics'
 import { 
   ExternalLink, 
   Mail,
@@ -18,6 +20,8 @@ import {
 
 const LabsPage: React.FC = () => {
   const { restorePreviousTheme } = useTheme()
+  const [doraMetrics, setDoraMetrics] = useState<Record<string, DoraMetricsType | null>>({})
+  const [loadingMetrics, setLoadingMetrics] = useState<Record<string, boolean>>({})
 
   useEffect(() => {
     // Restaurar tema anterior quando voltar para a página principal
@@ -25,6 +29,20 @@ const LabsPage: React.FC = () => {
     // Forçar scroll para o topo da página
     window.scrollTo(0, 0)
   }, [restorePreviousTheme])
+
+  // Função para carregar DORA Metrics
+  const loadDoraMetrics = async (projectName: string, repoUrl: string) => {
+    setLoadingMetrics(prev => ({ ...prev, [projectName]: true }))
+    try {
+      const metrics = await calculateDoraMetrics(repoUrl)
+      setDoraMetrics(prev => ({ ...prev, [projectName]: metrics }))
+    } catch (error) {
+      console.error(`Erro ao carregar DORA Metrics para ${projectName}:`, error)
+      setDoraMetrics(prev => ({ ...prev, [projectName]: null }))
+    } finally {
+      setLoadingMetrics(prev => ({ ...prev, [projectName]: false }))
+    }
+  }
 
   // Produtos Experimentais
   const experimentalProducts = [
@@ -159,7 +177,14 @@ const LabsPage: React.FC = () => {
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {experimentalProducts.map((project, index) => (
-                <ProjectCard key={index} project={project} index={index} />
+                <ProjectCard 
+                  key={index} 
+                  project={project} 
+                  index={index}
+                  doraMetrics={doraMetrics[project.name]}
+                  isLoadingMetrics={loadingMetrics[project.name] || false}
+                  onLoadMetrics={loadDoraMetrics}
+                />
               ))}
             </div>
           </div>
@@ -173,7 +198,14 @@ const LabsPage: React.FC = () => {
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {aiProjects.map((project, index) => (
-                <ProjectCard key={index} project={project} index={index} />
+                <ProjectCard 
+                  key={index} 
+                  project={project} 
+                  index={index}
+                  doraMetrics={doraMetrics[project.name]}
+                  isLoadingMetrics={loadingMetrics[project.name] || false}
+                  onLoadMetrics={loadDoraMetrics}
+                />
               ))}
             </div>
           </div>
@@ -187,7 +219,14 @@ const LabsPage: React.FC = () => {
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {architectureProjects.map((project, index) => (
-                <ProjectCard key={index} project={project} index={index} />
+                <ProjectCard 
+                  key={index} 
+                  project={project} 
+                  index={index}
+                  doraMetrics={doraMetrics[project.name]}
+                  isLoadingMetrics={loadingMetrics[project.name] || false}
+                  onLoadMetrics={loadDoraMetrics}
+                />
               ))}
             </div>
           </div>
@@ -254,7 +293,18 @@ interface Project {
   stats: ProjectStats;
 }
 
-const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
+const ProjectCard: React.FC<{ 
+  project: Project; 
+  index: number;
+  doraMetrics: DoraMetricsType | null;
+  isLoadingMetrics: boolean;
+  onLoadMetrics: (name: string, url: string) => void;
+}> = ({ project, index, doraMetrics, isLoadingMetrics, onLoadMetrics }) => {
+  
+  // Carregar DORA Metrics quando o card é montado
+  React.useEffect(() => {
+    onLoadMetrics(project.name, project.link)
+  }, [project.name, project.link, onLoadMetrics])
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -314,6 +364,12 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
             </span>
           ))}
         </div>
+
+        {/* DORA Metrics */}
+        <DoraMetrics 
+          metrics={doraMetrics} 
+          isLoading={isLoadingMetrics}
+        />
       </MagicCard>
     </motion.div>
   )
