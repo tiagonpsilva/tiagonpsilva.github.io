@@ -20,7 +20,9 @@ const CompactMetricItem: React.FC<{
   label: string
   value: string
   score: 'elite' | 'high' | 'medium' | 'low'
-}> = ({ icon, label, value, score }) => {
+  description: string
+  calculation: string
+}> = ({ icon, label, value, score, description, calculation }) => {
   const getScoreColor = (score: string) => {
     switch (score) {
       case 'elite': return 'text-green-600'
@@ -33,14 +35,31 @@ const CompactMetricItem: React.FC<{
 
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2">
+      {/* Label com tooltip de descrição */}
+      <div className="flex items-center gap-2 group relative">
         <div className={`${getScoreColor(score)}`}>
           {icon}
         </div>
-        <span className="text-xs font-medium text-foreground">{label}</span>
+        <span className="text-xs font-medium text-foreground cursor-help">{label}</span>
+        
+        {/* Tooltip da descrição */}
+        <div className="absolute bottom-full left-0 mb-2 px-3 py-2 bg-black/90 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-20 w-48">
+          <div className="font-semibold mb-1">{label}</div>
+          <div className="text-gray-300">{description}</div>
+          <div className="absolute top-full left-4 border-4 border-transparent border-t-black/90"></div>
+        </div>
       </div>
-      <div className="text-right">
-        <div className={`text-xs font-bold ${getScoreColor(score)}`}>{value}</div>
+      
+      {/* Valor com tooltip de cálculo */}
+      <div className="text-right group relative">
+        <div className={`text-xs font-bold ${getScoreColor(score)} cursor-help`}>{value}</div>
+        
+        {/* Tooltip do cálculo */}
+        <div className="absolute bottom-full right-0 mb-2 px-3 py-2 bg-black/90 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-20 w-56">
+          <div className="font-semibold mb-1">Cálculo:</div>
+          <div className="text-gray-300">{calculation}</div>
+          <div className="absolute top-full right-4 border-4 border-transparent border-t-black/90"></div>
+        </div>
       </div>
     </div>
   )
@@ -105,6 +124,8 @@ const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false })
           label="Deploy Freq"
           value={metrics.deploymentFrequency.display}
           score={metrics.deploymentFrequency.score}
+          description="Frequência de deploys em produção. Mede quão rapidamente a equipe consegue entregar código para usuários finais."
+          calculation="Baseado no número de releases públicas + commits na branch main nos últimos 3 meses. Se não há releases, usa commits como proxy."
         />
         
         <CompactMetricItem
@@ -112,6 +133,8 @@ const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false })
           label="Lead Time"
           value={metrics.leadTimeForChanges.display}
           score={metrics.leadTimeForChanges.score}
+          description="Tempo entre commit e deploy em produção. Mede a velocidade do pipeline de desenvolvimento."
+          calculation="Média do tempo entre criação e merge dos Pull Requests. Calcula (data merge - data criação) para todos os PRs."
         />
         
         <CompactMetricItem
@@ -119,6 +142,8 @@ const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false })
           label="Failure Rate"
           value={metrics.changeFailureRate.display}
           score={metrics.changeFailureRate.score}
+          description="Percentual de deploys que resultam em falhas ou precisam de hotfix. Mede a qualidade das releases."
+          calculation="Percentual de commits com palavras-chave de correção (fix, hotfix, bug, error, issue, patch) em relação ao total."
         />
         
         <CompactMetricItem
@@ -126,6 +151,8 @@ const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false })
           label="Recovery"
           value={metrics.meanTimeToRecovery.display}
           score={metrics.meanTimeToRecovery.score}
+          description="Tempo médio para restaurar o serviço após uma falha em produção. Mede a capacidade de resposta a incidentes."
+          calculation="Média do tempo entre commits de correção consecutivos. Analisa intervalos entre fixes para estimar velocidade de recuperação."
         />
       </div>
     </motion.div>

@@ -365,7 +365,7 @@ const ProjectCard: React.FC<{
         </div>
 
         {/* Título e descrição */}
-        <h4 className="text-base font-bold text-card-foreground mb-2 group-hover:text-blue-600 transition-colors duration-300">
+        <h4 className="text-base font-bold text-card-foreground mb-2">
           {project.name}
         </h4>
 
