@@ -21,7 +21,8 @@ import {
   Star,
   GitBranch,
   GitCommit,
-  Calendar
+  Calendar,
+  Sparkles
 } from 'lucide-react'
 
 const LabsPage: React.FC = () => {
@@ -279,8 +280,77 @@ const LabsPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Right side - DORA Metrics destacadas */}
-                  <div className="lg:w-80 lg:flex-shrink-0">
+                  {/* Right side - Informações adicionais e métricas */}
+                  <div className="lg:w-96 lg:flex-shrink-0 lg:border-l lg:border-primary/20 lg:pl-6">
+                    {/* Stack técnica detalhada */}
+                    <div className="mb-4">
+                      <h5 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                        <Code className="h-4 w-4 text-primary" />
+                        Stack Técnica
+                      </h5>
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div className="p-2 bg-primary/5 rounded border border-primary/10">
+                          <div className="font-medium text-primary">Frontend</div>
+                          <div className="text-muted-foreground">React 18 + TS</div>
+                        </div>
+                        <div className="p-2 bg-primary/5 rounded border border-primary/10">
+                          <div className="font-medium text-primary">Styling</div>
+                          <div className="text-muted-foreground">Tailwind CSS</div>
+                        </div>
+                        <div className="p-2 bg-primary/5 rounded border border-primary/10">
+                          <div className="font-medium text-primary">Build</div>
+                          <div className="text-muted-foreground">Vite + ESLint</div>
+                        </div>
+                        <div className="p-2 bg-primary/5 rounded border border-primary/10">
+                          <div className="font-medium text-primary">Deploy</div>
+                          <div className="text-muted-foreground">GitHub Pages</div>
+                        </div>
+                        <div className="p-2 bg-primary/5 rounded border border-primary/10">
+                          <div className="font-medium text-primary">Animações</div>
+                          <div className="text-muted-foreground">Framer Motion</div>
+                        </div>
+                        <div className="p-2 bg-primary/5 rounded border border-primary/10">
+                          <div className="font-medium text-primary">UI</div>
+                          <div className="text-muted-foreground">Magic UI</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Funcionalidades */}
+                    <div className="mb-4">
+                      <h5 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                        <Sparkles className="h-4 w-4 text-primary" />
+                        Funcionalidades
+                      </h5>
+                      <div className="space-y-2 text-xs">
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                          <span className="text-muted-foreground">Blog integrado com Markdown</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                          <span className="text-muted-foreground">Navegação mobile-first</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                          <span className="text-muted-foreground">Dark/Light mode</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                          <span className="text-muted-foreground">DORA Metrics em tempo real</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                          <span className="text-muted-foreground">Glassmorphism effects</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                          <span className="text-muted-foreground">Responsivo + PWA ready</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* DORA Metrics mais compactas */}
                     <DoraMetrics 
                       metrics={doraMetrics['Portfolio Profissional']}
                       isLoading={loadingMetrics['Portfolio Profissional'] || false}
