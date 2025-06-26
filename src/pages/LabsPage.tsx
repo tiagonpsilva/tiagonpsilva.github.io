@@ -208,7 +208,7 @@ const LabsPage: React.FC = () => {
               Produtos Experimentais
             </h3>
             
-            <div className="grid grid-cols-1 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {experimentalProducts.map((project, index) => (
                 <ProjectCard 
                   key={index} 
@@ -229,7 +229,7 @@ const LabsPage: React.FC = () => {
               IA & GenAI
             </h3>
             
-            <div className="grid grid-cols-1 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {aiProjects.map((project, index) => (
                 <ProjectCard 
                   key={index} 
@@ -250,7 +250,7 @@ const LabsPage: React.FC = () => {
               Arquitetura & Engenharia
             </h3>
             
-            <div className="grid grid-cols-1 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {architectureProjects.map((project, index) => (
                 <ProjectCard 
                   key={index} 
@@ -348,69 +348,70 @@ const ProjectCard: React.FC<{
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
     >
-      <MagicCard className={`p-6 h-full ${project.color} group`}>
-        <div className="flex flex-col lg:flex-row lg:gap-8">
-          {/* Left side - Main info */}
-          <div className="flex-1">
-            <div className="flex items-start justify-between mb-4">
-              <div className="p-3 bg-muted rounded-xl group-hover:bg-muted/80 transition-colors duration-300">
-                {project.icon}
-              </div>
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 hover:bg-muted rounded-lg transition-colors duration-200"
-              >
-                <ExternalLink className="h-5 w-5 text-muted-foreground hover:text-blue-600" />
-              </a>
-            </div>
-
-            <h4 className="text-lg font-bold text-card-foreground mb-3 group-hover:text-blue-600 transition-colors duration-300">
-              {project.name}
-            </h4>
-
-            <p className="text-muted-foreground text-base mb-4 leading-relaxed">
-              {project.description}
-            </p>
-
-            {/* Stats */}
-            <div className="flex items-center gap-4 mb-4 text-sm text-muted-foreground">
-              <div className="flex items-center gap-1">
-                <GitCommit className="h-4 w-4" />
-                <span>{project.stats.commits}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <GitBranch className="h-4 w-4" />
-                <span>{project.stats.branches}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Star className="h-4 w-4" />
-                <span>{project.stats.stars}</span>
-              </div>
-              <div className="flex items-center gap-1 text-xs ml-auto">
-                <Calendar className="h-3 w-3" />
-                <span>{project.stats.lastUpdate}</span>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap gap-2 mb-4 lg:mb-0">
-              {project.tags.map((tag: string, idx: number) => (
-                <span key={idx} className="px-2 py-1 bg-muted text-muted-foreground text-sm rounded-full mono-font">
-                  {tag}
-                </span>
-              ))}
-            </div>
+      <MagicCard className={`p-4 h-full ${project.color} group`}>
+        {/* Header com icon e link */}
+        <div className="flex items-start justify-between mb-3">
+          <div className="p-2 bg-muted rounded-lg group-hover:bg-muted/80 transition-colors duration-300">
+            {project.icon}
           </div>
+          <a
+            href={project.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-1.5 hover:bg-muted rounded-lg transition-colors duration-200"
+          >
+            <ExternalLink className="h-4 w-4 text-muted-foreground hover:text-blue-600" />
+          </a>
+        </div>
 
-          {/* Right side - DORA Metrics */}
-          <div className="lg:w-80 lg:flex-shrink-0">
-            <DoraMetrics 
-              metrics={doraMetrics} 
-              isLoading={isLoadingMetrics}
-            />
+        {/* Título e descrição */}
+        <h4 className="text-base font-bold text-card-foreground mb-2 group-hover:text-blue-600 transition-colors duration-300">
+          {project.name}
+        </h4>
+
+        <p className="text-muted-foreground text-sm mb-3 leading-relaxed">
+          {project.description}
+        </p>
+
+        {/* Stats compactas */}
+        <div className="flex items-center gap-3 mb-3 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1">
+            <GitCommit className="h-3 w-3" />
+            <span>{project.stats.commits}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <GitBranch className="h-3 w-3" />
+            <span>{project.stats.branches}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Star className="h-3 w-3" />
+            <span>{project.stats.stars}</span>
+          </div>
+          <div className="flex items-center gap-1 ml-auto">
+            <Calendar className="h-3 w-3" />
+            <span>{project.stats.lastUpdate}</span>
           </div>
         </div>
+
+        {/* Tags compactas */}
+        <div className="flex flex-wrap gap-1 mb-3">
+          {project.tags.slice(0, 3).map((tag: string, idx: number) => (
+            <span key={idx} className="px-1.5 py-0.5 bg-muted text-muted-foreground text-xs rounded mono-font">
+              {tag}
+            </span>
+          ))}
+          {project.tags.length > 3 && (
+            <span className="px-1.5 py-0.5 bg-muted text-muted-foreground text-xs rounded">
+              +{project.tags.length - 3}
+            </span>
+          )}
+        </div>
+
+        {/* DORA Metrics compactas */}
+        <DoraMetrics 
+          metrics={doraMetrics} 
+          isLoading={isLoadingMetrics}
+        />
       </MagicCard>
     </motion.div>
   )
