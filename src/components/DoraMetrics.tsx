@@ -65,7 +65,7 @@ const MetricItem: React.FC<{
 const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false }) => {
   if (isLoading) {
     return (
-      <div className="border-t border-muted pt-4 mt-4">
+      <div className="border-t border-muted lg:border-t-0 lg:border-l lg:pl-6 pt-4 lg:pt-0 mt-4 lg:mt-0">
         <div className="flex items-center gap-2 mb-3">
           <div className="w-4 h-4 bg-muted rounded animate-pulse"></div>
           <div className="w-24 h-4 bg-muted rounded animate-pulse"></div>
@@ -81,7 +81,7 @@ const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false })
 
   if (!metrics) {
     return (
-      <div className="border-t border-muted pt-4 mt-4">
+      <div className="border-t border-muted lg:border-t-0 lg:border-l lg:pl-6 pt-4 lg:pt-0 mt-4 lg:mt-0">
         <div className="flex items-center gap-2 mb-3 text-muted-foreground">
           <Info className="h-4 w-4" />
           <span className="text-sm font-medium">DORA Metrics</span>
@@ -100,7 +100,7 @@ const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false })
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="border-t border-muted pt-4 mt-4"
+      className="border-t border-muted lg:border-t-0 lg:border-l lg:pl-6 pt-4 lg:pt-0 mt-4 lg:mt-0"
     >
       {/* Header com badge de performance */}
       <div className="flex items-center justify-between mb-3">
