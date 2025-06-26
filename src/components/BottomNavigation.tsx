@@ -6,8 +6,8 @@ import {
   Sparkles,
   GraduationCap,
   BarChart3,
-  Layers3,
-  PenTool,
+  FlaskConical,
+  BookOpen,
   MessageCircle,
   ChevronUp
 } from 'lucide-react'
@@ -32,8 +32,8 @@ const BottomNavigation: React.FC = () => {
       subItems: inicioSubItems
     },
     { href: '/cases', label: 'Cases', icon: <BarChart3 className="h-5 w-5" />, isExternal: true },
-    { href: '/labs', label: 'Labs', icon: <Layers3 className="h-5 w-5" />, isExternal: true },
-    { href: '/blog', label: 'Blog', icon: <PenTool className="h-5 w-5" />, isExternal: true },
+    { href: '/labs', label: 'Labs', icon: <FlaskConical className="h-5 w-5" />, isExternal: true },
+    { href: '/blog', label: 'Blog', icon: <BookOpen className="h-5 w-5" />, isExternal: true },
     { href: '/contact', label: 'Contato', icon: <MessageCircle className="h-5 w-5" />, isExternal: true },
   ]
 

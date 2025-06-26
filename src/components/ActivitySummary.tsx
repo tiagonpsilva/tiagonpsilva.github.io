@@ -105,10 +105,10 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
 
   const getIntensityClass = (hours: number) => {
     if (hours === 0) return 'bg-muted'
-    if (hours <= 1) return 'bg-green-200 dark:bg-green-900'
-    if (hours <= 3) return 'bg-green-400 dark:bg-green-700'
-    if (hours <= 5) return 'bg-green-600 dark:bg-green-500'
-    return 'bg-green-800 dark:bg-green-300'
+    if (hours <= 1) return 'bg-blue-200 dark:bg-blue-900'
+    if (hours <= 3) return 'bg-blue-400 dark:bg-blue-700'
+    if (hours <= 5) return 'bg-blue-600 dark:bg-blue-500'
+    return 'bg-blue-800 dark:bg-blue-300'
   }
 
   return (
@@ -121,8 +121,8 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
-            <Flame className="h-5 w-5 text-green-600 dark:text-green-400" />
+          <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+            <Flame className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
             <h3 className="text-lg font-bold text-foreground">Atividade dos Últimos 7 Dias</h3>
@@ -131,7 +131,7 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
         </div>
         
         <div className="text-right">
-          <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
             {currentStreak} dias
           </div>
           <div className="text-xs text-muted-foreground">streak atual</div>
@@ -150,7 +150,7 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
         
         <div className="text-center p-3 bg-muted/30 rounded-lg">
           <div className="flex items-center justify-center mb-1">
-            <TrendingUp className="h-4 w-4 text-green-600 mr-1" />
+            <TrendingUp className="h-4 w-4 text-blue-600 mr-1" />
             <span className="text-lg font-bold text-foreground">{maxDayHours}h</span>
           </div>
           <div className="text-xs text-muted-foreground">Dia mais ativo</div>
@@ -201,7 +201,7 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
                   cursor-pointer
                 `}
               >
-                <span className="text-xs font-bold text-foreground/70">
+                <span className={`text-xs font-bold ${day.totalHours > 3 ? 'text-white' : 'text-foreground/70'}`}>
                   {day.totalHours ? `${day.totalHours}h` : ''}
                 </span>
               </div>
