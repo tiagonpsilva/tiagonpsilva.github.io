@@ -125,16 +125,16 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
             <Flame className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-foreground">Atividade dos Últimos 7 Dias</h3>
-            <p className="text-sm text-muted-foreground">Onde tenho trabalhado recentemente</p>
+            <h3 className="text-base lg:text-lg font-bold text-foreground">Atividade dos Últimos 7 Dias</h3>
+            <p className="text-xs lg:text-sm text-muted-foreground">Onde tenho trabalhado recentemente</p>
           </div>
         </div>
         
         <div className="text-right">
-          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+          <div className="text-xl lg:text-2xl font-bold text-blue-600 dark:text-blue-400">
             {currentStreak} dias
           </div>
-          <div className="text-xs text-muted-foreground">streak atual</div>
+          <div className="text-xs text-muted-foreground">consecutivos</div>
         </div>
       </div>
 
@@ -143,7 +143,7 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
         <div className="text-center p-3 bg-muted/30 rounded-lg">
           <div className="flex items-center justify-center mb-1">
             <Clock className="h-4 w-4 text-primary mr-1" />
-            <span className="text-lg font-bold text-foreground">{totalWeekHours.toFixed(1)}h</span>
+            <span className="text-base lg:text-lg font-bold text-foreground">{totalWeekHours.toFixed(1)}h</span>
           </div>
           <div className="text-xs text-muted-foreground">Total horas</div>
         </div>
@@ -151,7 +151,7 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
         <div className="text-center p-3 bg-muted/30 rounded-lg">
           <div className="flex items-center justify-center mb-1">
             <TrendingUp className="h-4 w-4 text-blue-600 mr-1" />
-            <span className="text-lg font-bold text-foreground">{maxDayHours}h</span>
+            <span className="text-base lg:text-lg font-bold text-foreground">{maxDayHours}h</span>
           </div>
           <div className="text-xs text-muted-foreground">Dia mais ativo</div>
         </div>
@@ -159,7 +159,7 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
         <div className="text-center p-3 bg-muted/30 rounded-lg">
           <div className="flex items-center justify-center mb-1">
             <Code className="h-4 w-4 text-blue-600 mr-1" />
-            <span className="text-lg font-bold text-foreground">
+            <span className="text-base lg:text-lg font-bold text-foreground">
               {new Set(activityData.flatMap(day => day.repos.map(repo => repo.name))).size}
             </span>
           </div>
@@ -169,7 +169,7 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
         <div className="text-center p-3 bg-muted/30 rounded-lg">
           <div className="flex items-center justify-center mb-1">
             <GitCommit className="h-4 w-4 text-purple-600 mr-1" />
-            <span className="text-lg font-bold text-foreground">
+            <span className="text-base lg:text-lg font-bold text-foreground">
               {(totalWeekHours / 7).toFixed(1)}h
             </span>
           </div>
@@ -181,7 +181,7 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-3">
           <Calendar className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-medium text-foreground">Heatmap de Atividade</span>
+          <span className="text-xs lg:text-sm font-medium text-foreground">Heatmap de Atividade</span>
         </div>
         
         <div className="grid grid-cols-7 gap-2">
@@ -224,7 +224,7 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
       <div>
         <div className="flex items-center gap-2 mb-3">
           <Code className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-medium text-foreground">Repositórios Mais Ativos</span>
+          <span className="text-xs lg:text-sm font-medium text-foreground">Repositórios Mais Ativos</span>
         </div>
         
         <div className="space-y-2">
@@ -256,7 +256,7 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
                   >
                     <div className="flex items-center gap-2 flex-1">
                       <div className={`w-3 h-3 rounded-full ${stats.color}`}></div>
-                      <span className="text-sm text-foreground truncate">{repoName}</span>
+                      <span className="text-xs lg:text-sm text-foreground truncate">{repoName.length > 20 ? repoName.substring(0, 20) + '...' : repoName}</span>
                     </div>
                     
                     <div className="flex items-center gap-2">
@@ -268,7 +268,7 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
                           transition={{ duration: 0.8, delay: 0.2 }}
                         />
                       </div>
-                      <span className="text-sm font-medium text-foreground w-12 text-right">
+                      <span className="text-xs lg:text-sm font-medium text-foreground w-10 lg:w-12 text-right">
                         {stats.hours.toFixed(1)}h
                       </span>
                     </div>
