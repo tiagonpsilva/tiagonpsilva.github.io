@@ -204,6 +204,9 @@ const LabsPage: React.FC = () => {
       <section className="section-padding bg-muted">
         <div className="container mx-auto px-6 space-y-12">
 
+          {/* Activity Summary no topo */}
+          <ActivitySummary />
+
           {/* Card Destacado - Repositório do Site */}
           <div>
             <h3 className="text-2xl font-bold text-foreground mb-8 flex items-center gap-2">
@@ -388,9 +391,6 @@ const LabsPage: React.FC = () => {
               ))}
             </div>
           </div>
-
-          {/* Activity Summary */}
-          <ActivitySummary className="mt-16" />
 
           {/* Contact CTA */}
           <motion.div
