@@ -1,0 +1,138 @@
+import React from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { X, Sparkles, TrendingUp, Users, Zap } from 'lucide-react'
+import { useAuth } from '@/contexts/AuthContext'
+
+const AuthModal: React.FC = () => {
+  const { showAuthModal, dismissAuthModal, signInWithLinkedIn } = useAuth()
+
+  const benefits = [
+    {
+      icon: <Sparkles className="w-5 h-5" />,
+      title: "Conteúdo Personalizado",
+      description: "Recomendações baseadas no seu perfil profissional"
+    },
+    {
+      icon: <TrendingUp className="w-5 h-5" />,
+      title: "Insights Exclusivos",
+      description: "Artigos e recursos direcionados para sua área"
+    },
+    {
+      icon: <Users className="w-5 h-5" />,
+      title: "Networking Inteligente",
+      description: "Descubra conexões e oportunidades relevantes"
+    }
+  ]
+
+  return (
+    <AnimatePresence>
+      {showAuthModal && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={dismissAuthModal}
+          >
+            {/* Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className="bg-background/95 backdrop-blur-lg border border-border rounded-2xl p-6 md:p-8 max-w-md w-full shadow-2xl relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={dismissAuthModal}
+                className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Header */}
+              <div className="text-center mb-6">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2, type: "spring" }}
+                  className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
+                >
+                  <Zap className="w-8 h-8 text-white" />
+                </motion.div>
+                
+                <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2">
+                  Personalize sua Experiência
+                </h2>
+                
+                <p className="text-muted-foreground text-sm md:text-base">
+                  Conecte-se com LinkedIn para ter uma experiência mais relevante e personalizada
+                </p>
+              </div>
+
+              {/* Benefits */}
+              <div className="space-y-4 mb-6">
+                {benefits.map((benefit, index) => (
+                  <motion.div
+                    key={benefit.title}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3 + index * 0.1 }}
+                    className="flex items-start gap-3"
+                  >
+                    <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+                      {benefit.icon}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground text-sm">
+                        {benefit.title}
+                      </h3>
+                      <p className="text-muted-foreground text-xs">
+                        {benefit.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* LinkedIn Button */}
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={signInWithLinkedIn}
+                className="w-full bg-[#0077B5] hover:bg-[#005582] text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 mb-4"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+                Conectar com LinkedIn
+              </motion.button>
+
+              {/* Disclaimer */}
+              <div className="text-center">
+                <button
+                  onClick={dismissAuthModal}
+                  className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                >
+                  Talvez depois
+                </button>
+              </div>
+
+              {/* Privacy Note */}
+              <div className="mt-4 pt-4 border-t border-border">
+                <p className="text-xs text-muted-foreground text-center">
+                  🔒 Seus dados são seguros. Usamos apenas informações básicas do perfil para personalização.
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  )
+}
+
+export default AuthModal

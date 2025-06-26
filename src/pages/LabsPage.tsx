@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { MagicCard } from '../components/ui/magic-card'
 import { useTheme } from '../contexts/ThemeContext'
+import { useInteractionTracking } from '../contexts/MixpanelContext'
 import DoraMetrics from '../components/DoraMetrics'
 import ActivitySummary from '../components/ActivitySummary'
 import { calculateDoraMetrics, DoraMetrics as DoraMetricsType } from '../utils/doraMetrics'
@@ -27,6 +28,7 @@ import {
 
 const LabsPage: React.FC = () => {
   const { restorePreviousTheme } = useTheme()
+  const { trackExternalLink, trackClick } = useInteractionTracking()
   const [doraMetrics, setDoraMetrics] = useState<Record<string, DoraMetricsType | null>>({})
   const [loadingMetrics, setLoadingMetrics] = useState<Record<string, boolean>>({})
 
@@ -237,6 +239,7 @@ const LabsPage: React.FC = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="p-2 hover:bg-muted rounded-lg transition-colors duration-200"
+                          onClick={() => trackExternalLink("https://github.com/tiagonpsilva/tiagonpsilva.github.io", "Portfolio Profissional")}
                         >
                           <ExternalLink className="h-5 w-5 text-muted-foreground hover:text-primary" />
                         </a>
@@ -411,6 +414,10 @@ const LabsPage: React.FC = () => {
                 <a
                   href="mailto:tiagonpsilva@gmail.com"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-card text-blue-600 font-semibold rounded-xl hover:bg-muted transition-colors duration-300"
+                  onClick={() => trackClick('Contact CTA', 'Labs Page', {
+                    contact_method: 'email',
+                    contact_href: 'mailto:tiagonpsilva@gmail.com'
+                  })}
                 >
                   <Mail className="h-5 w-5" />
                   Enviar Email
@@ -420,6 +427,7 @@ const LabsPage: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-blue-700 text-white font-semibold rounded-xl hover:bg-blue-800 transition-colors duration-300"
+                  onClick={() => trackExternalLink('https://linkedin.com/in/tiagonpsilva', 'LinkedIn Profile')}
                 >
                   <ExternalLink className="h-5 w-5" />
                   LinkedIn
@@ -462,6 +470,7 @@ const ProjectCard: React.FC<{
   isLoadingMetrics: boolean;
   onLoadMetrics: (name: string, url: string) => void;
 }> = ({ project, index, doraMetrics, isLoadingMetrics, onLoadMetrics }) => {
+  const { trackExternalLink } = useInteractionTracking()
   
   // Carregar DORA Metrics quando o card é montado (com debounce)
   React.useEffect(() => {
@@ -489,6 +498,7 @@ const ProjectCard: React.FC<{
             target="_blank"
             rel="noopener noreferrer"
             className="p-1.5 hover:bg-muted rounded-lg transition-colors duration-200"
+            onClick={() => trackExternalLink(project.link, project.name)}
           >
             <ExternalLink className="h-4 w-4 text-muted-foreground hover:text-blue-600" />
           </a>

@@ -5,11 +5,28 @@ import { Link } from 'react-router-dom'
 import { Article } from '@/types/blog'
 import { getAllArticles } from '@/lib/articles'
 import { useTheme } from '@/contexts/ThemeContext'
+import { useInteractionTracking } from '@/contexts/MixpanelContext'
 
 const BlogPage: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
   const { setDarkModeForBlog } = useTheme()
+  
+  // Basic tracking (safe version)
+  const { trackClick, trackExternalLink } = useInteractionTracking()
+  
+  const handleArticleClick = () => {
+    try { trackClick('Article Clicked', 'Blog Page', {}) } catch(e) {}
+  }
+  const handleNewsletterClick = () => {
+    try { trackExternalLink('https://www.linkedin.com/newsletters/7331120186697138176/', 'Newsletter') } catch(e) {}
+  }
+  const handleTopicPillClick = () => {
+    try { trackClick('Topic Clicked', 'Blog Page', {}) } catch(e) {}
+  }
+  const handleTagClick = () => {
+    try { trackClick('Tag Clicked', 'Blog Page', {}) } catch(e) {}
+  }
 
   // Função para obter a imagem de capa baseada no slug
   const getCoverImage = (slug: string): string => {
@@ -142,6 +159,7 @@ const BlogPage: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-4 py-2.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group text-sm"
+                  onClick={() => handleNewsletterClick()}
                 >
                   <svg className="w-4 h-4 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
@@ -172,6 +190,7 @@ const BlogPage: React.FC = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.5 + index * 0.1 }}
                     className="group cursor-pointer"
+                    onClick={() => handleTopicPillClick()}
                   >
                     <div className={`bg-gradient-to-r ${topic.color} p-[1px] rounded-full group-hover:shadow-lg transition-all duration-300`}>
                       <div className="bg-background/95 backdrop-blur-sm px-5 py-2.5 rounded-full group-hover:bg-background/90 transition-all duration-300">
@@ -255,6 +274,7 @@ const BlogPage: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
+                    onClick={() => handleNewsletterClick()}
                   >
                     <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
@@ -290,7 +310,10 @@ const BlogPage: React.FC = () => {
                 <div className="flex flex-col md:flex-row gap-4 md:gap-6">
                   {/* Article Cover Image */}
                   <div className="flex-shrink-0">
-                    <Link to={`/blog/${article.slug}`}>
+                    <Link 
+                      to={`/blog/${article.slug}`}
+                      onClick={() => handleArticleClick()}
+                    >
                       <motion.div
                         whileHover={{ scale: 1.05 }}
                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
@@ -313,6 +336,7 @@ const BlogPage: React.FC = () => {
                       <Link
                         to={`/blog/${article.slug}`}
                         className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
+                        onClick={() => handleArticleClick()}
                       >
                         Ler artigo completo
                         <ExternalLink className="w-4 h-4" />
@@ -328,6 +352,7 @@ const BlogPage: React.FC = () => {
                         <Link 
                           to={`/blog/${article.slug}`}
                           className="block group-hover:text-primary transition-colors duration-200"
+                          onClick={() => handleArticleClick()}
                         >
                           <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                             {article.title}
@@ -356,7 +381,8 @@ const BlogPage: React.FC = () => {
                       {article.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="inline-flex items-center gap-1 px-2 md:px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full border border-primary/20"
+                          className="inline-flex items-center gap-1 px-2 md:px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full border border-primary/20 cursor-pointer hover:bg-primary/20 transition-colors"
+                          onClick={() => handleTagClick()}
                         >
                           <Tag className="w-3 h-3" />
                           {tag}
@@ -369,6 +395,7 @@ const BlogPage: React.FC = () => {
                       <Link
                         to={`/blog/${article.slug}`}
                         className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
+                        onClick={() => handleArticleClick()}
                       >
                         Ler artigo completo
                         <ExternalLink className="w-4 h-4" />
