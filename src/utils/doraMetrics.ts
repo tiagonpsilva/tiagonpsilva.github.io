@@ -284,32 +284,45 @@ export async function calculateDoraMetrics(repoUrl: string): Promise<DoraMetrics
   
   const { owner, repo } = parsed
   
-  // Fetch data from GitHub API
-  const threeMonthsAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString()
-  const [commits, releases, pullRequests] = await Promise.all([
-    fetchCommits(owner, repo, threeMonthsAgo),
-    fetchReleases(owner, repo),
-    fetchPullRequests(owner, repo)
-  ])
-  
-  // Calculate individual metrics
-  const deploymentFrequency = calculateDeploymentFrequency(releases, commits)
-  const leadTimeForChanges = calculateLeadTimeForChanges(pullRequests)
-  const changeFailureRate = calculateChangeFailureRate(commits)
-  const meanTimeToRecovery = calculateMeanTimeToRecovery(commits)
-  
-  const metrics = {
-    deploymentFrequency,
-    leadTimeForChanges,
-    changeFailureRate,
-    meanTimeToRecovery
-  }
-  
-  const overallScore = calculateOverallScore(metrics)
-  
-  return {
-    ...metrics,
-    overallScore
+  try {
+    // Add timeout and error handling for API calls
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error('GitHub API timeout')), 10000) // 10s timeout
+    })
+    
+    // Fetch data from GitHub API with timeout
+    const threeMonthsAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString()
+    const [commits, releases, pullRequests] = await Promise.race([
+      Promise.all([
+        fetchCommits(owner, repo, threeMonthsAgo),
+        fetchReleases(owner, repo),
+        fetchPullRequests(owner, repo)
+      ]),
+      timeoutPromise
+    ])
+    
+    // Calculate individual metrics
+    const deploymentFrequency = calculateDeploymentFrequency(releases, commits)
+    const leadTimeForChanges = calculateLeadTimeForChanges(pullRequests)
+    const changeFailureRate = calculateChangeFailureRate(commits)
+    const meanTimeToRecovery = calculateMeanTimeToRecovery(commits)
+    
+    const metrics = {
+      deploymentFrequency,
+      leadTimeForChanges,
+      changeFailureRate,
+      meanTimeToRecovery
+    }
+    
+    const overallScore = calculateOverallScore(metrics)
+    
+    return {
+      ...metrics,
+      overallScore
+    }
+  } catch (error) {
+    console.warn(`Failed to calculate DORA metrics for ${owner}/${repo}:`, error)
+    return null
   }
 }
 

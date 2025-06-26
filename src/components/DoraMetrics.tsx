@@ -87,7 +87,7 @@ const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false })
           <span className="text-sm font-medium">DORA Metrics</span>
         </div>
         <div className="text-xs text-muted-foreground bg-muted/30 rounded-lg p-3">
-          Métricas não disponíveis para este repositório
+          Carregando métricas do cache...
         </div>
       </div>
     )

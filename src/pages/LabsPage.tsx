@@ -5,6 +5,12 @@ import { useTheme } from '../contexts/ThemeContext'
 import DoraMetrics from '../components/DoraMetrics'
 import { calculateDoraMetrics, DoraMetrics as DoraMetricsType } from '../utils/doraMetrics'
 import { 
+  getCachedDoraMetrics, 
+  setCachedDoraMetrics, 
+  shouldFetchDoraMetrics,
+  cleanExpiredCache 
+} from '../utils/doraCache'
+import { 
   ExternalLink, 
   Mail,
   Code,
@@ -30,15 +36,42 @@ const LabsPage: React.FC = () => {
     window.scrollTo(0, 0)
   }, [restorePreviousTheme])
 
-  // Função para carregar DORA Metrics
+  // Limpar cache expirado na inicialização
+  useEffect(() => {
+    cleanExpiredCache()
+  }, [])
+
+  // Função para carregar DORA Metrics com cache
   const loadDoraMetrics = async (projectName: string, repoUrl: string) => {
+    // Primeiro, tentar obter do cache
+    const cachedMetrics = getCachedDoraMetrics(repoUrl)
+    if (cachedMetrics) {
+      setDoraMetrics(prev => ({ ...prev, [projectName]: cachedMetrics }))
+      return
+    }
+
+    // Se não há cache válido, verificar se deve buscar dados frescos
+    if (!shouldFetchDoraMetrics(repoUrl)) {
+      return
+    }
+
+    // Carregar dados da API apenas se necessário
     setLoadingMetrics(prev => ({ ...prev, [projectName]: true }))
     try {
       const metrics = await calculateDoraMetrics(repoUrl)
-      setDoraMetrics(prev => ({ ...prev, [projectName]: metrics }))
+      if (metrics) {
+        setCachedDoraMetrics(repoUrl, metrics)
+        setDoraMetrics(prev => ({ ...prev, [projectName]: metrics }))
+      } else {
+        // Usar dados do cache como fallback mesmo se expirado
+        const fallbackMetrics = getCachedDoraMetrics(repoUrl)
+        setDoraMetrics(prev => ({ ...prev, [projectName]: fallbackMetrics }))
+      }
     } catch (error) {
       console.error(`Erro ao carregar DORA Metrics para ${projectName}:`, error)
-      setDoraMetrics(prev => ({ ...prev, [projectName]: null }))
+      // Usar dados do cache como fallback
+      const fallbackMetrics = getCachedDoraMetrics(repoUrl)
+      setDoraMetrics(prev => ({ ...prev, [projectName]: fallbackMetrics }))
     } finally {
       setLoadingMetrics(prev => ({ ...prev, [projectName]: false }))
     }
@@ -301,10 +334,14 @@ const ProjectCard: React.FC<{
   onLoadMetrics: (name: string, url: string) => void;
 }> = ({ project, index, doraMetrics, isLoadingMetrics, onLoadMetrics }) => {
   
-  // Carregar DORA Metrics quando o card é montado
+  // Carregar DORA Metrics quando o card é montado (com debounce)
   React.useEffect(() => {
-    onLoadMetrics(project.name, project.link)
-  }, [project.name, project.link, onLoadMetrics])
+    const timeoutId = setTimeout(() => {
+      onLoadMetrics(project.name, project.link)
+    }, index * 100) // Escalonar carregamento para evitar sobrecarga
+    
+    return () => clearTimeout(timeoutId)
+  }, [project.name, project.link, onLoadMetrics, index])
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
