@@ -21,8 +21,7 @@ import {
   Star,
   GitBranch,
   GitCommit,
-  Calendar,
-  Sparkles
+  Calendar
 } from 'lucide-react'
 
 const LabsPage: React.FC = () => {
@@ -316,39 +315,6 @@ const LabsPage: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Funcionalidades */}
-                    <div className="mb-4">
-                      <h5 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-                        <Sparkles className="h-4 w-4 text-primary" />
-                        Funcionalidades
-                      </h5>
-                      <div className="space-y-2 text-xs">
-                        <div className="flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                          <span className="text-muted-foreground">Blog integrado com Markdown</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                          <span className="text-muted-foreground">Navegação mobile-first</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                          <span className="text-muted-foreground">Dark/Light mode</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                          <span className="text-muted-foreground">DORA Metrics em tempo real</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                          <span className="text-muted-foreground">Glassmorphism effects</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                          <span className="text-muted-foreground">Responsivo + PWA ready</span>
-                        </div>
-                      </div>
-                    </div>
 
                     {/* DORA Metrics mais compactas */}
                     <DoraMetrics 
