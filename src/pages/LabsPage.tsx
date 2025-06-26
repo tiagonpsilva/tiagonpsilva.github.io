@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { MagicCard } from '../components/ui/magic-card'
 import { useTheme } from '../contexts/ThemeContext'
 import DoraMetrics from '../components/DoraMetrics'
+import ActivitySummary from '../components/ActivitySummary'
 import { calculateDoraMetrics, DoraMetrics as DoraMetricsType } from '../utils/doraMetrics'
 import { 
   getCachedDoraMetrics, 
@@ -387,6 +388,9 @@ const LabsPage: React.FC = () => {
               ))}
             </div>
           </div>
+
+          {/* Activity Summary */}
+          <ActivitySummary className="mt-16" />
 
           {/* Contact CTA */}
           <motion.div
