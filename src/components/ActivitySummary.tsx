@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { 
   GitCommit, 
@@ -8,90 +8,50 @@ import {
   Code,
   Flame
 } from 'lucide-react'
-
-interface DayActivity {
-  date: string
-  dayName: string
-  repos: {
-    name: string
-    hours: number
-    color: string
-  }[]
-  totalHours: number
-}
+import { getActivityData, ActivityData } from '../utils/activityCache'
 
 interface ActivitySummaryProps {
   className?: string
+  lastUpdated?: Date
 }
 
 const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => {
-  // Mock data dos últimos 7 dias de atividade em horas
-  const activityData: DayActivity[] = [
-    {
-      date: '2024-06-26',
-      dayName: 'Hoje',
-      repos: [
-        { name: 'tiagonpsilva.github.io', hours: 4.5, color: 'bg-blue-500' },
-        { name: 'kwanza-agent', hours: 2.0, color: 'bg-purple-500' }
-      ],
-      totalHours: 6.5
-    },
-    {
-      date: '2024-06-25',
-      dayName: 'Ontem',
-      repos: [
-        { name: 'tiagonpsilva.github.io', hours: 3.5, color: 'bg-blue-500' },
-        { name: 'genai-langchain-tutorial', hours: 2.5, color: 'bg-pink-500' }
-      ],
-      totalHours: 6.0
-    },
-    {
-      date: '2024-06-24',
-      dayName: 'Seg',
-      repos: [
-        { name: 'divino-cantar-frontend', hours: 3.0, color: 'bg-green-500' },
-        { name: 'system-design-concepts', hours: 1.5, color: 'bg-cyan-500' }
-      ],
-      totalHours: 4.5
-    },
-    {
-      date: '2024-06-23',
-      dayName: 'Dom',
-      repos: [
-        { name: 'github-mcpilot', hours: 2.5, color: 'bg-indigo-500' }
-      ],
-      totalHours: 2.5
-    },
-    {
-      date: '2024-06-22',
-      dayName: 'Sáb',
-      repos: [
-        { name: 'tiagonpsilva.github.io', hours: 4.0, color: 'bg-blue-500' },
-        { name: 'architecture-decision-records', hours: 1.0, color: 'bg-yellow-500' }
-      ],
-      totalHours: 5.0
-    },
-    {
-      date: '2024-06-21',
-      dayName: 'Sex',
-      repos: [
-        { name: 'modern-data-stack-training', hours: 3.5, color: 'bg-red-500' },
-        { name: 'kwanza-agent', hours: 1.5, color: 'bg-purple-500' }
-      ],
-      totalHours: 5.0
-    },
-    {
-      date: '2024-06-20',
-      dayName: 'Qui',
-      repos: [
-        { name: 'tiagonpsilva.github.io', hours: 5.5, color: 'bg-blue-500' }
-      ],
-      totalHours: 5.5
+  const [activityData, setActivityData] = useState<ActivityData[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [realLastUpdated, setRealLastUpdated] = useState<Date | null>(null)
+
+  // Load activity data on component mount
+  useEffect(() => {
+    const loadActivityData = async () => {
+      try {
+        setIsLoading(true)
+        console.log('🔄 ActivitySummary: Starting data load...')
+        
+        // FORCE CLEAR ALL CACHES for fresh data
+        localStorage.removeItem('github-activity-cache')
+        localStorage.removeItem('dora-metrics-cache')
+        localStorage.clear() // Clear all localStorage
+        console.log('🧹 ActivitySummary: ALL caches cleared - forcing fresh dynamic data')
+        
+        const data = await getActivityData()
+        console.log('🔄 ActivitySummary: Data loaded:', data?.length, 'days')
+        setActivityData(data || [])
+        setRealLastUpdated(new Date())
+        console.log('✅ ActivitySummary: Component updated successfully')
+      } catch (error) {
+        console.error('❌ ActivitySummary: Failed to load activity data:', error)
+        // Set empty data to prevent crashes
+        setActivityData([])
+      } finally {
+        setIsLoading(false)
+      }
     }
-  ]
+
+    loadActivityData()
+  }, [])
 
   const totalWeekHours = activityData.reduce((sum, day) => sum + day.totalHours, 0)
-  const maxDayHours = Math.max(...activityData.map(day => day.totalHours))
+  const maxDayHours = Math.max(...activityData.map(day => day.totalHours), 0)
   
   // Calcular streak de dias consecutivos com desenvolvimento
   let currentStreak = 0
@@ -109,6 +69,39 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
     if (hours <= 3) return 'bg-blue-400 dark:bg-blue-700'
     if (hours <= 5) return 'bg-blue-600 dark:bg-blue-500'
     return 'bg-blue-800 dark:bg-blue-300'
+  }
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className={`bg-card border border-border rounded-xl p-6 ${className}`}
+      >
+        <div className="animate-pulse">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 bg-muted rounded-lg"></div>
+              <div>
+                <div className="w-48 h-5 bg-muted rounded mb-2"></div>
+                <div className="w-32 h-4 bg-muted rounded"></div>
+              </div>
+            </div>
+            <div className="w-16 h-8 bg-muted rounded"></div>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            {[1,2,3,4].map(i => (
+              <div key={i} className="p-3 bg-muted/30 rounded-lg">
+                <div className="w-full h-6 bg-muted rounded mb-1"></div>
+                <div className="w-16 h-3 bg-muted rounded"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+    )
   }
 
   return (
@@ -185,7 +178,7 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
         </div>
         
         <div className="grid grid-cols-7 gap-2">
-          {activityData.reverse().map((day, index) => (
+          {activityData.map((day, index) => (
             <motion.div
               key={day.date}
               initial={{ opacity: 0, scale: 0.8 }}
@@ -214,6 +207,9 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
               
               <div className="text-center mt-1">
                 <div className="text-xs font-medium text-foreground">{day.dayName}</div>
+                <div className="text-xs text-muted-foreground/50 mt-0.5">
+                  {day.date.slice(8, 10)}/{day.date.slice(5, 7)}
+                </div>
               </div>
             </motion.div>
           ))}
@@ -276,6 +272,16 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
               })
           })()}
         </div>
+      </div>
+
+      {/* Timestamp da última atualização */}
+      <div className="text-center mt-4 pt-3 border-t border-border">
+        <span className="text-xs text-muted-foreground/60">
+          {realLastUpdated ? 
+            `Dados reais do GitHub - Atualizado em ${realLastUpdated.toLocaleDateString('pt-BR')} às ${realLastUpdated.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}` : 
+            'Carregando dados do GitHub...'
+          }
+        </span>
       </div>
     </motion.div>
   )

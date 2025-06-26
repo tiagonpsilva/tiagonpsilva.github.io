@@ -74,7 +74,7 @@ const CasesPage: React.FC = () => {
       year: "2025",
       category: "Inteligência Artificial",
       icon: <Brain className="h-6 w-6" />,
-      title: "Automação de Validação Documental com IA Generativa",
+      title: "Arquitetura Enterprise para Integração de LLMs em Validação de Conformidade Documental",
       context: "Produto de gestão documental exigia validação manual intensa de documentos trabalhistas para acesso a canteiros, com operadores verificando identidade, tipo e validade de cada documento",
       action: "Elaborou arquitetura de referência para LLMs e implementou práticas de IA Generativa",
       results: [

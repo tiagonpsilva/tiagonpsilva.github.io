@@ -23,12 +23,12 @@ const ContactPage: React.FC = () => {
 
   const contactMethods = [
     {
-      icon: <Mail className="h-6 w-6 text-blue-500" />,
-      title: "Email",
-      value: "tiagonpsilva@gmail.com",
-      description: "Para discussões técnicas e oportunidades",
-      link: "mailto:tiagonpsilva@gmail.com",
-      action: "Enviar Email"
+      icon: <Linkedin className="h-6 w-6 text-blue-600" />,
+      title: "LinkedIn",
+      value: "/in/tiagonpsilva",
+      description: "Networking profissional e conteúdo",
+      link: "https://linkedin.com/in/tiagonpsilva",
+      action: "Conectar"
     },
     {
       icon: <MessageSquare className="h-6 w-6 text-green-500" />,
@@ -39,20 +39,20 @@ const ContactPage: React.FC = () => {
       action: "Abrir WhatsApp"
     },
     {
-      icon: <Linkedin className="h-6 w-6 text-blue-600" />,
-      title: "LinkedIn",
-      value: "/in/tiagonpsilva",
-      description: "Networking profissional e conteúdo",
-      link: "https://linkedin.com/in/tiagonpsilva",
-      action: "Conectar"
-    },
-    {
       icon: <Github className="h-6 w-6 text-gray-700" />,
       title: "GitHub",
       value: "/tiagonpsilva",
       description: "Projetos open source e colaborações",
       link: "https://github.com/tiagonpsilva",
       action: "Ver Perfil"
+    },
+    {
+      icon: <Mail className="h-6 w-6 text-blue-500" />,
+      title: "Email",
+      value: "tiagonpsilva@gmail.com",
+      description: "Para discussões técnicas e oportunidades",
+      link: "mailto:tiagonpsilva@gmail.com",
+      action: "Enviar Email"
     }
   ]
 
@@ -68,7 +68,7 @@ const ContactPage: React.FC = () => {
       icon: "👥"
     },
     {
-      title: "Implementação de IA",
+      title: "Adoção de IA",
       description: "Estratégia e implementação de soluções de IA Generativa em processos e produtos",
       icon: "🤖"
     },

@@ -15,6 +15,7 @@ import { DoraMetrics as DoraMetricsType, getDoraScoreBadge } from '../utils/dora
 interface DoraMetricsProps {
   metrics: DoraMetricsType | null
   isLoading?: boolean
+  lastUpdated?: Date
 }
 
 const CompactMetricItem: React.FC<{
@@ -48,7 +49,7 @@ const CompactMetricItem: React.FC<{
   )
 }
 
-const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false }) => {
+const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false, lastUpdated }) => {
   const [showInfo, setShowInfo] = useState(false)
   if (isLoading) {
     return (
@@ -154,7 +155,7 @@ const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false })
       )}
 
       {/* Métricas compactas em grid 2x2 */}
-      <div className="grid grid-cols-1 gap-1.5 text-xs">
+      <div className="grid grid-cols-1 gap-1.5 text-xs mb-2">
         <CompactMetricItem
           icon={<TrendingUp className="h-3 w-3" />}
           label="Deploy Freq"
@@ -182,6 +183,16 @@ const DoraMetrics: React.FC<DoraMetricsProps> = ({ metrics, isLoading = false })
           value={metrics.meanTimeToRecovery.display}
           score={metrics.meanTimeToRecovery.score}
         />
+      </div>
+
+      {/* Timestamp da última atualização */}
+      <div className="text-center">
+        <span className="text-xs text-muted-foreground/60">
+          {lastUpdated ? 
+            `Atualizado em ${lastUpdated.toLocaleDateString('pt-BR')} às ${lastUpdated.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}` : 
+            'Dados atualizados a cada 24h'
+          }
+        </span>
       </div>
     </motion.div>
   )

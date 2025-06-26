@@ -70,7 +70,7 @@ const mockDoraData: Record<string, DoraMetrics> = {
     },
     overallScore: 'high'
   },
-  'utajiri-360': {
+  'utajiri-360-frontend': {
     deploymentFrequency: {
       value: 0.3,
       unit: 'per-month',
@@ -97,7 +97,7 @@ const mockDoraData: Record<string, DoraMetrics> = {
     },
     overallScore: 'medium'
   },
-  'divino-cantar': {
+  'divino-cantar-frontend': {
     deploymentFrequency: {
       value: 1.8,
       unit: 'per-week',
@@ -232,7 +232,7 @@ const mockDoraData: Record<string, DoraMetrics> = {
     },
     overallScore: 'medium'
   },
-  'modern-data-stack-training': {
+  'treinamento-modern-data-stack-01': {
     deploymentFrequency: {
       value: 1.5,
       unit: 'per-week',

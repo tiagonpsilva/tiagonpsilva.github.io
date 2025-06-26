@@ -322,6 +322,7 @@ const LabsPage: React.FC = () => {
                     <DoraMetrics 
                       metrics={doraMetrics['Portfolio Profissional']}
                       isLoading={loadingMetrics['Portfolio Profissional'] || false}
+                      lastUpdated={new Date('2024-12-26T07:15:00')}
                     />
                   </div>
                 </div>
@@ -470,6 +471,7 @@ const ProjectCard: React.FC<{
     
     return () => clearTimeout(timeoutId)
   }, [project.name, project.link, onLoadMetrics, index])
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -539,6 +541,7 @@ const ProjectCard: React.FC<{
         <DoraMetrics 
           metrics={doraMetrics} 
           isLoading={isLoadingMetrics}
+          lastUpdated={new Date('2024-12-26T07:15:00')}
         />
       </MagicCard>
     </motion.div>

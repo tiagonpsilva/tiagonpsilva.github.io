@@ -131,8 +131,35 @@ function calculateDeploymentFrequency(
     new Date(release.created_at) > threeMonthsAgo && !release.prerelease
   )
   
-  // If no releases, use commits to main as deployment proxy
-  const deployments = recentReleases.length > 0 ? recentReleases.length : commits.length
+  // If no releases, use smart commit filtering to identify deployments
+  let deployments = recentReleases.length
+  
+  if (deployments === 0) {
+    // Filter commits that likely represent deployments
+    const deployCommits = commits.filter(commit => {
+      const message = commit.commit.message.toLowerCase()
+      return (
+        // Deploy-related keywords
+        message.includes('deploy') ||
+        message.includes('release') ||
+        message.includes('publish') ||
+        message.includes('production') ||
+        message.includes('prod') ||
+        // Version bump patterns
+        /version.*\d+\.\d+\.\d+/.test(message) ||
+        /v\d+\.\d+\.\d+/.test(message) ||
+        // Build/CI related
+        message.includes('build:') ||
+        message.includes('ci:') ||
+        // Merge to main (assuming main = production)
+        message.includes('merge') && message.includes('main')
+      )
+    })
+    
+    // If no deploy-specific commits, use a reasonable estimate
+    // Assume 1 deploy per 5-10 commits (typical for continuous deployment)
+    deployments = deployCommits.length > 0 ? deployCommits.length : Math.max(1, Math.floor(commits.length / 7))
+  }
   const deploymentsPerWeek = (deployments / 12) // 12 weeks in 3 months
   
   if (deploymentsPerWeek >= 1) {
