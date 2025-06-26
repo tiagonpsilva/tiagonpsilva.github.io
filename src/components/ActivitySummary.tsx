@@ -242,7 +242,6 @@ const ActivitySummary: React.FC<ActivitySummaryProps> = ({ className = '' }) => 
             
             return Object.entries(repoStats)
               .sort(([,a], [,b]) => b.hours - a.hours)
-              .slice(0, 5)
               .map(([repoName, stats]) => {
                 const percentage = (stats.hours / totalWeekHours) * 100
                 
