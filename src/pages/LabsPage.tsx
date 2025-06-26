@@ -247,7 +247,7 @@ const LabsPage: React.FC = () => {
                     </h4>
 
                     <p className="text-muted-foreground text-base mb-4 leading-relaxed">
-                      Site pessoal e portfolio desenvolvido com React, TypeScript e Tailwind CSS. Inclui blog integrado, sistema de navegação mobile-first e métricas DORA em tempo real.
+                      Portfolio profissional com blog integrado para artigos técnicos, navegação adaptativa mobile-first, sistema completo de dark/light mode e métricas DORA automatizadas. Experiência moderna com glassmorphism effects e PWA-ready.
                     </p>
 
                     {/* Stats destacadas */}
