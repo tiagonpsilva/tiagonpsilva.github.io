@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { MagicCard } from './ui/magic-card'
 import { 
@@ -17,6 +17,37 @@ import {
 
 const Expertise: React.FC = () => {
   const [expandedCard, setExpandedCard] = useState<number | null>(null)
+  const [cardsPerRow, setCardsPerRow] = useState(3)
+  
+  // Update cards per row based on screen size
+  useEffect(() => {
+    const updateCardsPerRow = () => {
+      if (window.innerWidth >= 1024) { // lg screens
+        setCardsPerRow(3)
+      } else if (window.innerWidth >= 768) { // md screens
+        setCardsPerRow(2)
+      } else { // sm screens
+        setCardsPerRow(1)
+      }
+    }
+    
+    updateCardsPerRow()
+    window.addEventListener('resize', updateCardsPerRow)
+    return () => window.removeEventListener('resize', updateCardsPerRow)
+  }, [])
+  
+  // Calculate which cards are in the same row based on current screen size
+  const getCardsInSameRow = (cardIndex: number) => {
+    const rowIndex = Math.floor(cardIndex / cardsPerRow)
+    const startIndex = rowIndex * cardsPerRow
+    const endIndex = Math.min(startIndex + cardsPerRow - 1, expertiseAreas.length - 1)
+    
+    const result = []
+    for (let i = startIndex; i <= endIndex; i++) {
+      result.push(i)
+    }
+    return result
+  }
 
   const expertiseAreas = [
     {
@@ -196,7 +227,7 @@ const Expertise: React.FC = () => {
                     onClick={() => toggleExpand(index)}
                     className="p-2 hover:bg-muted rounded-lg transition-colors duration-200"
                   >
-                    {expandedCard === index ? (
+                    {(expandedCard !== null && getCardsInSameRow(expandedCard).includes(index)) ? (
                       <ChevronUp className="h-5 w-5 text-muted-foreground" />
                     ) : (
                       <ChevronDown className="h-5 w-5 text-muted-foreground" />
@@ -212,7 +243,7 @@ const Expertise: React.FC = () => {
                   {area.shortDesc}
                 </p>
 
-                {expandedCard === index && (
+                {(expandedCard !== null && getCardsInSameRow(expandedCard).includes(index)) && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}

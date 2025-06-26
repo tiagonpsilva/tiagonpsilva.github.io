@@ -36,8 +36,8 @@ const Header: React.FC = () => {
   const navItems = [
     { href: '#home', label: 'Início' },
     { href: '#expertise', label: 'Expertise' },
-    { href: '#cases', label: 'Cases' },
     { href: '#education', label: 'Formação' },
+    { href: '/cases', label: 'Cases', isExternal: true },
     { href: '#projects', label: 'Projetos' },
     { href: '/blog', label: 'Blog', isExternal: true },
     { href: '#contact', label: 'Contato' },
