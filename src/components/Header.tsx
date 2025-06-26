@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Menu, X, Sun, Moon } from 'lucide-react'
+import { Sun, Moon } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { useTheme } from '../contexts/ThemeContext'
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { isDarkMode, toggleDarkMode } = useTheme()
   const navigate = useNavigate()
   const location = useLocation()
@@ -59,7 +58,6 @@ const Header: React.FC = () => {
         }
       }
     }
-    setIsMobileMenuOpen(false)
   }
 
   return (
@@ -132,8 +130,8 @@ const Header: React.FC = () => {
             </motion.button>
           </nav>
 
-          {/* Mobile Menu & Theme Toggle */}
-          <div className="lg:hidden flex items-center gap-2">
+          {/* Mobile Theme Toggle Only */}
+          <div className="lg:hidden flex items-center">
             <button
               onClick={toggleDarkMode}
               className="p-2 text-foreground hover:text-primary transition-colors duration-200"
@@ -145,47 +143,9 @@ const Header: React.FC = () => {
                 <Moon className="h-5 w-5" />
               )}
             </button>
-            <button
-              className="p-2 text-foreground hover:text-primary transition-colors duration-200"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <motion.nav
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden mt-4 pb-4 border-t border-border"
-          >
-            <div className="flex flex-col space-y-4 pt-4">
-              {navItems.map((item) => (
-                <button
-                  key={item.href}
-                  onClick={() => handleNavigation(item.href, item.isExternal)}
-                  className={
-                    item.label === 'Blog'
-                      ? "relative group text-primary hover:text-blue-600 transition-colors duration-200 font-semibold text-left"
-                      : "text-foreground hover:text-primary transition-colors duration-200 font-medium text-left"
-                  }
-                >
-                  {item.label === 'Blog' && (
-                    <div className="absolute inset-0 -inset-x-2 -inset-y-1 bg-gradient-to-r from-primary/8 to-blue-600/8 rounded-lg"></div>
-                  )}
-                  <span className="relative z-10">{item.label}</span>
-                </button>
-              ))}
-            </div>
-          </motion.nav>
-        )}
       </div>
     </motion.header>
   )

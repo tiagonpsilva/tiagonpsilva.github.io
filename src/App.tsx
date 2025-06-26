@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { useEffect } from 'react'
 import Header from './components/Header'
+import BottomNavigation from './components/BottomNavigation'
 import Hero from './components/Hero'
 import Expertise from './components/Expertise'
 import Education from './components/Education'
@@ -42,6 +43,9 @@ function App() {
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<ArticlePage />} />
           </Routes>
+          <BottomNavigation />
+          {/* Add bottom padding to prevent content from being hidden behind bottom nav */}
+          <div className="lg:hidden h-16" />
         </div>
       </Router>
     </ThemeProvider>

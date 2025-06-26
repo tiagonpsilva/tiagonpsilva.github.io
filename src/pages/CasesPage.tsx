@@ -27,6 +27,8 @@ const CasesPage: React.FC = () => {
   useEffect(() => {
     // Restaurar tema anterior quando voltar para a página principal
     restorePreviousTheme()
+    // Forçar scroll para o topo da página
+    window.scrollTo(0, 0)
   }, [restorePreviousTheme])
 
   // Update cards per row based on screen size
