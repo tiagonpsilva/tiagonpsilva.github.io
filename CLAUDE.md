@@ -27,11 +27,15 @@ Note: The project also has automatic deployment via GitHub Actions on push to ma
 - **Tailwind CSS 3.3** with extensive customizations for styling
 - **Framer Motion 10.16** for animations
 - **Magic UI components** in `/src/components/ui/` for special effects
+- **Mixpanel** for analytics and user behavior tracking with environment separation
 
 ### Project Structure
 - `/src/components/` - Feature-based component organization (Hero, Expertise, Cases, etc.)
 - `/src/components/ui/` - Reusable Magic UI components with glassmorphism and animation effects
 - `/src/pages/` - Page components including BlogPage and ArticlePage
+- `/src/contexts/` - React contexts including ThemeContext and MixpanelContext
+- `/src/hooks/` - Custom React hooks including useRouteTracking for analytics
+- `/src/utils/` - Utility functions including mixpanelConfig for environment separation
 - `/src/lib/` - Utility functions including `cn()` for className merging and articles data
 - `/src/types/` - TypeScript type definitions
 - `/public/content/blog/` - Static blog images and assets
@@ -68,6 +72,63 @@ The project includes extensive Tailwind customizations:
 2. Use `npm run dev` to start the development server on http://localhost:5173
 3. The server runs continuously - the timeout in terminal is expected behavior
 4. If port 5173 is busy, Vite will automatically try the next available port
+
+## Analytics System
+
+### Overview
+Comprehensive Mixpanel integration with environment separation for tracking user behavior, page views, and interactions across the entire site.
+
+### Environment Configuration
+The analytics system supports three configuration strategies:
+
+#### Strategy 1: Separate Tokens (Recommended)
+```bash
+# .env.local
+VITE_MIXPANEL_TOKEN_DEV=dev_project_token
+VITE_MIXPANEL_TOKEN_PROD=prod_project_token
+```
+
+#### Strategy 2: Single Token with Flag
+```bash
+# .env.local
+VITE_MIXPANEL_TOKEN=single_project_token
+VITE_ANALYTICS_ENABLED=true  # false for dev, true for prod
+```
+
+#### Strategy 3: Auto-detection
+```bash
+# .env.local
+VITE_MIXPANEL_TOKEN=auto_token
+# Automatic detection based on hostname and Vite mode
+```
+
+### Features Tracked
+- **Automatic Page Views**: All route changes with referrer data
+- **Navigation Tracking**: Header links, mobile navigation, theme toggles
+- **Project Interactions**: External GitHub links, project card clicks
+- **Contact Tracking**: Email links, social media, WhatsApp, contact forms
+- **External Links**: All outbound links with destination tracking
+
+### Implementation Details
+- **Context Pattern**: Centralized MixpanelContext for state management
+- **Custom Hooks**: `useMixpanel`, `usePageTracking`, `useInteractionTracking`
+- **Environment Properties**: Automatic environment tagging for all events
+- **Type Safety**: Full TypeScript integration with proper interfaces
+- **Privacy Controls**: Configurable property blacklisting per environment
+
+### Development vs Production
+- **Development**: Analytics **ENABLED** with detailed console logging and debug mode
+- **Production**: Analytics enabled with minimal logging and localStorage persistence
+- **Debug Mode**: Comprehensive event logging in development environment
+- **Data Separation**: Complete separation between dev and prod data streams when using separate tokens
+- **Environment Tagging**: All events automatically tagged with `environment: "development"` or `"production"`
+
+### Setup Instructions
+1. See `/MIXPANEL_SETUP.md` for detailed configuration guide
+2. Copy `.env.example` to `.env.local` and configure tokens
+3. Choose your preferred environment separation strategy
+4. Test with `npm run dev` (should show **ENABLED** analytics with development environment)
+5. Verify production build with `npm run build && npm run preview`
 
 ## Blog System
 

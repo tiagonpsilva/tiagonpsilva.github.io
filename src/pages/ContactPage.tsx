@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { MagicCard } from '../components/ui/magic-card'
 import { useTheme } from '../contexts/ThemeContext'
+import { useInteractionTracking } from '../contexts/MixpanelContext'
 import { 
   Mail, 
   Github, 
@@ -13,6 +14,7 @@ import {
 
 const ContactPage: React.FC = () => {
   const { restorePreviousTheme } = useTheme()
+  const { trackExternalLink, trackClick } = useInteractionTracking()
 
   useEffect(() => {
     // Restaurar tema anterior quando voltar para a página principal
@@ -139,6 +141,16 @@ const ContactPage: React.FC = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors duration-200"
+                          onClick={() => {
+                            if (method.title === 'Email') {
+                              trackClick('Contact Method', 'Contact Page', {
+                                contact_method: 'email',
+                                contact_href: method.link
+                              })
+                            } else {
+                              trackExternalLink(method.link, method.title)
+                            }
+                          }}
                         >
                           {method.action}
                           <ExternalLink className="h-4 w-4" />
@@ -199,6 +211,10 @@ const ContactPage: React.FC = () => {
                   <a
                     href="mailto:tiagonpsilva@gmail.com?subject=Oportunidade de Consultoria&body=Olá Tiago,%0D%0A%0D%0AGostaria de conversar sobre uma oportunidade de consultoria/projeto.%0D%0A%0D%0DDetalhes do projeto:%0D%0A%0D%0D%0D%0DObrigado!"
                     className="inline-flex items-center gap-2 px-8 py-4 bg-card text-blue-600 font-semibold rounded-xl hover:bg-muted transition-colors duration-300"
+                    onClick={() => trackClick('Quick Contact CTA', 'Contact Page', {
+                      contact_method: 'email_proposal',
+                      contact_href: 'mailto:tiagonpsilva@gmail.com'
+                    })}
                   >
                     <Mail className="h-5 w-5" />
                     Enviar Proposta
@@ -208,6 +224,7 @@ const ContactPage: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-8 py-4 bg-blue-700 text-white font-semibold rounded-xl hover:bg-blue-800 transition-colors duration-300"
+                    onClick={() => trackExternalLink('https://wa.me/5511996531591', 'WhatsApp Business')}
                   >
                     <MessageSquare className="h-5 w-5" />
                     Chat no WhatsApp
@@ -249,6 +266,7 @@ const ContactPage: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground/60 hover:text-muted-foreground transition-colors duration-200"
+                onClick={() => trackExternalLink('https://github.com/tiagonpsilva', 'GitHub Footer')}
               >
                 <Github className="h-5 w-5" />
               </a>
@@ -257,12 +275,17 @@ const ContactPage: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground/60 hover:text-muted-foreground transition-colors duration-200"
+                onClick={() => trackExternalLink('https://linkedin.com/in/tiagonpsilva', 'LinkedIn Footer')}
               >
                 <Linkedin className="h-5 w-5" />
               </a>
               <a
                 href="mailto:tiagonpsilva@gmail.com"
                 className="text-muted-foreground/60 hover:text-muted-foreground transition-colors duration-200"
+                onClick={() => trackClick('Contact Footer', 'Contact Page', {
+                  contact_method: 'email',
+                  contact_href: 'mailto:tiagonpsilva@gmail.com'
+                })}
               >
                 <Mail className="h-5 w-5" />
               </a>

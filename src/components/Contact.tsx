@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { MagicCard } from './ui/magic-card'
+import { useInteractionTracking } from '../contexts/MixpanelContext'
 import { 
   Mail, 
   Github, 
@@ -11,6 +12,7 @@ import {
 } from 'lucide-react'
 
 const Contact: React.FC = () => {
+  const { trackExternalLink, trackClick } = useInteractionTracking()
   const contactMethods = [
     {
       icon: <Mail className="h-6 w-6 text-blue-500" />,
@@ -124,6 +126,16 @@ const Contact: React.FC = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors duration-200"
+                        onClick={() => {
+                          if (method.title === 'Email') {
+                            trackClick('Contact Method', 'Home Contact Section', {
+                              contact_method: 'email',
+                              contact_href: method.link
+                            })
+                          } else {
+                            trackExternalLink(method.link, method.title)
+                          }
+                        }}
                       >
                         {method.action}
                         <ExternalLink className="h-4 w-4" />
@@ -186,6 +198,10 @@ const Contact: React.FC = () => {
                 <a
                   href="mailto:tiagonpsilva@gmail.com?subject=Oportunidade de Consultoria&body=Olá Tiago,%0D%0A%0D%0AGostaria de conversar sobre uma oportunidade de consultoria/projeto.%0D%0A%0D%0DDetalhes do projeto:%0D%0A%0D%0D%0D%0DObrigado!"
                   className="inline-flex items-center gap-2 px-8 py-4 bg-card text-blue-600 font-semibold rounded-xl hover:bg-muted transition-colors duration-300"
+                  onClick={() => trackClick('Quick Contact CTA', 'Home Contact Section', {
+                    contact_method: 'email_proposal',
+                    contact_href: 'mailto:tiagonpsilva@gmail.com'
+                  })}
                 >
                   <Mail className="h-5 w-5" />
                   Enviar Proposta
@@ -195,6 +211,7 @@ const Contact: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-8 py-4 bg-blue-700 text-white font-semibold rounded-xl hover:bg-blue-800 transition-colors duration-300"
+                  onClick={() => trackExternalLink('https://wa.me/5511996531591', 'WhatsApp Business')}
                 >
                   <MessageSquare className="h-5 w-5" />
                   Chat no WhatsApp
@@ -238,6 +255,7 @@ const Contact: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground/60 hover:text-muted-foreground transition-colors duration-200"
+              onClick={() => trackExternalLink('https://github.com/tiagonpsilva', 'GitHub Footer')}
             >
               <Github className="h-5 w-5" />
             </a>
@@ -246,12 +264,17 @@ const Contact: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground/60 hover:text-muted-foreground transition-colors duration-200"
+              onClick={() => trackExternalLink('https://linkedin.com/in/tiagonpsilva', 'LinkedIn Footer')}
             >
               <Linkedin className="h-5 w-5" />
             </a>
             <a
               href="mailto:tiagonpsilva@gmail.com"
               className="text-muted-foreground/60 hover:text-muted-foreground transition-colors duration-200"
+              onClick={() => trackClick('Contact Footer', 'Home Contact Section', {
+                contact_method: 'email',
+                contact_href: 'mailto:tiagonpsilva@gmail.com'
+              })}
             >
               <Mail className="h-5 w-5" />
             </a>

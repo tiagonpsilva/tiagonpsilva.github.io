@@ -10,7 +10,13 @@ import ArticlePage from './pages/ArticlePage'
 import CasesPage from './pages/CasesPage'
 import LabsPage from './pages/LabsPage'
 import ContactPage from './pages/ContactPage'
+import LinkedInCallback from './components/LinkedInCallback'
+import AuthModal from './components/AuthModal'
 import { ThemeProvider, useTheme } from './contexts/ThemeContext'
+import { MixpanelProvider } from './contexts/MixpanelContext'
+import { AuthProvider } from './contexts/AuthContext'
+import { ToastProvider } from './components/ToastManager'
+// import { useRouteTracking } from './hooks/useRouteTracking'
 
 function HomePage() {
   const { restorePreviousTheme } = useTheme()
@@ -29,26 +35,44 @@ function HomePage() {
   )
 }
 
+function AppContent() {
+  // Track route changes - temporarily disabled
+  // useRouteTracking()
+
+  return (
+    <div className="min-h-screen bg-background transition-colors duration-300">
+      <Header />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/cases" element={<CasesPage />} />
+        <Route path="/labs" element={<LabsPage />} />
+        <Route path="/projects" element={<LabsPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/blog/:slug" element={<ArticlePage />} />
+        <Route path="/auth/linkedin/callback" element={<LinkedInCallback />} />
+      </Routes>
+      <BottomNavigation />
+      {/* Add bottom padding to prevent content from being hidden behind bottom nav */}
+      <div className="lg:hidden h-16" />
+      {/* Auth Modal */}
+      <AuthModal />
+    </div>
+  )
+}
+
 function App() {
   return (
     <ThemeProvider>
-      <Router>
-        <div className="min-h-screen bg-background transition-colors duration-300">
-          <Header />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/cases" element={<CasesPage />} />
-            <Route path="/labs" element={<LabsPage />} />
-            <Route path="/projects" element={<LabsPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/blog/:slug" element={<ArticlePage />} />
-          </Routes>
-          <BottomNavigation />
-          {/* Add bottom padding to prevent content from being hidden behind bottom nav */}
-          <div className="lg:hidden h-16" />
-        </div>
-      </Router>
+      <MixpanelProvider>
+        <AuthProvider>
+          <ToastProvider>
+            <Router>
+              <AppContent />
+            </Router>
+          </ToastProvider>
+        </AuthProvider>
+      </MixpanelProvider>
     </ThemeProvider>
   )
 }

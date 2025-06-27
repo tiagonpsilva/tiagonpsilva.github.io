@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useInteractionTracking } from '../contexts/MixpanelContext'
 import { 
   Home, 
   Sparkles,
@@ -14,6 +15,7 @@ import {
 
 const BottomNavigation: React.FC = () => {
   const [isInicioExpanded, setIsInicioExpanded] = useState(false)
+  const { trackClick } = useInteractionTracking()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -37,7 +39,16 @@ const BottomNavigation: React.FC = () => {
     { href: '/contact', label: 'Contato', icon: <MessageCircle className="h-5 w-5" />, isExternal: true },
   ]
 
-  const handleNavigation = (href: string, isExternal?: boolean, isExpandable?: boolean) => {
+  const handleNavigation = (href: string, isExternal?: boolean, isExpandable?: boolean, label?: string) => {
+    // Track navigation click
+    trackClick('Navigation Link', 'Bottom Navigation', {
+      link_href: href,
+      link_label: label,
+      is_external: isExternal,
+      is_expandable: isExpandable,
+      current_page: location.pathname
+    })
+
     if (isExpandable) {
       setIsInicioExpanded(!isInicioExpanded)
       return
@@ -68,7 +79,14 @@ const BottomNavigation: React.FC = () => {
     setIsInicioExpanded(false)
   }
 
-  const handleSubItemClick = (href: string) => {
+  const handleSubItemClick = (href: string, label?: string) => {
+    // Track sub navigation click
+    trackClick('Sub Navigation Link', 'Bottom Navigation Expanded', {
+      link_href: href,
+      link_label: label,
+      current_page: location.pathname
+    })
+
     // Se estamos tentando navegar para uma seção e não estamos na página inicial
     if (location.pathname !== '/') {
       // Navegar para a página inicial com a âncora
@@ -98,7 +116,7 @@ const BottomNavigation: React.FC = () => {
           {mainItems.map((item) => (
             <button
               key={item.href}
-              onClick={() => handleNavigation(item.href, item.isExternal, item.isExpandable)}
+              onClick={() => handleNavigation(item.href, item.isExternal, item.isExpandable, item.label)}
               className="flex flex-col items-center gap-1 p-2 min-w-0 text-muted-foreground hover:text-primary transition-colors duration-200"
             >
               <div className="relative">
@@ -132,7 +150,7 @@ const BottomNavigation: React.FC = () => {
             {inicioSubItems.map((subItem) => (
               <button
                 key={subItem.href}
-                onClick={() => handleSubItemClick(subItem.href)}
+                onClick={() => handleSubItemClick(subItem.href, subItem.label)}
                 className="flex items-center gap-3 w-full p-3 text-left text-foreground hover:text-primary hover:bg-muted/50 rounded-lg transition-all duration-200"
               >
                 {subItem.icon}

@@ -4,10 +4,13 @@ import { Sun, Moon } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { useTheme } from '../contexts/ThemeContext'
+import { useInteractionTracking } from '../contexts/MixpanelContext'
+import AuthButton from './AuthButton'
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const { isDarkMode, toggleDarkMode } = useTheme()
+  const { trackClick } = useInteractionTracking()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -42,7 +45,15 @@ const Header: React.FC = () => {
     { href: '/contact', label: 'Contato', isExternal: true },
   ]
 
-  const handleNavigation = (href: string, isExternal?: boolean) => {
+  const handleNavigation = (href: string, isExternal?: boolean, label?: string) => {
+    // Track navigation click
+    trackClick('Navigation Link', 'Header', {
+      link_href: href,
+      link_label: label,
+      is_external: isExternal,
+      current_page: location.pathname
+    })
+
     if (isExternal) {
       navigate(href)
     } else {
@@ -91,7 +102,7 @@ const Header: React.FC = () => {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                onClick={() => handleNavigation(item.href, item.isExternal)}
+                onClick={() => handleNavigation(item.href, item.isExternal, item.label)}
                 className={
                   item.label === 'Blog' 
                     ? "relative group text-primary hover:text-blue-600 transition-colors duration-200 font-semibold text-base tracking-wide"
@@ -118,7 +129,12 @@ const Header: React.FC = () => {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: navItems.length * 0.1 }}
-              onClick={toggleDarkMode}
+              onClick={() => {
+                trackClick('Theme Toggle', 'Header', {
+                  theme_changed_to: isDarkMode ? 'light' : 'dark'
+                })
+                toggleDarkMode()
+              }}
               className="p-2 text-foreground hover:text-primary transition-colors duration-200 ml-4"
               aria-label={isDarkMode ? 'Ativar modo claro' : 'Ativar modo escuro'}
             >
@@ -128,10 +144,23 @@ const Header: React.FC = () => {
                 <Moon className="h-5 w-5" />
               )}
             </motion.button>
+
+            {/* Auth Button */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: (navItems.length + 1) * 0.1 }}
+              className="ml-4"
+            >
+              <AuthButton />
+            </motion.div>
           </nav>
 
-          {/* Mobile Theme Toggle Only */}
-          <div className="lg:hidden flex items-center">
+          {/* Mobile Controls */}
+          <div className="lg:hidden flex items-center gap-2">
+            {/* Auth Button - Mobile */}
+            <AuthButton />
+            
             <button
               onClick={toggleDarkMode}
               className="p-2 text-foreground hover:text-primary transition-colors duration-200"

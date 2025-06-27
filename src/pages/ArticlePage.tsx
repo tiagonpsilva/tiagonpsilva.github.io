@@ -6,6 +6,8 @@ import ReactMarkdown from 'react-markdown'
 import { Article } from '@/types/blog'
 import { getArticleBySlug } from '@/lib/articles'
 import { useTheme } from '@/contexts/ThemeContext'
+// import { useArticleEngagement } from '@/hooks/useArticleEngagement'
+// import { useInteractionTracking } from '@/contexts/MixpanelContext'
 
 const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>()
@@ -13,6 +15,9 @@ const ArticlePage: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
   const { setDarkModeForBlog } = useTheme()
+  // Temporarily disabled tracking
+  // const { trackClick } = useInteractionTracking()
+  // const { trackInteraction } = useArticleEngagement(null)
 
   useEffect(() => {
     // Ativar dark mode quando entrar no artigo (apenas uma vez)
@@ -64,6 +69,7 @@ const ArticlePage: React.FC = () => {
           <Link
             to="/blog"
             className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
+            // onClick for tracking disabled temporarily
           >
             <ArrowLeft className="w-4 h-4" />
             Voltar ao Blog
@@ -81,6 +87,7 @@ const ArticlePage: React.FC = () => {
           <Link
             to="/blog"
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+            // onClick for tracking disabled temporarily
           >
             <ArrowLeft className="w-4 h-4" />
             Voltar ao Blog
@@ -121,7 +128,8 @@ const ArticlePage: React.FC = () => {
               {article.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1 px-2 md:px-3 py-1 text-xs md:text-sm font-medium bg-primary/10 text-primary rounded-full border border-primary/20"
+                  className="inline-flex items-center gap-1 px-2 md:px-3 py-1 text-xs md:text-sm font-medium bg-primary/10 text-primary rounded-full border border-primary/20 cursor-pointer hover:bg-primary/20 transition-colors"
+                  // onClick for tracking disabled temporarily
                 >
                   <Tag className="w-3 h-3 md:w-4 md:h-4" />
                   {tag}
