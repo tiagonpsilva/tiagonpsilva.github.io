@@ -10,6 +10,7 @@ import ArticlePage from './pages/ArticlePage'
 import CasesPage from './pages/CasesPage'
 import LabsPage from './pages/LabsPage'
 import ContactPage from './pages/ContactPage'
+import AuthDebugPage from './pages/AuthDebugPage'
 import LinkedInCallback from './components/LinkedInCallback'
 import AuthModal from './components/AuthModal'
 import { ThemeProvider, useTheme } from './contexts/ThemeContext'
@@ -50,6 +51,7 @@ function AppContent() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:slug" element={<ArticlePage />} />
+        <Route path="/auth/debug" element={<AuthDebugPage />} />
         <Route path="/auth/linkedin/callback" element={<LinkedInCallback />} />
       </Routes>
       <BottomNavigation />

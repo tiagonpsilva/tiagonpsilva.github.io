@@ -14,39 +14,30 @@ export async function onRequestGet(context) {
 
     const accessToken = authHeader.replace('Bearer ', '')
 
-    // Fetch user profile from LinkedIn API
-    const [profileResponse, emailResponse] = await Promise.all([
-      fetch('https://api.linkedin.com/v2/people/~:(id,firstName,lastName,headline,location,industry,publicProfileUrl,profilePicture(displayImage~:playableStreams))', {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
-        }
-      }),
-      fetch('https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))', {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
-        }
-      })
-    ])
+    // Use OpenID Connect userinfo endpoint (simpler and works with approved product)
+    const userinfoResponse = await fetch('https://api.linkedin.com/v2/userinfo', {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    })
 
-    if (!profileResponse.ok) {
-      throw new Error('Failed to fetch profile data')
+    if (!userinfoResponse.ok) {
+      const errorText = await userinfoResponse.text()
+      throw new Error(`Failed to fetch userinfo: ${errorText}`)
     }
 
-    const profile = await profileResponse.json()
-    const emailData = emailResponse.ok ? await emailResponse.json() : null
+    const userinfo = await userinfoResponse.json()
 
-    // Format user data
+    // Format user data from OpenID Connect response
     const userData = {
-      id: profile.id,
-      name: `${profile.firstName?.localized?.en_US || ''} ${profile.lastName?.localized?.en_US || ''}`.trim(),
-      email: emailData?.elements?.[0]?.['handle~']?.emailAddress,
-      headline: profile.headline?.localized?.en_US,
-      location: profile.location?.country?.localized?.en_US,
-      industry: profile.industry?.localized?.en_US,
-      publicProfileUrl: profile.publicProfileUrl,
-      picture: profile.profilePicture?.['displayImage~']?.elements?.[0]?.identifiers?.[0]?.identifier
+      id: userinfo.sub,
+      name: userinfo.name,
+      email: userinfo.email,
+      headline: userinfo.job_title || userinfo.title,
+      location: userinfo.locale,
+      picture: userinfo.picture,
+      publicProfileUrl: userinfo.profile
     }
 
     return new Response(JSON.stringify(userData), {

@@ -13,6 +13,11 @@ export default async function handler(req, res) {
     }
 
     console.log('🔄 Exchanging LinkedIn code for token...')
+    console.log('🔧 Environment check:', {
+      hasClientId: !!process.env.VITE_LINKEDIN_CLIENT_ID || !!process.env.LINKEDIN_CLIENT_ID,
+      hasClientSecret: !!process.env.LINKEDIN_CLIENT_SECRET,
+      origin: req.headers.origin
+    })
 
     // Exchange authorization code for access token
     const tokenResponse = await fetch('https://www.linkedin.com/oauth/v2/accessToken', {
@@ -23,9 +28,9 @@ export default async function handler(req, res) {
       body: new URLSearchParams({
         grant_type: 'authorization_code',
         code,
-        client_id: process.env.VITE_LINKEDIN_CLIENT_ID,
+        client_id: process.env.VITE_LINKEDIN_CLIENT_ID || process.env.LINKEDIN_CLIENT_ID,
         client_secret: process.env.LINKEDIN_CLIENT_SECRET,
-        redirect_uri: `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : req.headers.origin || 'http://localhost:3000'}/auth/linkedin/callback`
+        redirect_uri: `${req.headers.origin}/auth/linkedin/callback`
       })
     })
 
