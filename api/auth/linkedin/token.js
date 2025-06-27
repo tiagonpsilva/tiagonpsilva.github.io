@@ -25,7 +25,7 @@ export default async function handler(req, res) {
         code,
         client_id: process.env.VITE_LINKEDIN_CLIENT_ID,
         client_secret: process.env.LINKEDIN_CLIENT_SECRET,
-        redirect_uri: `${req.headers.origin || 'http://localhost:3000'}/auth/linkedin/callback`
+        redirect_uri: `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : req.headers.origin || 'http://localhost:3000'}/auth/linkedin/callback`
       })
     })
 
