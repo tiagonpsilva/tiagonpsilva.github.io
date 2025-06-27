@@ -73,7 +73,38 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setLoading(false)
     }
 
+    // Listen for auth success from popup
+    const handleAuthMessage = (event: MessageEvent) => {
+      // Security: check origin
+      if (event.origin !== window.location.origin) {
+        console.warn('⚠️ Ignoring message from untrusted origin:', event.origin)
+        return
+      }
+
+      if (event.data?.type === 'LINKEDIN_AUTH_SUCCESS') {
+        console.log('📨 Received auth success from popup:', event.data.userData)
+        
+        const userData = event.data.userData
+        
+        // Save to localStorage
+        try {
+          localStorage.setItem('linkedin_user', JSON.stringify(userData))
+          setUser(userData)
+          identifyLinkedInUser(userData)
+          setShowAuthModal(false)
+          console.log('✅ User authenticated via postMessage')
+        } catch (error) {
+          console.error('❌ Failed to save user data:', error)
+        }
+      }
+    }
+
+    window.addEventListener('message', handleAuthMessage)
     initializeAuth()
+
+    return () => {
+      window.removeEventListener('message', handleAuthMessage)
+    }
   }, [])
 
   // Track page views and time for modal trigger
@@ -172,9 +203,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signInWithLinkedIn = () => {
     const clientId = import.meta.env.VITE_LINKEDIN_CLIENT_ID
-    const redirectUri = `${window.location.origin}/auth/linkedin/callback`
-    const scope = 'profile email'
+    const currentOrigin = window.location.origin
+    const redirectUri = `${currentOrigin}/auth/linkedin/callback`
+    const scope = 'openid profile email'
     const state = Math.random().toString(36).substring(7)
+    
+    console.log('🔐 Starting LinkedIn OAuth...')
+    console.log('Current Origin:', currentOrigin)
+    console.log('Client ID:', clientId)
+    console.log('Redirect URI:', redirectUri)
+    
+    if (!clientId) {
+      console.error('❌ VITE_LINKEDIN_CLIENT_ID not found!')
+      return
+    }
     
     // Store state for security
     sessionStorage.setItem('linkedin_oauth_state', state)
@@ -185,6 +227,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       `redirect_uri=${encodeURIComponent(redirectUri)}&` +
       `scope=${encodeURIComponent(scope)}&` +
       `state=${state}`
+
+    console.log('🌐 Auth URL:', authUrl)
 
     track('LinkedIn OAuth Initiated', {
       modal_trigger: showAuthModal ? 'modal' : 'manual'
@@ -197,26 +241,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       'width=600,height=600,scrollbars=yes,resizable=yes'
     )
 
-    // Listen for auth completion
+    if (!popup) {
+      console.error('❌ Popup blocked!')
+      return
+    }
+
+    console.log('✅ Popup opened')
+
+    // Listen for popup close (just for logging, auth handled by postMessage)
     const checkClosed = setInterval(() => {
       if (popup?.closed) {
         clearInterval(checkClosed)
-        // Check if user was authenticated (will be handled by callback)
-        const checkAuth = setTimeout(() => {
-          const savedUser = localStorage.getItem('linkedin_user')
-          if (savedUser) {
-            try {
-              const userData = JSON.parse(savedUser)
-              setUser(userData)
-              identifyLinkedInUser(userData)
-              setShowAuthModal(false)
-            } catch (error) {
-              console.error('Error parsing auth result:', error)
-            }
+        console.log('🔄 Popup closed')
+        
+        // Small delay to allow postMessage to be processed
+        setTimeout(() => {
+          if (!user) {
+            console.warn('⚠️ Popup closed but no user authenticated - user may have cancelled')
           }
         }, 1000)
-
-        return () => clearTimeout(checkAuth)
       }
     }, 1000)
   }
@@ -246,6 +289,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       has_headline: !!userData.headline,
       has_location: !!userData.location
     })
+
+    // Show success notification
+    console.log(`✅ Conectado como ${userData.name}`)
   }
 
   const signOut = () => {

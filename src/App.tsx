@@ -15,6 +15,7 @@ import AuthModal from './components/AuthModal'
 import { ThemeProvider, useTheme } from './contexts/ThemeContext'
 import { MixpanelProvider } from './contexts/MixpanelContext'
 import { AuthProvider } from './contexts/AuthContext'
+import { ToastProvider } from './components/ToastManager'
 // import { useRouteTracking } from './hooks/useRouteTracking'
 
 function HomePage() {
@@ -65,9 +66,11 @@ function App() {
     <ThemeProvider>
       <MixpanelProvider>
         <AuthProvider>
-          <Router>
-            <AppContent />
-          </Router>
+          <ToastProvider>
+            <Router>
+              <AppContent />
+            </Router>
+          </ToastProvider>
         </AuthProvider>
       </MixpanelProvider>
     </ThemeProvider>

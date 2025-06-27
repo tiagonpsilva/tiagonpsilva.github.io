@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { useTheme } from '../contexts/ThemeContext'
 import { useInteractionTracking } from '../contexts/MixpanelContext'
-import UserProfile from './UserProfile'
+import AuthButton from './AuthButton'
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -145,21 +145,21 @@ const Header: React.FC = () => {
               )}
             </motion.button>
 
-            {/* User Profile */}
+            {/* Auth Button */}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: (navItems.length + 1) * 0.1 }}
               className="ml-4"
             >
-              <UserProfile />
+              <AuthButton />
             </motion.div>
           </nav>
 
           {/* Mobile Controls */}
           <div className="lg:hidden flex items-center gap-2">
-            {/* User Profile - Mobile */}
-            <UserProfile />
+            {/* Auth Button - Mobile */}
+            <AuthButton />
             
             <button
               onClick={toggleDarkMode}
