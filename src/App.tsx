@@ -17,7 +17,7 @@ import { ThemeProvider, useTheme } from './contexts/ThemeContext'
 import { MixpanelProvider } from './contexts/MixpanelContext'
 import { AuthProvider } from './contexts/AuthContext'
 import { ToastProvider } from './components/ToastManager'
-// import { useRouteTracking } from './hooks/useRouteTracking'
+import { useRouteTracking } from './hooks/useRouteTracking'
 
 function HomePage() {
   const { restorePreviousTheme } = useTheme()
@@ -37,8 +37,8 @@ function HomePage() {
 }
 
 function AppContent() {
-  // Track route changes - temporarily disabled
-  // useRouteTracking()
+  // Track route changes for analytics
+  useRouteTracking()
 
   return (
     <div className="min-h-screen bg-background transition-colors duration-300">

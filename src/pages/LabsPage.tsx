@@ -5,6 +5,7 @@ import { useTheme } from '../contexts/ThemeContext'
 import { useInteractionTracking } from '../contexts/MixpanelContext'
 import DoraMetrics from '../components/DoraMetrics'
 import ActivitySummary from '../components/ActivitySummary'
+import AnalyticsDashboard from '../components/AnalyticsDashboard'
 import { calculateDoraMetrics, DoraMetrics as DoraMetricsType } from '../utils/doraMetrics'
 import { 
   getCachedDoraMetrics, 
@@ -395,6 +396,15 @@ const LabsPage: React.FC = () => {
               ))}
             </div>
           </div>
+
+          {/* Analytics Dashboard */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <AnalyticsDashboard />
+          </motion.div>
 
           {/* Contact CTA */}
           <motion.div
