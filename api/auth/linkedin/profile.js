@@ -32,6 +32,13 @@ export default async function handler(req, res) {
 
     const userinfo = await userinfoResponse.json()
     console.log('✅ LinkedIn profile received:', userinfo)
+    
+    // Debug locale specifically
+    console.log('🔍 Locale debug:', {
+      locale: userinfo.locale,
+      localeType: typeof userinfo.locale,
+      localeKeys: userinfo.locale && typeof userinfo.locale === 'object' ? Object.keys(userinfo.locale) : 'N/A'
+    })
 
     // Format user data from OpenID Connect response
     const userData = {
@@ -39,7 +46,11 @@ export default async function handler(req, res) {
       name: userinfo.name,
       email: userinfo.email,
       headline: userinfo.job_title || userinfo.title,
-      location: userinfo.locale,
+      location: typeof userinfo.locale === 'object' && userinfo.locale 
+        ? `${userinfo.locale.country || ''} ${userinfo.locale.language || ''}`.trim()
+        : typeof userinfo.locale === 'string' 
+        ? userinfo.locale 
+        : null,
       picture: userinfo.picture,
       publicProfileUrl: userinfo.profile || `https://linkedin.com/in/${userinfo.sub}`
     }
