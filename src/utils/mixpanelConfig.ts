@@ -51,7 +51,7 @@ export const getMixpanelConfig = (): MixpanelConfig => {
     // Strategy 3: Auto-detection fallback
     // Check for any available token as fallback
     const fallbackToken = singleToken || devToken || prodToken
-    token = fallbackToken
+    token = fallbackToken || null
     enabled = !!fallbackToken
     environment = isDev ? 'development' : 'production'
     console.log(`🎯 Mixpanel: Auto-detection mode, analytics ${enabled ? 'enabled' : 'disabled'} (${environment})`)
