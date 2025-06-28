@@ -17,7 +17,43 @@ npm run type-check   # Run TypeScript compiler without emitting files
 npm run deploy       # Build and deploy to GitHub Pages manually
 ```
 
-Note: The project also has automatic deployment via GitHub Actions on push to main branch.
+Note: The project uses **Vercel** for automatic deployment on push to main branch.
+
+#### Deployment Verification Protocol
+**IMPORTANT**: After every push to main, ALWAYS verify deployment status:
+
+1. **Check Vercel Build Status**:
+   - Visit Vercel Dashboard or use Vercel CLI
+   - Verify build completed successfully
+   - Check for any build errors or warnings
+   - Confirm deployment is live
+
+2. **Test Production Site**:
+   ```bash
+   # Check if new bundle is deployed
+   curl -s https://tiagopinto.io/ | grep -o "index-[a-f0-9]*\.js"
+   
+   # Verify site is accessible
+   curl -s -I https://tiagopinto.io/ | head -5
+   ```
+
+3. **Bundle Verification**:
+   - New commits should generate new bundle hash
+   - Compare with previous bundle to confirm updates
+   - If bundle hash unchanged, deployment may have failed
+
+4. **Rollback Process**:
+   - If deployment fails, immediately check Vercel logs
+   - Fix issues and redeploy, or rollback via Vercel dashboard
+   - Never leave broken deployments in production
+
+**Deploy Checklist**:
+- [ ] Local build passes: `npm run build`
+- [ ] Push to main completed
+- [ ] Vercel build status: ✅ Success
+- [ ] New bundle hash generated
+- [ ] Production site accessible
+- [ ] Key functionality tested
 
 ## Architecture
 

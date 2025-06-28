@@ -320,17 +320,16 @@ export const generateMixpanelReport = async (
 }
 
 // Helper functions
-const processArticleData = (data: any): BlogArticleMetrics[] => {
+const processArticleData = (_data: any): BlogArticleMetrics[] => {
   // Processar dados brutos do Mixpanel para formato de artigos
   const articles: BlogArticleMetrics[] = []
   
-  // Implementar lógica de processamento baseado na estrutura real da resposta
-  if (data.data) {
-    // Exemplo de processamento - adaptar conforme estrutura real
-    Object.entries(data.data).forEach(([date, events]: [string, any]) => {
-      // Processar eventos por data e artigo
-    })
-  }
+  // TODO: Implementar lógica de processamento baseado na estrutura real da resposta
+  // if (data.data) {
+  //   Object.entries(data.data).forEach(([date, events]: [string, any]) => {
+  //     // Processar eventos por data e artigo
+  //   })
+  // }
   
   return articles
 }
@@ -340,12 +339,12 @@ const calculateAverage = (data: any): number => {
   if (!data.data) return 0
   
   const values = Object.values(data.data).flat()
-  const sum = values.reduce((a: any, b: any) => a + b, 0)
+  const sum = values.reduce((a: number, b: any) => a + Number(b), 0)
   return values.length > 0 ? sum / values.length : 0
 }
 
-const getCompletionRate = async (config: MixpanelQueryConfig, days: number): Promise<number> => {
-  // Query específica para taxa de conclusão de artigos
+const getCompletionRate = async (_config: MixpanelQueryConfig, _days: number): Promise<number> => {
+  // TODO: Query específica para taxa de conclusão de artigos
   // Implementar baseado nos eventos "Article Started" vs "Article Completed"
   return 0 // Placeholder
 }
@@ -355,13 +354,13 @@ const sumEventCounts = (data: any): number => {
   return Object.values(data.data).reduce((sum: number, count: any) => sum + count, 0)
 }
 
-const processChannelData = (data: any) => {
-  // Processar dados de canais de aquisição
+const processChannelData = (_data: any) => {
+  // TODO: Processar dados de canais de aquisição
   return []
 }
 
-const processSiteData = (data: any) => {
-  // Processar dados de popularidade do site
+const processSiteData = (_data: any) => {
+  // TODO: Processar dados de popularidade do site
   return []
 }
 
