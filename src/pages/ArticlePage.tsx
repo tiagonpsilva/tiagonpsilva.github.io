@@ -18,9 +18,18 @@ const ArticlePage: React.FC = () => {
   const { trackClick } = useInteractionTracking()
   const contentRef = useRef<HTMLDivElement>(null)
   
-  // Article analytics tracking
+  // Article analytics tracking (only when article is loaded)
   const { readingProgress, trackArticleInteraction } = useArticleAnalytics({
-    article: article!,
+    article: article || { 
+      id: 'loading',
+      slug: 'loading',
+      title: 'Loading...', 
+      content: '', 
+      readTime: 0, 
+      publishedAt: new Date().toISOString(), 
+      tags: [], 
+      excerpt: '' 
+    },
     contentRef
   })
 

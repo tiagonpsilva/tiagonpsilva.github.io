@@ -32,20 +32,24 @@ export const useArticleAnalytics = ({ article, contentRef }: ArticleAnalyticsOpt
 
   // Track article start
   useEffect(() => {
-    if (!hasTrackedStart.current) {
+    if (!hasTrackedStart.current && article.id !== 'loading') {
       hasTrackedStart.current = true
       startTime.current = Date.now()
       
-      track('Article Started', {
-        article_id: article.id,
-        article_title: article.title,
-        article_slug: article.id,
-        word_count: estimateWordCount(article.content || ''),
-        reading_time: article.readTime,
-        tags: article.tags,
-        published_date: article.publishedAt,
-        start_timestamp: new Date().toISOString()
-      })
+      try {
+        track('Article Started', {
+          article_id: article.id,
+          article_title: article.title,
+          article_slug: article.id,
+          word_count: estimateWordCount(article.content || ''),
+          reading_time: article.readTime,
+          tags: article.tags,
+          published_date: article.publishedAt,
+          start_timestamp: new Date().toISOString()
+        })
+      } catch (error) {
+        console.error('Error tracking article start:', error)
+      }
     }
   }, [article, track])
 

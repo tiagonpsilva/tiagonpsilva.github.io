@@ -79,19 +79,29 @@ export const MixpanelProvider: React.FC<MixpanelProviderProps> = ({ children }) 
       return
     }
     
-    // Add environment and common properties
-    const enhancedProperties = addEnvironmentProperties({
-      page_url: window.location.href,
-      page_title: document.title,
-      user_agent: navigator.userAgent,
-      ...properties
-    })
-    
-    mixpanel.track(event, enhancedProperties)
-    
-    const config = getMixpanelConfig()
-    if (config.debug) {
-      console.log('📊 Tracked event:', event, enhancedProperties)
+    try {
+      // Check if mixpanel is properly initialized
+      if (!mixpanel || !(mixpanel as any)._flags) {
+        console.warn('⚠️ Mixpanel not properly initialized, skipping track:', event)
+        return
+      }
+      
+      // Add environment and common properties
+      const enhancedProperties = addEnvironmentProperties({
+        page_url: window.location.href,
+        page_title: document.title,
+        user_agent: navigator.userAgent,
+        ...properties
+      })
+      
+      mixpanel.track(event, enhancedProperties)
+      
+      const config = getMixpanelConfig()
+      if (config.debug) {
+        console.log('📊 Tracked event:', event, enhancedProperties)
+      }
+    } catch (error) {
+      console.error('❌ Error tracking event:', error)
     }
   }
 
@@ -101,11 +111,21 @@ export const MixpanelProvider: React.FC<MixpanelProviderProps> = ({ children }) 
       return
     }
     
-    mixpanel.identify(userId)
-    
-    const config = getMixpanelConfig()
-    if (config.debug) {
-      console.log('👤 User identified:', userId)
+    try {
+      // Check if mixpanel is properly initialized
+      if (!mixpanel || !(mixpanel as any)._flags) {
+        console.warn('⚠️ Mixpanel not properly initialized, skipping identify:', userId)
+        return
+      }
+      
+      mixpanel.identify(userId)
+      
+      const config = getMixpanelConfig()
+      if (config.debug) {
+        console.log('👤 User identified:', userId)
+      }
+    } catch (error) {
+      console.error('❌ Error identifying user:', error)
     }
   }
 
@@ -115,12 +135,22 @@ export const MixpanelProvider: React.FC<MixpanelProviderProps> = ({ children }) 
       return
     }
     
-    const enhancedProperties = addEnvironmentProperties(properties)
-    mixpanel.people.set(enhancedProperties)
-    
-    const config = getMixpanelConfig()
-    if (config.debug) {
-      console.log('👤 User properties set:', enhancedProperties)
+    try {
+      // Check if mixpanel is properly initialized
+      if (!mixpanel || !(mixpanel as any)._flags || !mixpanel.people) {
+        console.warn('⚠️ Mixpanel not properly initialized, skipping set user properties')
+        return
+      }
+      
+      const enhancedProperties = addEnvironmentProperties(properties)
+      mixpanel.people.set(enhancedProperties)
+      
+      const config = getMixpanelConfig()
+      if (config.debug) {
+        console.log('👤 User properties set:', enhancedProperties)
+      }
+    } catch (error) {
+      console.error('❌ Error setting user properties:', error)
     }
   }
 
@@ -130,11 +160,21 @@ export const MixpanelProvider: React.FC<MixpanelProviderProps> = ({ children }) 
       return
     }
     
-    mixpanel.reset()
-    
-    const config = getMixpanelConfig()
-    if (config.debug) {
-      console.log('🔄 Mixpanel session reset')
+    try {
+      // Check if mixpanel is properly initialized
+      if (!mixpanel || !(mixpanel as any)._flags) {
+        console.warn('⚠️ Mixpanel not properly initialized, skipping reset')
+        return
+      }
+      
+      mixpanel.reset()
+      
+      const config = getMixpanelConfig()
+      if (config.debug) {
+        console.log('🔄 Mixpanel session reset')
+      }
+    } catch (error) {
+      console.error('❌ Error resetting session:', error)
     }
   }
 
