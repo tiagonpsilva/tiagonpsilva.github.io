@@ -304,6 +304,23 @@ When encountering any problem or improvement opportunity:
 - **Close issues** only after verification of the fix
 - **Cross-reference** related issues when applicable
 
+#### Automation Scripts
+For consistent issue management, use the provided automation scripts:
+
+```bash
+# Create new issue following the template
+./scripts/create-issue.sh "Issue Title" [bug|enhancement|documentation|infrastructure]
+
+# Close issue with detailed resolution
+./scripts/close-issue.sh <issue_number>
+```
+
+**Script Features:**
+- Automated template population following CLAUDE.md protocol
+- Environment detection and metadata collection
+- Guided resolution documentation
+- Consistent formatting and tracking
+
 #### Examples of Issues to Track
 - **Bugs**: OAuth failures, build errors, deployment issues
 - **Enhancements**: New features, performance improvements
