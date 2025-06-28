@@ -140,29 +140,70 @@ const checkExistingUserData = () => {
 
 // Get comprehensive user identification data
 export const getUserIdentificationData = (): UserIdentificationData => {
-  const visitData = updateVisitTracking()
-  const utmParams = getUtmParameters()
-  const existingData = checkExistingUserData()
-  
-  const identificationData: UserIdentificationData = {
-    user_id: getUserId(),
-    session_id: getSessionId(),
-    device_fingerprint: generateDeviceFingerprint(),
-    browser_fingerprint: getBrowserFingerprint(),
-    referrer: document.referrer || 'direct',
-    user_agent: navigator.userAgent,
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    language: navigator.language,
-    screen_resolution: `${screen.width}x${screen.height}`,
-    user_type: visitData.is_returning_user ? 'returning' : 'new',
-    ...visitData,
-    ...utmParams,
+  try {
+    const visitData = updateVisitTracking()
+    const utmParams = getUtmParameters()
+    const existingData = checkExistingUserData()
     
-    // Add existing tracking data if available
-    ...existingData
+    // Safe timezone extraction
+    let timezone = 'UTC'
+    try {
+      const resolvedOptions = Intl.DateTimeFormat().resolvedOptions()
+      timezone = typeof resolvedOptions.timeZone === 'string' ? resolvedOptions.timeZone : 'UTC'
+    } catch (error) {
+      console.warn('Failed to get timezone, using UTC:', error)
+    }
+    
+    // Safe language extraction
+    let language = 'en-US'
+    try {
+      language = typeof navigator.language === 'string' ? navigator.language : 'en-US'
+    } catch (error) {
+      console.warn('Failed to get language, using en-US:', error)
+    }
+    
+    const identificationData: UserIdentificationData = {
+      user_id: getUserId(),
+      session_id: getSessionId(),
+      device_fingerprint: generateDeviceFingerprint(),
+      browser_fingerprint: getBrowserFingerprint(),
+      referrer: document.referrer || 'direct',
+      user_agent: navigator.userAgent,
+      timezone,
+      language,
+      screen_resolution: `${screen.width}x${screen.height}`,
+      user_type: visitData.is_returning_user ? 'returning' : 'new',
+      ...visitData,
+      ...utmParams,
+      
+      // Add existing tracking data if available (with safety check)
+      ...Object.fromEntries(
+        Object.entries(existingData).map(([key, value]) => [
+          key, 
+          typeof value === 'object' && value !== null ? JSON.stringify(value) : value
+        ])
+      )
+    }
+    
+    return identificationData
+  } catch (error) {
+    console.error('Error in getUserIdentificationData:', error)
+    // Return minimal safe data
+    return {
+      user_id: 'fallback_' + Date.now(),
+      session_id: 'fallback_session_' + Date.now(),
+      device_fingerprint: 'fallback',
+      browser_fingerprint: 'fallback',
+      referrer: 'direct',
+      user_agent: 'unknown',
+      timezone: 'UTC',
+      language: 'en-US',
+      screen_resolution: '1920x1080',
+      is_returning_user: false,
+      visit_count: 1,
+      user_type: 'unknown'
+    }
   }
-  
-  return identificationData
 }
 
 // Store UTM parameters for session attribution
@@ -209,44 +250,63 @@ export const identifyUserForMixpanel = (mixpanelInstance: any) => {
     // Use the persistent user_id as the distinct_id
     mixpanelInstance.identify(userData.user_id)
     
-    // Set user properties
+    // Sanitize all properties to ensure no objects are passed
+    const sanitizedUserData = Object.fromEntries(
+      Object.entries(userData).map(([key, value]) => [
+        key,
+        typeof value === 'object' && value !== null 
+          ? (Array.isArray(value) ? value.join(',') : JSON.stringify(value))
+          : String(value)
+      ])
+    )
+    
+    const sanitizedPreferences = Object.fromEntries(
+      Object.entries(preferences).map(([key, value]) => [
+        key,
+        typeof value === 'object' && value !== null 
+          ? (Array.isArray(value) ? value.join(',') : JSON.stringify(value))
+          : String(value)
+      ])
+    )
+    
+    // Set user properties (all guaranteed to be primitive values)
     mixpanelInstance.people.set({
       // Core identification
-      $user_id: userData.user_id,
-      $session_id: userData.session_id,
+      $user_id: String(sanitizedUserData.user_id),
+      $session_id: String(sanitizedUserData.session_id),
       
       // Device & Browser
-      device_fingerprint: userData.device_fingerprint,
-      browser_fingerprint: userData.browser_fingerprint,
-      $browser: getBrowserInfo(),
-      $os: getOSInfo(),
+      device_fingerprint: String(sanitizedUserData.device_fingerprint),
+      browser_fingerprint: String(sanitizedUserData.browser_fingerprint),
+      $browser: String(getBrowserInfo()),
+      $os: String(getOSInfo()),
       
-      // Location & Language
-      $timezone: userData.timezone,
-      $language: userData.language,
-      screen_resolution: userData.screen_resolution,
+      // Location & Language (explicit string conversion)
+      $timezone: String(sanitizedUserData.timezone),
+      $language: String(sanitizedUserData.language),
+      screen_resolution: String(sanitizedUserData.screen_resolution),
       
       // Attribution
-      $initial_referrer: userData.referrer,
-      utm_source: userData.utm_source,
-      utm_medium: userData.utm_medium,
-      utm_campaign: userData.utm_campaign,
+      $initial_referrer: String(sanitizedUserData.referrer),
+      utm_source: sanitizedUserData.utm_source ? String(sanitizedUserData.utm_source) : undefined,
+      utm_medium: sanitizedUserData.utm_medium ? String(sanitizedUserData.utm_medium) : undefined,
+      utm_campaign: sanitizedUserData.utm_campaign ? String(sanitizedUserData.utm_campaign) : undefined,
       
       // User behavior
-      user_type: userData.user_type,
-      visit_count: userData.visit_count,
-      first_visit_date: userData.first_visit_date,
-      last_visit_date: userData.last_visit_date,
+      user_type: String(sanitizedUserData.user_type),
+      visit_count: Number(sanitizedUserData.visit_count),
+      first_visit_date: String(sanitizedUserData.first_visit_date),
+      last_visit_date: String(sanitizedUserData.last_visit_date),
       
-      // Technical capabilities
-      ...preferences,
+      // Technical capabilities (sanitized)
+      ...sanitizedPreferences,
       
       // Timestamps
-      $created: userData.first_visit_date,
-      last_seen: userData.last_visit_date
+      $created: String(sanitizedUserData.first_visit_date),
+      last_seen: String(sanitizedUserData.last_visit_date)
     })
     
-    console.log('✅ User identified for Mixpanel:', userData.user_id)
+    console.log('✅ User identified for Mixpanel:', sanitizedUserData.user_id)
     return userData
     
   } catch (error) {
