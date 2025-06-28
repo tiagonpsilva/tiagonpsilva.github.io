@@ -48,11 +48,20 @@ export const getMixpanelConfig = (): MixpanelConfig => {
     environment = isDev ? 'development' : 'production'
     console.log(`🎯 Mixpanel: Single token mode, analytics ${enabled ? 'enabled' : 'disabled'}`)
   } else {
-    // Strategy 3: Auto-detection with dev enabled
-    token = singleToken || null
-    enabled = !!singleToken  // Enable if token exists
+    // Strategy 3: Auto-detection fallback
+    // Check for any available token as fallback
+    const fallbackToken = singleToken || devToken || prodToken
+    token = fallbackToken
+    enabled = !!fallbackToken
     environment = isDev ? 'development' : 'production'
     console.log(`🎯 Mixpanel: Auto-detection mode, analytics ${enabled ? 'enabled' : 'disabled'} (${environment})`)
+    
+    if (!enabled) {
+      console.warn('⚠️ No Mixpanel token found! Check environment variables:')
+      console.warn('- VITE_MIXPANEL_TOKEN_PROD (recommended for production)')
+      console.warn('- VITE_MIXPANEL_TOKEN (alternative)')
+      console.warn('- VITE_ANALYTICS_ENABLED=true (if using single token)')
+    }
   }
   
   // Environment-specific settings
@@ -69,17 +78,24 @@ export const getMixpanelConfig = (): MixpanelConfig => {
     }
   }
   
-  // Log configuration (only in development)
-  if (isDev) {
-    console.log('🔧 Mixpanel Configuration:', {
-      environment: config.environment,
-      enabled: config.enabled,
-      hasToken: !!config.token,
-      debug: config.debug,
-      hostname: typeof window !== 'undefined' ? window.location.hostname : 'server',
-      mode
-    })
-  }
+  // Log configuration (always in production for debugging)
+  console.log('🔧 Mixpanel Configuration:', {
+    environment: config.environment,
+    enabled: config.enabled,
+    hasToken: !!config.token,
+    tokenPreview: config.token ? config.token.substring(0, 8) + '...' : 'none',
+    debug: config.debug,
+    hostname: typeof window !== 'undefined' ? window.location.hostname : 'server',
+    mode,
+    isDev,
+    // Environment variables check (first 8 chars only for security)
+    envCheck: {
+      VITE_MIXPANEL_TOKEN: singleToken ? singleToken.substring(0, 8) + '...' : 'missing',
+      VITE_MIXPANEL_TOKEN_DEV: devToken ? devToken.substring(0, 8) + '...' : 'missing',
+      VITE_MIXPANEL_TOKEN_PROD: prodToken ? prodToken.substring(0, 8) + '...' : 'missing',
+      VITE_ANALYTICS_ENABLED: import.meta.env.VITE_ANALYTICS_ENABLED || 'missing'
+    }
+  })
   
   return config
 }

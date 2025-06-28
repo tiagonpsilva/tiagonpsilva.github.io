@@ -247,3 +247,68 @@ Detailed implementation timeline and tasks are documented in `/management/SEO_RO
 - **Weekly**: Core Web Vitals and Search Console checks
 - **Monthly**: Keyword rankings and traffic analysis
 - **Quarterly**: Content gap analysis and strategy updates
+
+## Issue Management Protocol
+
+### GitHub Issues Integration
+All problems, bugs, and improvements encountered during development must be documented as GitHub Issues to maintain project transparency and facilitate collaboration.
+
+#### Issue Creation Requirements
+When encountering any problem or improvement opportunity:
+
+1. **Create GitHub Issue** using the `gh` CLI tool or GitHub web interface
+2. **Title Format**: Clear, descriptive title summarizing the problem
+3. **Labels**: Apply appropriate labels (bug, enhancement, documentation, etc.)
+4. **Description Template**:
+   ```markdown
+   ## Problem Description
+   [Detailed description of the issue]
+   
+   ## Steps to Reproduce
+   1. [Step one]
+   2. [Step two]
+   3. [Result observed]
+   
+   ## Expected Behavior
+   [What should happen instead]
+   
+   ## Environment
+   - OS: [Operating system]
+   - Browser: [If applicable]
+   - Node.js: [Version]
+   - Platform: [Development/Production]
+   
+   ## Investigation
+   [Analysis performed, logs, error messages]
+   
+   ## Solution Implemented
+   [Detailed steps taken to resolve]
+   
+   ## Verification
+   [How the fix was tested and verified]
+   
+   ## Related Files/Components
+   [List of modified files and components]
+   ```
+
+#### Issue Lifecycle
+1. **Open**: Problem identified and documented
+2. **In Progress**: Investigation and resolution in progress
+3. **Resolved**: Solution implemented and tested
+4. **Closed**: Verified working and documented
+
+#### Implementation Guidelines
+- **Always create issues** before starting problem resolution
+- **Link commits** to issues using keywords: "fixes #123", "closes #123"
+- **Update issues** with progress, findings, and solutions
+- **Close issues** only after verification of the fix
+- **Cross-reference** related issues when applicable
+
+#### Examples of Issues to Track
+- **Bugs**: OAuth failures, build errors, deployment issues
+- **Enhancements**: New features, performance improvements
+- **Documentation**: Missing guides, unclear instructions
+- **Infrastructure**: DNS configuration, deployment problems
+- **Dependencies**: Package updates, compatibility issues
+
+This protocol ensures all development work is properly documented, searchable, and maintains a clear audit trail for future reference and collaboration.
