@@ -377,40 +377,44 @@ This protocol ensures all development work is properly documented, searchable, a
 
 Following the identification of problems through Cypress testing, the following GitHub Issues have been created to track and resolve LinkedIn authentication problems:
 
-#### Critical Bugs (Immediate Action Required)
-- **Issue #6**: 🐛 AuthButton crashes when user.name is undefined
-  - Component crashes on incomplete user data from localStorage
-  - Affects production stability when users have corrupted auth data
+#### Bugs Críticos (Ação Imediata Necessária)
+- **Issue #6**: 🐛 AuthButton quebra quando user.name é undefined ✅ **RESOLVIDO**
+  - Componente quebrava com dados incompletos do usuário do localStorage
+  - Afetava estabilidade da produção quando usuários tinham dados de auth corrompidos
   
-- **Issue #7**: 🔒 OAuth state parameter validation not working  
-  - Security vulnerability allowing potential CSRF attacks
-  - Users get stuck on callback page with invalid OAuth states
+- **Issue #7**: 🔒 Validação do parâmetro OAuth state não está funcionando ✅ **RESOLVIDO**
+  - Vulnerabilidade de segurança permitindo potenciais ataques CSRF
+  - Usuários ficavam presos na página de callback com estados OAuth inválidos
 
-#### Data Integrity Issues  
-- **Issue #8**: 🗃️ Corrupted localStorage data not handled gracefully
-  - App crashes when localStorage contains malformed user data
-  - No validation or cleanup of corrupted authentication data
+- **Issue #15**: 🐛 Falha na autenticação LinkedIn com erro TTY ✅ **RESOLVIDO**
+  - Erro "Opening /dev/tty failed (6): Device not configured" em ambiente serverless
+  - Bloqueava completamente a autenticação de usuários
 
-- **Issue #9**: 📱 iOS Safari private mode localStorage restrictions
-  - Authentication fails completely in iOS Safari private browsing
-  - No fallback storage mechanism for restricted environments
+#### Problemas de Integridade de Dados  
+- **Issue #8**: 🗃️ Dados corrompidos do localStorage não são tratados graciosamente
+  - App quebra quando localStorage contém dados malformados do usuário
+  - Sem validação ou limpeza de dados de autenticação corrompidos
 
-#### User Experience Issues
-- **Issue #10**: 🔒 Auth modal overlay prevents interaction with page
-  - Modal sometimes gets stuck, preventing user interaction
-  - Poor focus management and keyboard navigation
+- **Issue #9**: 📱 Restrições do modo privado do iOS Safari com localStorage
+  - Autenticação falha completamente na navegação privada do iOS Safari
+  - Sem mecanismo de fallback de armazenamento para ambientes restritos
 
-- **Issue #11**: 📱 Mobile popup limitations and UX issues  
-  - Mobile browsers block popups causing auth failures
-  - Poor mobile user experience for authentication flow
+#### Problemas de Experiência do Usuário
+- **Issue #10**: 🔒 Overlay do modal de autenticação impede interação com a página
+  - Modal às vezes trava, impedindo interação do usuário
+  - Gerenciamento ruim de foco e navegação por teclado
 
-- **Issue #12**: ⚡ Authentication state conflicts during page navigation
-  - Auth state becomes inconsistent when users navigate during OAuth
-  - Concurrent authentication attempts cause conflicts
+- **Issue #11**: 📱 Limitações de popup móvel e problemas de UX
+  - Browsers móveis bloqueiam popups causando falhas de auth
+  - Experiência ruim do usuário móvel para fluxo de autenticação
 
-#### Enhancement Opportunities
-- **Issue #13**: 🔄 Implement comprehensive authentication error handling
-  - Improve user feedback for various failure scenarios
-  - Add retry logic and fallback authentication methods
+- **Issue #12**: ⚡ Conflitos de estado de autenticação durante navegação da página
+  - Estado de auth torna-se inconsistente quando usuários navegam durante OAuth
+  - Tentativas concorrentes de autenticação causam conflitos
+
+#### Oportunidades de Melhoria
+- **Issue #13**: 🔄 Implementar tratamento abrangente de erros de autenticação
+  - Melhorar feedback do usuário para vários cenários de falha
+  - Adicionar lógica de retry e métodos alternativos de autenticação
 
 These issues directly address the problems some users are experiencing with LinkedIn authentication and provide a clear roadmap for improving the authentication system's robustness and user experience.
