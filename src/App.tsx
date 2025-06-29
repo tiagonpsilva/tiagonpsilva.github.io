@@ -13,6 +13,7 @@ import ContactPage from './pages/ContactPage'
 import AuthDebugPage from './pages/AuthDebugPage'
 import LinkedInCallback from './components/LinkedInCallback'
 import AuthModal from './components/AuthModal'
+import AuthStatusIndicator from './components/AuthStatusIndicator'
 import { ThemeProvider, useTheme } from './contexts/ThemeContext'
 import { MixpanelProvider } from './contexts/MixpanelContext'
 import { AuthProvider } from './contexts/AuthContext'
@@ -59,6 +60,8 @@ function AppContent() {
       <div className="lg:hidden h-16" />
       {/* Auth Modal */}
       <AuthModal />
+      {/* Auth Status Indicator */}
+      <AuthStatusIndicator />
     </div>
   )
 }

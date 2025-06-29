@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react'
 import { useMixpanel } from './MixpanelContext'
 import { storage } from '../utils/storage'
 import { useDeviceCapabilities } from '../hooks/useMediaQuery'
+import { useAuthConcurrencyControl } from '../hooks/useAuthStatePersistence'
 
 export interface LinkedInUser {
   id: string
@@ -152,6 +153,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [showAuthModal, setShowAuthModal] = useState(false)
   const { track, identify, setUserProperties } = useMixpanel()
   const { isMobile, isPopupSupported, preferRedirect } = useDeviceCapabilities()
+  const { attemptAuth, clearAuthProgress } = useAuthConcurrencyControl()
+  const authPopupRef = useRef<Window | null>(null)
 
   // Initialize engagement tracking
   useEffect(() => {
@@ -316,6 +319,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }
 
   const signInWithLinkedIn = () => {
+    attemptAuth(async () => {
     const clientId = import.meta.env.VITE_LINKEDIN_CLIENT_ID
     const currentOrigin = window.location.origin
     const redirectUri = `${currentOrigin}/auth/linkedin/callback`
@@ -394,9 +398,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Fallback to redirect if popup is blocked
       sessionStorage.setItem('linkedin_auth_return_url', window.location.pathname + window.location.search)
       window.location.href = authUrl
+      clearAuthProgress() // Clear auth progress since we're redirecting
       return
     }
 
+    // Store popup reference for cleanup during navigation
+    authPopupRef.current = popup
     console.log('✅ Popup opened successfully')
 
     // Monitor popup status
@@ -429,12 +436,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (popup && !popup.closed) {
         popup.close()
         clearInterval(checkClosed)
+        authPopupRef.current = null
+        clearAuthProgress() // Clear auth progress on timeout
         console.warn('⏰ Auto-closed popup after timeout')
+        
+        // Dispatch failure event
+        window.dispatchEvent(new CustomEvent('linkedin-auth-failure'))
       }
     }, 10 * 60 * 1000)
+    })
   }
 
   const identifyLinkedInUser = (userData: LinkedInUser) => {
+    // Clear auth progress on successful authentication
+    clearAuthProgress()
+    authPopupRef.current = null
+    
     // Enhanced Mixpanel identification with LinkedIn data
     identify(userData.id)
     
@@ -459,6 +476,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       has_headline: !!userData.headline,
       has_location: !!userData.location
     })
+
+    // Dispatch success event for UI feedback
+    window.dispatchEvent(new CustomEvent('linkedin-auth-success'))
 
     // Show success notification
     console.log(`✅ Conectado como ${userData.name}`)
