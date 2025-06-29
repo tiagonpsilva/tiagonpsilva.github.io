@@ -68,7 +68,6 @@ const LinkedInCallback: React.FC = () => {
         })
 
         if (!tokenResponse.ok) {
-          const errorText = await tokenResponse.text()
           console.error('Token exchange failed:', tokenResponse.status)
           navigate('/', { replace: true })
           return
