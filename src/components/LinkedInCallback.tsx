@@ -103,11 +103,27 @@ const LinkedInCallback: React.FC = () => {
           sessionStorage.removeItem('linkedin_oauth_state')
           window.close()
         } else {
-          // Fallback: save to localStorage and redirect (non-popup flow)
+          // Mobile/redirect flow: save to localStorage and navigate back
           try {
             localStorage.setItem('linkedin_user', JSON.stringify(userData))
             sessionStorage.removeItem('linkedin_oauth_state')
-            navigate('/', { replace: true })
+            
+            // Check if we should return to a specific page (mobile flow)
+            const returnUrl = sessionStorage.getItem('linkedin_auth_return_url')
+            if (returnUrl) {
+              sessionStorage.removeItem('linkedin_auth_return_url')
+              console.log('📱 Returning to:', returnUrl)
+              navigate(returnUrl, { replace: true })
+            } else {
+              console.log('🏠 Redirecting to home')
+              navigate('/', { replace: true })
+            }
+            
+            // Force page reload to trigger auth context update
+            setTimeout(() => {
+              window.location.reload()
+            }, 100)
+            
           } catch (error) {
             console.error('Failed to save user data:', error)
             navigate('/', { replace: true })

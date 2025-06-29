@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { useMixpanel } from './MixpanelContext'
 import { storage } from '../utils/storage'
+import { useDeviceCapabilities } from '../hooks/useMediaQuery'
 
 export interface LinkedInUser {
   id: string
@@ -150,6 +151,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const [showAuthModal, setShowAuthModal] = useState(false)
   const { track, identify, setUserProperties } = useMixpanel()
+  const { isMobile, isPopupSupported, preferRedirect } = useDeviceCapabilities()
 
   // Initialize engagement tracking
   useEffect(() => {
@@ -321,6 +323,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const state = Math.random().toString(36).substring(7)
     
     console.log('🔐 Starting LinkedIn OAuth...')
+    console.log('Device Info:', { isMobile, isPopupSupported, preferRedirect })
     console.log('Current Origin:', currentOrigin)
     console.log('Client ID:', clientId)
     console.log('Redirect URI:', redirectUri)
@@ -343,37 +346,92 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     console.log('🌐 Auth URL:', authUrl)
 
     track('LinkedIn OAuth Initiated', {
-      modal_trigger: showAuthModal ? 'modal' : 'manual'
+      modal_trigger: showAuthModal ? 'modal' : 'manual',
+      device_type: isMobile ? 'mobile' : 'desktop',
+      popup_supported: isPopupSupported,
+      auth_method: preferRedirect ? 'redirect' : 'popup'
     })
 
-    // Open LinkedIn auth in popup
-    const popup = window.open(
-      authUrl,
-      'linkedin-auth',
-      'width=600,height=600,scrollbars=yes,resizable=yes'
-    )
-
-    if (!popup) {
-      console.error('❌ Popup blocked!')
+    // Use mobile-optimized strategy
+    if (preferRedirect) {
+      console.log('📱 Using redirect strategy for mobile/popup-blocked environment')
+      
+      // Store current page to return to after auth
+      sessionStorage.setItem('linkedin_auth_return_url', window.location.pathname + window.location.search)
+      
+      // Direct redirect for mobile or when popups are blocked
+      window.location.href = authUrl
       return
     }
 
-    console.log('✅ Popup opened')
+    // Desktop popup strategy
+    console.log('🖥️ Using popup strategy for desktop')
+    
+    // Try popup with optimized dimensions for auth flow
+    const popupFeatures = [
+      'width=500',
+      'height=600',
+      'left=' + (window.screen.width / 2 - 250),
+      'top=' + (window.screen.height / 2 - 300),
+      'scrollbars=yes',
+      'resizable=yes',
+      'toolbar=no',
+      'menubar=no',
+      'location=no',
+      'directories=no',
+      'status=no'
+    ].join(',')
 
-    // Listen for popup close (just for logging, auth handled by postMessage)
+    const popup = window.open(authUrl, 'linkedin-auth', popupFeatures)
+
+    if (!popup) {
+      console.warn('❌ Popup blocked! Falling back to redirect...')
+      
+      track('LinkedIn OAuth Popup Blocked', {
+        fallback_to_redirect: true
+      })
+      
+      // Fallback to redirect if popup is blocked
+      sessionStorage.setItem('linkedin_auth_return_url', window.location.pathname + window.location.search)
+      window.location.href = authUrl
+      return
+    }
+
+    console.log('✅ Popup opened successfully')
+
+    // Monitor popup status
+    let popupClosed = false
     const checkClosed = setInterval(() => {
-      if (popup?.closed) {
+      try {
+        if (popup?.closed) {
+          clearInterval(checkClosed)
+          popupClosed = true
+          console.log('🔄 Popup closed')
+          
+          // Small delay to allow postMessage to be processed
+          setTimeout(() => {
+            if (!user && popupClosed) {
+              console.warn('⚠️ Popup closed but no user authenticated - user may have cancelled')
+              track('LinkedIn OAuth Cancelled', {
+                method: 'popup_closed'
+              })
+            }
+          }, 1000)
+        }
+      } catch (error) {
+        // Popup might be closed or cross-origin, clear interval
         clearInterval(checkClosed)
-        console.log('🔄 Popup closed')
-        
-        // Small delay to allow postMessage to be processed
-        setTimeout(() => {
-          if (!user) {
-            console.warn('⚠️ Popup closed but no user authenticated - user may have cancelled')
-          }
-        }, 1000)
       }
     }, 1000)
+
+    // Auto-close popup after 10 minutes to prevent memory leaks
+    setTimeout(() => {
+      if (popup && !popup.closed) {
+        popup.close()
+        clearInterval(checkClosed)
+        console.warn('⏰ Auto-closed popup after timeout')
+      }
+    }, 10 * 60 * 1000)
   }
 
   const identifyLinkedInUser = (userData: LinkedInUser) => {

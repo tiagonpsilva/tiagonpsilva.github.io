@@ -1,12 +1,14 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Sparkles, TrendingUp, Users, Zap } from 'lucide-react'
+import { X, Sparkles, TrendingUp, Users, Zap, Smartphone } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
+import { useDeviceCapabilities } from '@/hooks/useMediaQuery'
 
 const AuthModal: React.FC = () => {
   const { showAuthModal, dismissAuthModal, signInWithLinkedIn } = useAuth()
   const modalRef = useRef<HTMLDivElement>(null)
   const [touchStart, setTouchStart] = useState(false)
+  const { isMobile, isPopupSupported } = useDeviceCapabilities()
 
   // Focus management and accessibility
   useEffect(() => {
@@ -90,7 +92,7 @@ const AuthModal: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
+            className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center ${isMobile ? 'p-2' : 'p-4'}`}
             onClick={handleBackdropClick}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
@@ -106,7 +108,11 @@ const AuthModal: React.FC = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: "spring", duration: 0.5 }}
-              className="bg-background/95 backdrop-blur-lg border border-border rounded-2xl p-6 md:p-8 max-w-md w-full shadow-2xl relative"
+              className={`bg-background/95 backdrop-blur-lg border border-border shadow-2xl relative ${
+                isMobile 
+                  ? 'rounded-t-3xl h-full w-full flex flex-col justify-center p-6' 
+                  : 'rounded-2xl p-6 md:p-8 max-w-md w-full'
+              }`}
               onClick={(e) => e.stopPropagation()}
               tabIndex={-1}
               role="document"
@@ -137,8 +143,23 @@ const AuthModal: React.FC = () => {
                 </h2>
                 
                 <p id="auth-modal-description" className="text-muted-foreground text-sm md:text-base">
-                  Conecte-se com LinkedIn para ter uma experiência mais relevante e personalizada
+                  {isMobile 
+                    ? 'Conecte-se com LinkedIn para uma experiência personalizada. Você será redirecionado brevemente.'
+                    : 'Conecte-se com LinkedIn para ter uma experiência mais relevante e personalizada'
+                  }
                 </p>
+                
+                {isMobile && !isPopupSupported && (
+                  <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-950/50 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <div className="flex items-center gap-2 text-blue-700 dark:text-blue-300">
+                      <Smartphone className="w-4 h-4" />
+                      <span className="text-sm font-medium">Mobile Otimizado</span>
+                    </div>
+                    <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                      Redirecionamento seguro para melhor experiência móvel
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Benefits */}
@@ -168,17 +189,19 @@ const AuthModal: React.FC = () => {
 
               {/* LinkedIn Button */}
               <motion.button
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: isMobile ? 1 : 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={signInWithLinkedIn}
-                className="w-full bg-[#0077B5] hover:bg-[#005582] text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 mb-4 focus:outline-none focus:ring-2 focus:ring-[#0077B5] focus:ring-offset-2 focus:ring-offset-background"
-                aria-label="Conectar com LinkedIn para personalizar experiência"
+                className={`w-full bg-[#0077B5] hover:bg-[#005582] text-white font-semibold rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 mb-4 focus:outline-none focus:ring-2 focus:ring-[#0077B5] focus:ring-offset-2 focus:ring-offset-background ${
+                  isMobile ? 'py-4 px-6 text-lg' : 'py-3 px-4'
+                }`}
+                aria-label={isMobile ? "Conectar com LinkedIn (redirecionamento)" : "Conectar com LinkedIn para personalizar experiência"}
                 type="button"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                 </svg>
-                Conectar com LinkedIn
+                {isMobile ? 'Conectar com LinkedIn →' : 'Conectar com LinkedIn'}
               </motion.button>
 
               {/* Disclaimer */}
