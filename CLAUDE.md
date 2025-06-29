@@ -166,6 +166,13 @@ VITE_MIXPANEL_TOKEN=auto_token
 4. Test with `npm run dev` (should show **ENABLED** analytics with development environment)
 5. Verify production build with `npm run build && npm run preview`
 
+### Dashboard Creation System
+- **Automated Dashboard Creation**: `/scripts/create-mixpanel-dashboards.js` for creating 3 specialized dashboards
+- **Dashboard Types**: Blog Analytics Overview, User Journey & Acquisition, Content Performance
+- **API Integration**: Direct Mixpanel Dashboard API with widget management
+- **Configuration**: Uses same environment variables as analytics tracking
+- **Output**: Creates dashboards in Mixpanel + saves creation report to `/reports/`
+
 ## Blog System
 
 ### Overview
@@ -365,3 +372,45 @@ For consistent issue management, use the provided automation scripts:
 - **Dependencies**: Package updates, compatibility issues
 
 This protocol ensures all development work is properly documented, searchable, and maintains a clear audit trail for future reference and collaboration.
+
+### Current Open Issues
+
+Following the identification of problems through Cypress testing, the following GitHub Issues have been created to track and resolve LinkedIn authentication problems:
+
+#### Critical Bugs (Immediate Action Required)
+- **Issue #6**: 🐛 AuthButton crashes when user.name is undefined
+  - Component crashes on incomplete user data from localStorage
+  - Affects production stability when users have corrupted auth data
+  
+- **Issue #7**: 🔒 OAuth state parameter validation not working  
+  - Security vulnerability allowing potential CSRF attacks
+  - Users get stuck on callback page with invalid OAuth states
+
+#### Data Integrity Issues  
+- **Issue #8**: 🗃️ Corrupted localStorage data not handled gracefully
+  - App crashes when localStorage contains malformed user data
+  - No validation or cleanup of corrupted authentication data
+
+- **Issue #9**: 📱 iOS Safari private mode localStorage restrictions
+  - Authentication fails completely in iOS Safari private browsing
+  - No fallback storage mechanism for restricted environments
+
+#### User Experience Issues
+- **Issue #10**: 🔒 Auth modal overlay prevents interaction with page
+  - Modal sometimes gets stuck, preventing user interaction
+  - Poor focus management and keyboard navigation
+
+- **Issue #11**: 📱 Mobile popup limitations and UX issues  
+  - Mobile browsers block popups causing auth failures
+  - Poor mobile user experience for authentication flow
+
+- **Issue #12**: ⚡ Authentication state conflicts during page navigation
+  - Auth state becomes inconsistent when users navigate during OAuth
+  - Concurrent authentication attempts cause conflicts
+
+#### Enhancement Opportunities
+- **Issue #13**: 🔄 Implement comprehensive authentication error handling
+  - Improve user feedback for various failure scenarios
+  - Add retry logic and fallback authentication methods
+
+These issues directly address the problems some users are experiencing with LinkedIn authentication and provide a clear roadmap for improving the authentication system's robustness and user experience.

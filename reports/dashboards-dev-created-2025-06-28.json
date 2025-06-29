@@ -1,0 +1,25 @@
+{
+  "created_at": "2025-06-28T20:13:13.772Z",
+  "environment": "development",
+  "project_id": "3765740",
+  "dashboards": [
+    {
+      "title": "📊 Blog Analytics Overview - DEV",
+      "description": "Métricas principais do blog Bantu Digital - artigos mais acessados, engagement e aquisição de usuários",
+      "id": 10187229,
+      "url": "https://mixpanel.com/project/3765740/view/dashboards/10187229/"
+    },
+    {
+      "title": "🛤️ User Journey & Acquisition - DEV",
+      "description": "Jornada do usuário, funis de conversão e canais de aquisição detalhados",
+      "id": 10187233,
+      "url": "https://mixpanel.com/project/3765740/view/dashboards/10187233/"
+    },
+    {
+      "title": "📝 Content Performance - DEV",
+      "description": "Performance detalhada do conteúdo - artigos, tags, e engagement por tópico",
+      "id": 10187235,
+      "url": "https://mixpanel.com/project/3765740/view/dashboards/10187235/"
+    }
+  ]
+}

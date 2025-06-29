@@ -1,160 +1,64 @@
 import React, { useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 
 const LinkedInCallback: React.FC = () => {
+  const navigate = useNavigate()
+
   useEffect(() => {
     const handleLinkedInCallback = async () => {
       try {
-        console.log('🔄 LinkedIn callback started...')
-        
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search)
         const code = urlParams.get('code')
         const state = urlParams.get('state')
         const error = urlParams.get('error')
 
-        console.log('📝 URL Params:', { code: code?.substring(0, 10) + '...', state, error })
-
-        // Check for errors
+        // Check for OAuth errors first
         if (error) {
-          console.error('❌ LinkedIn OAuth error:', error)
-          alert(`LinkedIn Error: ${error}`)
-          window.close()
+          console.error('LinkedIn OAuth error:', error)
+          navigate('/', { replace: true })
           return
         }
 
-        // Verify state to prevent CSRF attacks
+        // CRITICAL: Validate state parameter for security (CSRF protection)
         const savedState = sessionStorage.getItem('linkedin_oauth_state')
-        console.log('🔐 State check:', { received: state, saved: savedState })
         
-        // For development, we'll be more lenient with state validation
         if (!state) {
-          console.error('❌ No state parameter received')
-          alert('Security error: No state parameter')
-          window.close()
+          console.error('Security error: No state parameter received')
+          navigate('/', { replace: true })
           return
         }
         
-        if (savedState && state !== savedState) {
-          console.warn('⚠️ State mismatch - this might be due to popup/cross-origin issues')
-          console.log('🔧 Proceeding in development mode...')
-          // In development, we'll proceed but log the issue
-        }
-
-        if (!code) {
-          console.error('❌ No authorization code received')
-          alert('Error: No authorization code received')
-          window.close()
+        if (!savedState) {
+          console.error('Security error: No saved state found')
+          navigate('/', { replace: true })
           return
         }
-
-        console.log('✅ Code received, starting token exchange...')
-
-        // For development, we'll simulate the user data since we don't have backend
-        // In production, this would call the actual LinkedIn API
         
-        // Try to get real LinkedIn data using our backend functions
-        console.log('🌐 Attempting to get real LinkedIn data...')
-        
-        try {
-          // Use our Cloudflare Functions to handle the token exchange
-          console.log('🔄 Exchanging code for token via backend...')
-          
-          const tokenResponse = await fetch('/api/auth/linkedin/token', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ code })
-          })
-
-          if (tokenResponse.ok) {
-            const { access_token } = await tokenResponse.json()
-            console.log('✅ Token received, fetching profile...')
-            
-            // Get user profile via our backend
-            const profileResponse = await fetch('/api/auth/linkedin/profile', {
-              method: 'GET',
-              headers: {
-                'Authorization': `Bearer ${access_token}`,
-                'Content-Type': 'application/json',
-              }
-            })
-
-            if (profileResponse.ok) {
-              const realUserData = await profileResponse.json()
-              console.log('✅ Real LinkedIn data received:', realUserData)
-              
-              // Send real user data to parent window
-              if (window.opener) {
-                console.log('📤 Sending real user data to parent window...')
-                window.opener.postMessage({
-                  type: 'LINKEDIN_AUTH_SUCCESS',
-                  userData: realUserData
-                }, window.location.origin)
-              }
-              
-              console.log('🔒 Closing popup...')
-              window.close()
-              return
-            } else {
-              const errorText = await profileResponse.text()
-              console.error('❌ Profile fetch failed:', errorText)
-            }
-          } else {
-            const errorText = await tokenResponse.text()
-            console.error('❌ Token exchange failed:', errorText)
-          }
-        } catch (error) {
-          console.warn('⚠️ Real LinkedIn API failed, falling back to simulation:', error)
-        }
-
-        // Fallback to simulated data if real API fails
-        console.log('🔧 Falling back to simulated user data...')
-        
-        const simulatedUserData = {
-          id: 'dev_user_' + Date.now(),
-          name: 'Usuário de Teste',
-          email: 'teste@exemplo.com',
-          headline: 'Desenvolvedor Full Stack',
-          location: 'Brasil',
-          industry: 'Technology',
-          publicProfileUrl: 'https://linkedin.com/in/teste',
-          picture: null
-        }
-
-        console.log('✅ Simulated auth completed:', simulatedUserData)
-        
-        // Send user data to parent window using postMessage
-        if (window.opener) {
-          console.log('📤 Sending user data to parent window...')
-          window.opener.postMessage({
-            type: 'LINKEDIN_AUTH_SUCCESS',
-            userData: simulatedUserData
-          }, window.location.origin)
-        } else {
-          console.warn('⚠️ No opener window found, trying localStorage...')
-          try {
-            localStorage.setItem('linkedin_user', JSON.stringify(simulatedUserData))
-          } catch (error) {
-            console.error('❌ localStorage failed:', error)
-          }
-        }
-        
-        // Clean up and close popup
-        try {
+        if (state !== savedState) {
+          console.error('Security error: State parameter mismatch')
           sessionStorage.removeItem('linkedin_oauth_state')
-        } catch (error) {
-          console.warn('⚠️ sessionStorage cleanup failed:', error)
+          navigate('/', { replace: true })
+          return
         }
-        
-        console.log('🔒 Closing popup...')
-        window.close()
 
-        // Production flow (with real LinkedIn API)
-        console.log('🌐 Production mode: calling LinkedIn API...')
-        
-        // Exchange code for access token using Cloudflare Function
+        // Validate authorization code
+        if (!code) {
+          console.error('No authorization code received')
+          navigate('/', { replace: true })
+          return
+        }
+
+        // Environment-specific logging
+        if (import.meta.env.DEV) {
+          console.log('LinkedIn callback processing:', { 
+            codeLength: code.length, 
+            stateValid: true 
+          })
+        }
+
+        // Exchange code for access token
         const tokenResponse = await fetch('/api/auth/linkedin/token', {
           method: 'POST',
           headers: {
@@ -165,14 +69,14 @@ const LinkedInCallback: React.FC = () => {
 
         if (!tokenResponse.ok) {
           const errorText = await tokenResponse.text()
-          console.error('❌ Token exchange failed:', errorText)
-          throw new Error(`Failed to exchange code for token: ${errorText}`)
+          console.error('Token exchange failed:', tokenResponse.status)
+          navigate('/', { replace: true })
+          return
         }
 
         const { access_token } = await tokenResponse.json()
-        console.log('✅ Access token received')
 
-        // Get user profile information
+        // Get user profile with access token
         const profileResponse = await fetch('/api/auth/linkedin/profile', {
           method: 'GET',
           headers: {
@@ -182,49 +86,52 @@ const LinkedInCallback: React.FC = () => {
         })
 
         if (!profileResponse.ok) {
-          const errorText = await profileResponse.text()
-          console.error('❌ Profile fetch failed:', errorText)
-          throw new Error(`Failed to fetch user profile: ${errorText}`)
+          console.error('Profile fetch failed:', profileResponse.status)
+          navigate('/', { replace: true })
+          return
         }
 
         const userData = await profileResponse.json()
-        console.log('✅ User profile received:', userData)
 
-        // Send user data to parent window using postMessage
-        if (window.opener) {
-          console.log('📤 Sending user data to parent window...')
+        // Send user data to parent window (popup flow)
+        if (window.opener && !window.opener.closed) {
           window.opener.postMessage({
             type: 'LINKEDIN_AUTH_SUCCESS',
             userData: userData
           }, window.location.origin)
+          
+          // Clean up state and close popup
+          sessionStorage.removeItem('linkedin_oauth_state')
+          window.close()
         } else {
-          console.warn('⚠️ No opener window found, trying localStorage...')
+          // Fallback: save to localStorage and redirect (non-popup flow)
           try {
             localStorage.setItem('linkedin_user', JSON.stringify(userData))
+            sessionStorage.removeItem('linkedin_oauth_state')
+            navigate('/', { replace: true })
           } catch (error) {
-            console.error('❌ localStorage failed:', error)
+            console.error('Failed to save user data:', error)
+            navigate('/', { replace: true })
           }
         }
-        
-        // Clean up and close popup
-        try {
-          sessionStorage.removeItem('linkedin_oauth_state')
-        } catch (error) {
-          console.warn('⚠️ sessionStorage cleanup failed:', error)
-        }
-        
-        // Close the popup window
-        window.close()
 
       } catch (error) {
-        console.error('❌ LinkedIn authentication error:', error)
-        alert(`Authentication failed: ${error instanceof Error ? error.message : String(error)}`)
-        window.close()
+        console.error('LinkedIn authentication error:', error instanceof Error ? error.message : String(error))
+        
+        // Clean up state on any error
+        try {
+          sessionStorage.removeItem('linkedin_oauth_state')
+        } catch (cleanupError) {
+          // Ignore cleanup errors
+        }
+        
+        // Redirect to home on any error
+        navigate('/', { replace: true })
       }
     }
 
     handleLinkedInCallback()
-  }, [])
+  }, [navigate])
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
@@ -241,9 +148,11 @@ const LinkedInCallback: React.FC = () => {
         <p className="text-muted-foreground">
           Processando autenticação LinkedIn...
         </p>
-        <p className="text-xs text-muted-foreground">
-          {import.meta.env.DEV ? 'Modo desenvolvimento' : 'Modo produção'}
-        </p>
+        {import.meta.env.DEV && (
+          <p className="text-xs text-muted-foreground">
+            Validando parâmetros OAuth...
+          </p>
+        )}
       </motion.div>
     </div>
   )

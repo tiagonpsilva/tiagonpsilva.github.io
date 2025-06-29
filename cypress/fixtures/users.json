@@ -1,0 +1,33 @@
+{
+  "validUser": {
+    "id": "linkedin_user_123",
+    "name": "João Silva",
+    "email": "joao.silva@email.com",
+    "headline": "Senior Software Engineer",
+    "location": "São Paulo, SP",
+    "industry": "Computer Software",
+    "picture": "https://media.licdn.com/dms/image/profile-pic",
+    "publicProfileUrl": "https://linkedin.com/in/joaosilva"
+  },
+  "userWithoutEmail": {
+    "id": "linkedin_user_456",
+    "name": "Maria Santos",
+    "headline": "Product Manager",
+    "location": "Rio de Janeiro, RJ",
+    "industry": "Technology",
+    "picture": "https://media.licdn.com/dms/image/profile-pic2",
+    "publicProfileUrl": "https://linkedin.com/in/mariasantos"
+  },
+  "minimalUser": {
+    "id": "linkedin_user_789",
+    "name": "Pedro Costa"
+  },
+  "userWithSpecialChars": {
+    "id": "linkedin_user_special",
+    "name": "José Antônio da Silva-Pereira",
+    "email": "jose.antonio@empresa.com.br",
+    "headline": "Engenheiro de Software Sênior",
+    "location": "Belo Horizonte, MG",
+    "industry": "Tecnologia da Informação"
+  }
+}

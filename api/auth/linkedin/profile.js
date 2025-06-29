@@ -14,7 +14,10 @@ export default async function handler(req, res) {
 
     const accessToken = authHeader.replace('Bearer ', '')
 
-    console.log('🔄 Fetching LinkedIn profile...')
+    // Log only in development to avoid TTY issues in serverless
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🔄 Fetching LinkedIn profile...')
+    }
 
     // Use OpenID Connect userinfo endpoint (works with approved "Sign In with LinkedIn using OpenID Connect" product)
     const userinfoResponse = await fetch('https://api.linkedin.com/v2/userinfo', {
@@ -26,19 +29,21 @@ export default async function handler(req, res) {
 
     if (!userinfoResponse.ok) {
       const errorText = await userinfoResponse.text()
-      console.error('❌ LinkedIn userinfo failed:', errorText)
+      console.error('LinkedIn userinfo failed:', userinfoResponse.status)
       throw new Error(`Failed to fetch userinfo: ${userinfoResponse.status}`)
     }
 
     const userinfo = await userinfoResponse.json()
-    console.log('✅ LinkedIn profile received:', userinfo)
     
-    // Debug locale specifically
-    console.log('🔍 Locale debug:', {
-      locale: userinfo.locale,
-      localeType: typeof userinfo.locale,
-      localeKeys: userinfo.locale && typeof userinfo.locale === 'object' ? Object.keys(userinfo.locale) : 'N/A'
-    })
+    // Debug logging only in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log('✅ LinkedIn profile received:', userinfo)
+      console.log('🔍 Locale debug:', {
+        locale: userinfo.locale,
+        localeType: typeof userinfo.locale,
+        localeKeys: userinfo.locale && typeof userinfo.locale === 'object' ? Object.keys(userinfo.locale) : 'N/A'
+      })
+    }
 
     // Format user data from OpenID Connect response
     const userData = {
@@ -55,12 +60,16 @@ export default async function handler(req, res) {
       publicProfileUrl: userinfo.profile || `https://linkedin.com/in/${userinfo.sub}`
     }
 
-    console.log('✅ Formatted user data:', userData)
+    // Log formatted data only in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log('✅ Formatted user data:', userData)
+    }
 
     return res.status(200).json(userData)
 
   } catch (error) {
-    console.error('❌ Profile fetch error:', error)
+    // Log errors without emojis to prevent TTY issues
+    console.error('Profile fetch error:', error.message)
     return res.status(500).json({ 
       error: 'Failed to fetch profile',
       details: error.message 

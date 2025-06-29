@@ -46,6 +46,49 @@ interface EngagementData {
   lastDismissTime: number
 }
 
+// Validate and sanitize user data to prevent crashes
+const validateUserData = (userData: any): LinkedInUser | null => {
+  try {
+    // Check if userData is an object
+    if (!userData || typeof userData !== 'object') {
+      return null
+    }
+
+    // Validate required fields
+    if (!userData.id || typeof userData.id !== 'string') {
+      return null
+    }
+
+    // Name is critical - provide fallback if missing
+    const name = userData.name && typeof userData.name === 'string' 
+      ? userData.name.trim() 
+      : userData.email && typeof userData.email === 'string'
+        ? userData.email.split('@')[0] // Use email prefix as fallback
+        : 'Usuário LinkedIn' // Ultimate fallback
+
+    if (!name) {
+      return null
+    }
+
+    // Create sanitized user object
+    const sanitizedUser: LinkedInUser = {
+      id: userData.id.trim(),
+      name: name,
+      email: userData.email && typeof userData.email === 'string' ? userData.email.trim() : undefined,
+      picture: userData.picture && typeof userData.picture === 'string' ? userData.picture.trim() : undefined,
+      headline: userData.headline && typeof userData.headline === 'string' ? userData.headline.trim() : undefined,
+      location: userData.location && typeof userData.location === 'string' ? userData.location.trim() : undefined,
+      industry: userData.industry && typeof userData.industry === 'string' ? userData.industry.trim() : undefined,
+      publicProfileUrl: userData.publicProfileUrl && typeof userData.publicProfileUrl === 'string' ? userData.publicProfileUrl.trim() : undefined
+    }
+
+    return sanitizedUser
+  } catch (error) {
+    console.warn('Error validating user data:', error)
+    return null
+  }
+}
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<LinkedInUser | null>(null)
   const [loading, setLoading] = useState(true)
@@ -60,8 +103,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (savedUser) {
         try {
           const userData = JSON.parse(savedUser)
-          setUser(userData)
-          identifyLinkedInUser(userData)
+          const validatedUser = validateUserData(userData)
+          
+          if (validatedUser) {
+            setUser(validatedUser)
+            identifyLinkedInUser(validatedUser)
+          } else {
+            console.warn('Invalid user data found, clearing localStorage')
+            localStorage.removeItem('linkedin_user')
+          }
         } catch (error) {
           console.error('Error parsing saved user data:', error)
           localStorage.removeItem('linkedin_user')
@@ -85,16 +135,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         console.log('📨 Received auth success from popup:', event.data.userData)
         
         const userData = event.data.userData
+        const validatedUser = validateUserData(userData)
         
-        // Save to localStorage
-        try {
-          localStorage.setItem('linkedin_user', JSON.stringify(userData))
-          setUser(userData)
-          identifyLinkedInUser(userData)
+        if (validatedUser) {
+          // Save validated data to localStorage
+          try {
+            localStorage.setItem('linkedin_user', JSON.stringify(validatedUser))
+            setUser(validatedUser)
+            identifyLinkedInUser(validatedUser)
+            setShowAuthModal(false)
+            console.log('✅ User authenticated via postMessage')
+          } catch (error) {
+            console.error('❌ Failed to save user data:', error)
+          }
+        } else {
+          console.error('❌ Invalid user data received from OAuth')
           setShowAuthModal(false)
-          console.log('✅ User authenticated via postMessage')
-        } catch (error) {
-          console.error('❌ Failed to save user data:', error)
         }
       }
     }

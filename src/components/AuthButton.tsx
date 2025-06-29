@@ -46,13 +46,25 @@ const AuthButton: React.FC = () => {
     setShowMenu(false)
   }
 
-  const getInitials = (name: string): string => {
-    return name
-      .split(' ')
-      .map(word => word.charAt(0))
-      .join('')
-      .substring(0, 2)
-      .toUpperCase()
+  const getInitials = (name?: string): string => {
+    // Handle undefined, null, or empty names gracefully
+    if (!name || typeof name !== 'string' || name.trim() === '') {
+      return 'U' // Default to 'U' for User
+    }
+    
+    try {
+      return name
+        .trim()
+        .split(' ')
+        .filter(word => word.length > 0) // Remove empty strings
+        .map(word => word.charAt(0))
+        .join('')
+        .substring(0, 2)
+        .toUpperCase()
+    } catch (error) {
+      console.warn('Error generating initials for name:', name, error)
+      return 'U' // Fallback
+    }
   }
 
   return (
@@ -63,6 +75,7 @@ const AuthButton: React.FC = () => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleMenuToggle}
+          data-testid="auth-button"
           className="flex items-center gap-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-full px-3 py-1.5 text-sm hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors"
         >
           {/* Avatar */}
@@ -84,7 +97,7 @@ const AuthButton: React.FC = () => {
           <div className="hidden md:flex items-center gap-2">
             <UserCheck className="w-4 h-4 text-green-600 dark:text-green-400" />
             <span className="text-green-700 dark:text-green-300 font-medium">
-              {user.name.split(' ')[0]}
+              {user.name ? user.name.split(' ')[0] : 'Usuário'}
             </span>
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             <ChevronDown className={`w-3 h-3 text-green-600 dark:text-green-400 transition-transform ${showMenu ? 'rotate-180' : ''}`} />
@@ -102,7 +115,8 @@ const AuthButton: React.FC = () => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleSignIn}
-          className="flex items-center gap-2 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-full px-3 py-1.5 text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-200 dark:hover:border-blue-800 transition-colors group"
+          data-testid="auth-button"
+          className="flex items-center gap-2 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-full px-3 py-1.5 text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-200 dark:hover:border-blue-800 transition-colors group auth-button-login"
         >
           {/* Desktop: Full button */}
           <div className="hidden md:flex items-center gap-2">
@@ -155,7 +169,7 @@ const AuthButton: React.FC = () => {
                   
                   <div className="flex-1 min-w-0">
                     <div className="font-semibold text-foreground truncate">
-                      {user.name}
+                      {user.name || 'Usuário'}
                     </div>
                     {user.headline && (
                       <div className="text-sm text-muted-foreground truncate">
