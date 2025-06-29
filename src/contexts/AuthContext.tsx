@@ -3,6 +3,8 @@ import { useMixpanel } from './MixpanelContext'
 import { storage } from '../utils/storage'
 import { useDeviceCapabilities } from '../hooks/useMediaQuery'
 import { useAuthConcurrencyControl } from '../hooks/useAuthStatePersistence'
+import { useAuthError } from '../hooks/useAuthError'
+import { AuthError } from '../utils/AuthErrorHandler'
 
 export interface LinkedInUser {
   id: string
@@ -24,6 +26,10 @@ interface AuthContextType {
   showAuthModal: boolean
   dismissAuthModal: () => void
   shouldShowAuthModal: () => boolean
+  authError: AuthError | null
+  clearAuthError: () => void
+  retryAuth: () => Promise<void>
+  isRetrying: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -155,6 +161,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const { isMobile, isPopupSupported, preferRedirect } = useDeviceCapabilities()
   const { attemptAuth, clearAuthProgress } = useAuthConcurrencyControl()
   const authPopupRef = useRef<Window | null>(null)
+  const { 
+    error: authError, 
+    setError: setAuthError, 
+    clearError: clearAuthError, 
+    retry: retryAuth,
+    isRetrying 
+  } = useAuthError({
+    retryType: 'custom',
+    maxRetries: 3,
+    onRetrySuccess: () => {
+      console.log('🎉 Authentication retry succeeded')
+    },
+    onRetryFailure: (error) => {
+      console.error('❌ Authentication retry failed:', error)
+    }
+  })
 
   // Initialize engagement tracking
   useEffect(() => {
@@ -333,6 +355,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     console.log('Redirect URI:', redirectUri)
     
     if (!clientId) {
+      const error = new Error('VITE_LINKEDIN_CLIENT_ID not found')
+      setAuthError(error, { step: 'config_validation' })
       console.error('❌ VITE_LINKEDIN_CLIENT_ID not found!')
       return
     }
@@ -390,6 +414,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     if (!popup) {
       console.warn('❌ Popup blocked! Falling back to redirect...')
+      
+      // Create popup blocked error but don't stop the process
+      const popupError = new Error('Popup blocked by browser')
+      setAuthError(popupError, { 
+        step: 'popup_blocked', 
+        fallback: 'redirect',
+        userAgent: navigator.userAgent
+      })
       
       track('LinkedIn OAuth Popup Blocked', {
         fallback_to_redirect: true
@@ -504,7 +536,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     signOut,
     showAuthModal,
     dismissAuthModal,
-    shouldShowAuthModal
+    shouldShowAuthModal,
+    authError,
+    clearAuthError,
+    retryAuth,
+    isRetrying
   }
 
   return (

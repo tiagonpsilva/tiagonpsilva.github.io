@@ -14,6 +14,7 @@ import AuthDebugPage from './pages/AuthDebugPage'
 import LinkedInCallback from './components/LinkedInCallback'
 import AuthModal from './components/AuthModal'
 import AuthStatusIndicator from './components/AuthStatusIndicator'
+import AuthErrorDisplayWrapper from './components/AuthErrorDisplayWrapper'
 import { ThemeProvider, useTheme } from './contexts/ThemeContext'
 import { MixpanelProvider } from './contexts/MixpanelContext'
 import { AuthProvider } from './contexts/AuthContext'
@@ -40,7 +41,7 @@ function HomePage() {
 function AppContent() {
   // Track route changes for analytics
   useRouteTracking()
-
+  
   return (
     <div className="min-h-screen bg-background transition-colors duration-300">
       <Header />
@@ -62,6 +63,8 @@ function AppContent() {
       <AuthModal />
       {/* Auth Status Indicator */}
       <AuthStatusIndicator />
+      {/* Auth Error Display */}
+      <AuthErrorDisplayWrapper />
     </div>
   )
 }
