@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { useMixpanel } from './MixpanelContext'
+import { storage } from '../utils/storage'
 
 export interface LinkedInUser {
   id: string
@@ -46,40 +47,95 @@ interface EngagementData {
   lastDismissTime: number
 }
 
-// Validate and sanitize user data to prevent crashes
+// Sanitize string to prevent XSS and normalize data
+const sanitizeString = (value: any): string | undefined => {
+  if (!value || typeof value !== 'string') {
+    return undefined
+  }
+  
+  return value
+    .trim()
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') // Remove script tags
+    .replace(/<[^>]*>/g, '') // Remove all HTML tags
+    .replace(/javascript:/gi, '') // Remove javascript: protocols
+    .replace(/on\w+\s*=/gi, '') // Remove event handlers
+    .substring(0, 500) // Limit length to prevent DoS
+}
+
+// Validate URL format
+const validateUrl = (url: string): boolean => {
+  try {
+    const urlObj = new URL(url)
+    return urlObj.protocol === 'http:' || urlObj.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
+// Validate email format
+const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(email) && email.length <= 254
+}
+
+// Validate and sanitize user data to prevent crashes and XSS
 const validateUserData = (userData: any): LinkedInUser | null => {
   try {
     // Check if userData is an object
     if (!userData || typeof userData !== 'object') {
+      console.warn('Invalid user data: not an object')
       return null
     }
 
     // Validate required fields
-    if (!userData.id || typeof userData.id !== 'string') {
+    const rawId = sanitizeString(userData.id)
+    if (!rawId || rawId.length < 1) {
+      console.warn('Invalid user data: missing or invalid id')
       return null
     }
 
     // Name is critical - provide fallback if missing
-    const name = userData.name && typeof userData.name === 'string' 
-      ? userData.name.trim() 
-      : userData.email && typeof userData.email === 'string'
-        ? userData.email.split('@')[0] // Use email prefix as fallback
-        : 'Usuário LinkedIn' // Ultimate fallback
-
+    let name = sanitizeString(userData.name)
     if (!name) {
-      return null
+      // Try email prefix as fallback
+      const email = sanitizeString(userData.email)
+      if (email && validateEmail(email)) {
+        name = email.split('@')[0]
+      } else {
+        name = 'Usuário LinkedIn' // Ultimate fallback
+      }
     }
+
+    // Validate and sanitize email
+    const rawEmail = sanitizeString(userData.email)
+    const email = rawEmail && validateEmail(rawEmail) ? rawEmail : undefined
+
+    // Validate and sanitize picture URL
+    const rawPicture = sanitizeString(userData.picture)
+    const picture = rawPicture && validateUrl(rawPicture) ? rawPicture : undefined
+
+    // Validate and sanitize profile URL
+    const rawProfileUrl = sanitizeString(userData.publicProfileUrl)
+    const publicProfileUrl = rawProfileUrl && validateUrl(rawProfileUrl) ? rawProfileUrl : undefined
 
     // Create sanitized user object
     const sanitizedUser: LinkedInUser = {
-      id: userData.id.trim(),
+      id: rawId,
       name: name,
-      email: userData.email && typeof userData.email === 'string' ? userData.email.trim() : undefined,
-      picture: userData.picture && typeof userData.picture === 'string' ? userData.picture.trim() : undefined,
-      headline: userData.headline && typeof userData.headline === 'string' ? userData.headline.trim() : undefined,
-      location: userData.location && typeof userData.location === 'string' ? userData.location.trim() : undefined,
-      industry: userData.industry && typeof userData.industry === 'string' ? userData.industry.trim() : undefined,
-      publicProfileUrl: userData.publicProfileUrl && typeof userData.publicProfileUrl === 'string' ? userData.publicProfileUrl.trim() : undefined
+      email: email,
+      picture: picture,
+      headline: sanitizeString(userData.headline),
+      location: sanitizeString(userData.location),
+      industry: sanitizeString(userData.industry),
+      publicProfileUrl: publicProfileUrl
+    }
+
+    // Log sanitization if data was modified
+    if (process.env.NODE_ENV === 'development') {
+      const wasModified = JSON.stringify(userData) !== JSON.stringify(sanitizedUser)
+      if (wasModified) {
+        console.log('User data was sanitized:', { original: userData, sanitized: sanitizedUser })
+      }
     }
 
     return sanitizedUser
@@ -99,7 +155,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const initializeAuth = () => {
       // Check for existing user session
-      const savedUser = localStorage.getItem('linkedin_user')
+      const savedUser = storage.getItem('linkedin_user')
       if (savedUser) {
         try {
           const userData = JSON.parse(savedUser)
@@ -109,12 +165,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             setUser(validatedUser)
             identifyLinkedInUser(validatedUser)
           } else {
-            console.warn('Invalid user data found, clearing localStorage')
-            localStorage.removeItem('linkedin_user')
+            console.warn('Invalid user data found, clearing storage')
+            storage.removeItem('linkedin_user')
           }
         } catch (error) {
           console.error('Error parsing saved user data:', error)
-          localStorage.removeItem('linkedin_user')
+          storage.removeItem('linkedin_user')
         }
       }
 
@@ -138,9 +194,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const validatedUser = validateUserData(userData)
         
         if (validatedUser) {
-          // Save validated data to localStorage
+          // Save validated data to storage
           try {
-            localStorage.setItem('linkedin_user', JSON.stringify(validatedUser))
+            storage.setItem('linkedin_user', JSON.stringify(validatedUser))
             setUser(validatedUser)
             identifyLinkedInUser(validatedUser)
             setShowAuthModal(false)
@@ -190,7 +246,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
 
     try {
-      const saved = localStorage.getItem('user_engagement')
+      const saved = storage.getItem('user_engagement')
       return saved ? { ...defaultData, ...JSON.parse(saved) } : defaultData
     } catch {
       return defaultData
@@ -213,7 +269,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       lastVisit: now
     }
 
-    localStorage.setItem('user_engagement', JSON.stringify(updated))
+    storage.setItem('user_engagement', JSON.stringify(updated))
 
     // Check if should show modal based on page views
     if (!user && updated.pageViews >= 3 && shouldShowAuthModal()) {
@@ -249,7 +305,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       lastDismissTime: Date.now()
     }
     
-    localStorage.setItem('user_engagement', JSON.stringify(updated))
+    storage.setItem('user_engagement', JSON.stringify(updated))
     
     track('Auth Modal Dismissed', {
       page_views: engagement.pageViews,
@@ -352,7 +408,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signOut = () => {
     setUser(null)
-    localStorage.removeItem('linkedin_user')
+    storage.removeItem('linkedin_user')
     
     track('User Signed Out', {
       provider: 'linkedin'
