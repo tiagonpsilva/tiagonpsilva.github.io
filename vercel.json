@@ -1,7 +1,11 @@
 {
   "rewrites": [
     {
-      "source": "/((?!api/).*)",
+      "source": "/auth/linkedin/callback",
+      "destination": "/auth/linkedin/callback.html"
+    },
+    {
+      "source": "/((?!api/|auth/).*)",
       "destination": "/index.html"
     }
   ]
