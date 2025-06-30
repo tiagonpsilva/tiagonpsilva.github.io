@@ -87,6 +87,69 @@ const validateEmail = (email: string): boolean => {
   return emailRegex.test(email) && email.length <= 254
 }
 
+// Exchange authorization code for access token and fetch user profile using serverless functions
+const exchangeCodeForProfile = async (code: string): Promise<LinkedInUser> => {
+  try {
+    // Step 1: Exchange code for access token using serverless function
+    console.log('🔄 Exchanging authorization code for access token via API...')
+    const tokenResponse = await fetch('/api/auth/linkedin/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ code })
+    })
+
+    if (!tokenResponse.ok) {
+      const errorData = await tokenResponse.json().catch(() => ({ error: 'Unknown error' }))
+      throw new Error(`Token exchange failed: ${tokenResponse.status} - ${errorData.error || errorData.details}`)
+    }
+
+    const tokenData = await tokenResponse.json()
+    const accessToken = tokenData.access_token
+
+    if (!accessToken) {
+      throw new Error('No access token received from API')
+    }
+
+    console.log('✅ Access token obtained successfully via API')
+
+    // Step 2: Fetch user profile using serverless function
+    console.log('👤 Fetching user profile via API...')
+    const profileResponse = await fetch('/api/auth/linkedin/profile', {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Accept': 'application/json'
+      }
+    })
+
+    if (!profileResponse.ok) {
+      const errorData = await profileResponse.json().catch(() => ({ error: 'Unknown error' }))
+      throw new Error(`Profile fetch failed: ${profileResponse.status} - ${errorData.error || errorData.details}`)
+    }
+
+    const profileData = await profileResponse.json()
+    console.log('✅ LinkedIn profile data received via API:', profileData)
+
+    // The serverless function already returns data in the correct format
+    const linkedInUser: LinkedInUser = {
+      id: profileData.id || 'linkedin_' + Date.now(),
+      name: profileData.name || 'Usuário LinkedIn',
+      email: profileData.email,
+      picture: profileData.picture,
+      headline: profileData.headline || '',
+      location: profileData.location || '',
+      industry: '', // Not available in current API
+      publicProfileUrl: profileData.publicProfileUrl || ''
+    }
+
+    return linkedInUser
+  } catch (error) {
+    console.error('❌ OAuth exchange via API failed:', error)
+    throw error
+  }
+}
+
 // Validate and sanitize user data to prevent crashes and XSS
 const validateUserData = (userData: any): LinkedInUser | null => {
   try {
@@ -226,21 +289,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           return
         }
         
-        // Process the code (simplified for now)
-        const mockUser = {
-          id: 'user_' + Date.now(),
-          name: 'Usuário LinkedIn',
-          email: 'user@example.com',
-          headline: 'Profissional LinkedIn',
-          location: 'Brasil'
-        }
-        
-        storage.setItem('linkedin_user', JSON.stringify(mockUser))
-        setUser(mockUser)
-        identifyLinkedInUser(mockUser)
-        setShowAuthModal(false)
-        clearAuthError()
-        console.log('✅ User authenticated')
+        // Exchange code for access token and fetch user profile
+        exchangeCodeForProfile(event.data.code)
+          .then(userData => {
+            const validatedUser = validateUserData(userData)
+            if (validatedUser) {
+              storage.setItem('linkedin_user', JSON.stringify(validatedUser))
+              setUser(validatedUser)
+              identifyLinkedInUser(validatedUser)
+              setShowAuthModal(false)
+              clearAuthError()
+              console.log('✅ User authenticated with real LinkedIn data')
+            } else {
+              console.error('❌ Invalid user data received')
+              setAuthError(AuthErrorHandler.handleError('Invalid user data received', { type: 'invalid_user_data' }))
+            }
+          })
+          .catch(error => {
+            console.error('❌ Failed to exchange code for user profile:', error)
+            setAuthError(AuthErrorHandler.handleError(error, { type: 'token_exchange' }))
+          })
         
       } else if (event.data?.type === 'LINKEDIN_AUTH_SUCCESS') {
         console.log('📨 Received auth success from popup:', event.data.userData)

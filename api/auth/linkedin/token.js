@@ -36,7 +36,7 @@ async function tokenHandler(req, res) {
         code,
         client_id: process.env.VITE_LINKEDIN_CLIENT_ID || process.env.LINKEDIN_CLIENT_ID,
         client_secret: process.env.LINKEDIN_CLIENT_SECRET,
-        redirect_uri: `${req.headers.origin}/auth/linkedin/callback`
+        redirect_uri: `${req.headers.origin}/oauth/linkedin/callback`
       })
     })
     const tokenDuration = Date.now() - tokenStartTime

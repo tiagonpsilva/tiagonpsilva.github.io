@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TESTE SIMPLES</title>
+    <style>
+        body { 
+            background: red; 
+            color: white; 
+            text-align: center; 
+            padding: 50px; 
+            font-size: 24px;
+            font-family: Arial;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔴 TESTE HTML PURO FUNCIONANDO!</h1>
+    <p>Se você está vendo essa tela VERMELHA, o HTML puro funciona!</p>
+    <p>URL: <span id="url"></span></p>
+    <script>
+        document.getElementById('url').textContent = window.location.href;
+        console.log('🔴 HTML puro funcionando!');
+    </script>
+</body>
+</html>
