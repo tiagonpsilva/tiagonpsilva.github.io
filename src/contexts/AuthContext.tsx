@@ -389,8 +389,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     attemptAuth(async () => {
     const clientId = import.meta.env.VITE_LINKEDIN_CLIENT_ID
     const currentOrigin = window.location.origin
-    // Usar URL do Vercel que está configurada no LinkedIn App
-    const redirectUri = `https://tiagopintoio.vercel.app/auth/linkedin/callback`
+    // TESTE FINAL: HTML puro para ver se funciona
+    const redirectUri = `${currentOrigin}/test-callback.html`
     const scope = 'openid profile email'
     const state = Math.random().toString(36).substring(7)
     
