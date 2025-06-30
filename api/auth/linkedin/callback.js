@@ -1,4 +1,14 @@
-<!DOCTYPE html>
+// LinkedIn OAuth Callback Handler
+// This serverless function serves the OAuth callback page directly
+export default function handler(req, res) {
+  // Set proper headers
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+
+  // Return the OAuth callback HTML page
+  const html = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -65,15 +75,15 @@
     <script>
         // Configuration
         const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        const API_BASE = isDevelopment ? 'http://localhost:5173' : window.location.origin;
+        const API_BASE = window.location.origin;
         
         // Debug logging function
         function debugLog(message, data = null) {
-            console.log(`[LinkedIn Callback] ${message}`, data);
+            console.log(\`[LinkedIn Callback] \${message}\`, data);
             if (isDevelopment) {
                 const debugElement = document.getElementById('debug-info');
                 if (debugElement) {
-                    debugElement.innerHTML += `<div>${message}${data ? ': ' + JSON.stringify(data) : ''}</div>`;
+                    debugElement.innerHTML += \`<div>\${message}\${data ? ': ' + JSON.stringify(data) : ''}</div>\`;
                 }
             }
         }
@@ -81,7 +91,7 @@
         // Error display function
         function showError(message) {
             const errorContainer = document.getElementById('error-container');
-            errorContainer.innerHTML = `<div class="error">${message}</div>`;
+            errorContainer.innerHTML = \`<div class="error">\${message}</div>\`;
             debugLog('Error displayed', message);
         }
 
@@ -107,7 +117,7 @@
                 // Check for OAuth errors first
                 if (error) {
                     debugLog('OAuth error received', { error, errorDescription });
-                    showError(`Erro de autenticação: ${errorDescription || error}`);
+                    showError(\`Erro de autenticação: \${errorDescription || error}\`);
                     
                     // Notify parent and close
                     if (window.opener && !window.opener.closed) {
@@ -173,13 +183,13 @@
                         location: 'Brasil',
                         industry: 'Technology',
                         publicProfileUrl: 'https://linkedin.com/in/dev-user',
-                        picture: `https://ui-avatars.com/api/?name=Dev+User&background=0077B5&color=fff&size=200`
+                        picture: \`https://ui-avatars.com/api/?name=Dev+User&background=0077B5&color=fff&size=200\`
                     };
                 } else {
                     debugLog('Fetching real user data from API');
                     
                     // Production: Exchange code for token
-                    const tokenResponse = await fetch(`${API_BASE}/api/auth/linkedin/token`, {
+                    const tokenResponse = await fetch(\`\${API_BASE}/api/auth/linkedin/token\`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -189,7 +199,7 @@
 
                     if (!tokenResponse.ok) {
                         debugLog('Token exchange failed', tokenResponse.status);
-                        showError(`Falha na troca de token: ${tokenResponse.status}`);
+                        showError(\`Falha na troca de token: \${tokenResponse.status}\`);
                         return;
                     }
 
@@ -197,17 +207,17 @@
                     debugLog('Token received successfully');
 
                     // Get user profile with access token
-                    const profileResponse = await fetch(`${API_BASE}/api/auth/linkedin/profile`, {
+                    const profileResponse = await fetch(\`\${API_BASE}/api/auth/linkedin/profile\`, {
                         method: 'GET',
                         headers: {
-                            'Authorization': `Bearer ${access_token}`,
+                            'Authorization': \`Bearer \${access_token}\`,
                             'Content-Type': 'application/json',
                         }
                     });
 
                     if (!profileResponse.ok) {
                         debugLog('Profile fetch failed', profileResponse.status);
-                        showError(`Falha ao buscar perfil: ${profileResponse.status}`);
+                        showError(\`Falha ao buscar perfil: \${profileResponse.status}\`);
                         return;
                     }
 
@@ -259,7 +269,7 @@
 
             } catch (error) {
                 debugLog('LinkedIn authentication error', error);
-                showError(`Erro de autenticação: ${error.message}`);
+                showError(\`Erro de autenticação: \${error.message}\`);
                 
                 // Clean up state on any error
                 try {
@@ -285,4 +295,7 @@
         handleLinkedInCallback();
     </script>
 </body>
-</html>
+</html>`;
+
+  res.status(200).send(html);
+}
