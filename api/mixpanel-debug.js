@@ -1,5 +1,7 @@
 // Vercel API Route for Mixpanel Debug
-export default async function handler(req, res) {
+const { withTracing, createSpan } = require('./utils/telemetry')
+
+async function mixpanelDebugHandler(req, res) {
   const debugHtml = `
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -240,6 +242,19 @@ export default async function handler(req, res) {
 </html>
   `;
 
+  // Track Mixpanel debug page access
+  const debugSpan = createSpan('mixpanel.debug_access', {
+    'debug.type': 'mixpanel',
+    'debug.user_agent': req.headers['user-agent'] || 'unknown',
+    'debug.referer': req.headers['referer'] || 'direct',
+    'debug.environment': process.env.NODE_ENV || 'unknown'
+  })
+
   res.setHeader('Content-Type', 'text/html');
   res.status(200).send(debugHtml);
+  
+  debugSpan.end()
 }
+
+// Export with tracing wrapper
+export default withTracing('mixpanel_debug_tool', mixpanelDebugHandler)

@@ -1,5 +1,7 @@
 // Vercel API Route for LinkedIn profile retrieval
-export default async function handler(req, res) {
+const { withTracing, trackExternalApiCall, trackAuthEvent } = require('../../utils/telemetry')
+
+async function profileHandler(req, res) {
   // Only allow GET requests
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' })
@@ -20,15 +22,36 @@ export default async function handler(req, res) {
     }
 
     // Use OpenID Connect userinfo endpoint (works with approved "Sign In with LinkedIn using OpenID Connect" product)
+    const profileStartTime = Date.now()
     const userinfoResponse = await fetch('https://api.linkedin.com/v2/userinfo', {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       }
     })
+    const profileDuration = Date.now() - profileStartTime
+
+    // Track external API call
+    trackExternalApiCall(
+      'https://api.linkedin.com/v2/userinfo',
+      'GET',
+      userinfoResponse.status,
+      profileDuration,
+      {
+        'oauth.provider': 'linkedin',
+        'oauth.step': 'profile_fetch'
+      }
+    )
 
     if (!userinfoResponse.ok) {
       const errorText = await userinfoResponse.text()
+      
+      // Track profile fetch failure
+      trackAuthEvent('profile_fetch', 'anonymous', 'linkedin', false, {
+        'error.status': userinfoResponse.status,
+        'error.message': errorText.substring(0, 200)
+      })
+      
       console.error('LinkedIn userinfo failed:', userinfoResponse.status)
       throw new Error(`Failed to fetch userinfo: ${userinfoResponse.status}`)
     }
@@ -60,6 +83,13 @@ export default async function handler(req, res) {
       publicProfileUrl: userinfo.profile || `https://linkedin.com/in/${userinfo.sub}`
     }
 
+    // Track successful profile fetch
+    trackAuthEvent('profile_fetch', userinfo.sub, 'linkedin', true, {
+      'user.has_email': !!userData.email,
+      'user.has_picture': !!userData.picture,
+      'user.has_headline': !!userData.headline
+    })
+
     // Log formatted data only in development
     if (process.env.NODE_ENV === 'development') {
       console.log('✅ Formatted user data:', userData)
@@ -68,6 +98,12 @@ export default async function handler(req, res) {
     return res.status(200).json(userData)
 
   } catch (error) {
+    // Track profile error
+    trackAuthEvent('profile_fetch', 'anonymous', 'linkedin', false, {
+      'error.type': 'exception',
+      'error.message': error.message
+    })
+    
     // Log errors without emojis to prevent TTY issues
     console.error('Profile fetch error:', error.message)
     return res.status(500).json({ 
@@ -76,3 +112,6 @@ export default async function handler(req, res) {
     })
   }
 }
+
+// Export with tracing wrapper
+export default withTracing('linkedin_profile_fetch', profileHandler)

@@ -1,5 +1,7 @@
 // Vercel API Route for LinkedIn OAuth Debug
-export default async function handler(req, res) {
+const { withTracing, createSpan, trackAuthEvent } = require('./utils/telemetry')
+
+async function debugHandler(req, res) {
   const debugHtml = `
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -275,14 +277,11 @@ export default async function handler(req, res) {
                 if (popup) {
                     popup.close();
                     log('✅ Popup funcionando!');
-                    alert('✅ Popup funcionando!');
                 } else {
                     log('❌ Popup bloqueado!');
-                    alert('❌ Popup bloqueado pelo browser!');
                 }
             } catch (e) {
                 log('❌ Erro no teste de popup: ' + e.message);
-                alert('❌ Erro no teste de popup: ' + e.message);
             }
         }
 
@@ -301,13 +300,11 @@ export default async function handler(req, res) {
                 
                 if (response.status === 400 && data.includes('Authorization code required')) {
                     log('✅ Backend está funcionando! (Erro esperado com código de teste)');
-                    alert('✅ Backend funcionando!\\n\\nRecebeu erro esperado: "Authorization code required"\\n\\nIsso significa que as environment variables estão configuradas.');
                 } else {
-                    alert(\`Backend Response:\\nStatus: \${response.status}\\nBody: \${data}\`);
+                    log(\`Backend Response: Status: \${response.status}, Body: \${data}\`);
                 }
             } catch (error) {
                 log('❌ Erro no backend: ' + error.message);
-                alert('❌ Backend Error: ' + error.message);
             }
         }
 
@@ -340,6 +337,24 @@ export default async function handler(req, res) {
 </html>
   `;
 
+  // Track debug page access
+  const debugSpan = createSpan('debug.page_access', {
+    'debug.user_agent': req.headers['user-agent'] || 'unknown',
+    'debug.referer': req.headers['referer'] || 'direct',
+    'debug.origin': req.headers.origin || 'unknown'
+  })
+
+  // Track auth debugging event
+  trackAuthEvent('debug_page_access', 'anonymous', 'linkedin', true, {
+    'debug.page': 'oauth_debug',
+    'debug.environment': process.env.NODE_ENV || 'unknown'
+  })
+
   res.setHeader('Content-Type', 'text/html');
   res.status(200).send(debugHtml);
+  
+  debugSpan.end()
 }
+
+// Export with tracing wrapper
+export default withTracing('linkedin_oauth_debug', debugHandler)
