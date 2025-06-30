@@ -362,7 +362,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     attemptAuth(async () => {
     const clientId = import.meta.env.VITE_LINKEDIN_CLIENT_ID
     const currentOrigin = window.location.origin
-    const redirectUri = `${currentOrigin}/auth/linkedin/callback`
+    const redirectUri = `${currentOrigin}/api/auth/linkedin/callback`
     const scope = 'openid profile email'
     const state = Math.random().toString(36).substring(7)
     
