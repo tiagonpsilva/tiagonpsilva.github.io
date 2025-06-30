@@ -1,5 +1,5 @@
 // Vercel API Route for LinkedIn profile retrieval
-const { withTracing, trackExternalApiCall, trackAuthEvent } = require('../../utils/telemetry')
+// Note: Telemetry temporarily removed to fix FUNCTION_INVOCATION_FAILED
 
 async function profileHandler(req, res) {
   // Only allow GET requests
@@ -16,10 +16,8 @@ async function profileHandler(req, res) {
 
     const accessToken = authHeader.replace('Bearer ', '')
 
-    // Log only in development to avoid TTY issues in serverless
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🔄 Fetching LinkedIn profile...')
-    }
+    console.log('🔄 Fetching LinkedIn profile...')
+    console.log('🔧 Access token preview:', accessToken.substring(0, 20) + '...')
 
     // Use OpenID Connect userinfo endpoint (works with approved "Sign In with LinkedIn using OpenID Connect" product)
     const profileStartTime = Date.now()
@@ -30,43 +28,25 @@ async function profileHandler(req, res) {
       }
     })
     const profileDuration = Date.now() - profileStartTime
-
-    // Track external API call
-    trackExternalApiCall(
-      'https://api.linkedin.com/v2/userinfo',
-      'GET',
-      userinfoResponse.status,
-      profileDuration,
-      {
-        'oauth.provider': 'linkedin',
-        'oauth.step': 'profile_fetch'
-      }
-    )
+    console.log('📡 LinkedIn userinfo response status:', userinfoResponse.status)
 
     if (!userinfoResponse.ok) {
       const errorText = await userinfoResponse.text()
-      
-      // Track profile fetch failure
-      trackAuthEvent('profile_fetch', 'anonymous', 'linkedin', false, {
-        'error.status': userinfoResponse.status,
-        'error.message': errorText.substring(0, 200)
+      console.error('❌ LinkedIn userinfo failed:', {
+        status: userinfoResponse.status,
+        statusText: userinfoResponse.statusText,
+        error: errorText
       })
       
-      console.error('LinkedIn userinfo failed:', userinfoResponse.status)
-      throw new Error(`Failed to fetch userinfo: ${userinfoResponse.status}`)
+      return res.status(500).json({ 
+        error: 'Profile fetch failed',
+        details: `LinkedIn API returned ${userinfoResponse.status}: ${errorText}`,
+        status: userinfoResponse.status
+      })
     }
 
     const userinfo = await userinfoResponse.json()
-    
-    // Debug logging only in development
-    if (process.env.NODE_ENV === 'development') {
-      console.log('✅ LinkedIn profile received:', userinfo)
-      console.log('🔍 Locale debug:', {
-        locale: userinfo.locale,
-        localeType: typeof userinfo.locale,
-        localeKeys: userinfo.locale && typeof userinfo.locale === 'object' ? Object.keys(userinfo.locale) : 'N/A'
-      })
-    }
+    console.log('✅ LinkedIn profile received:', userinfo)
 
     // Format user data from OpenID Connect response
     const userData = {
@@ -83,35 +63,24 @@ async function profileHandler(req, res) {
       publicProfileUrl: userinfo.profile || `https://linkedin.com/in/${userinfo.sub}`
     }
 
-    // Track successful profile fetch
-    trackAuthEvent('profile_fetch', userinfo.sub, 'linkedin', true, {
-      'user.has_email': !!userData.email,
-      'user.has_picture': !!userData.picture,
-      'user.has_headline': !!userData.headline
-    })
-
-    // Log formatted data only in development
-    if (process.env.NODE_ENV === 'development') {
-      console.log('✅ Formatted user data:', userData)
-    }
+    console.log('✅ Formatted user data:', userData)
 
     return res.status(200).json(userData)
 
   } catch (error) {
-    // Track profile error
-    trackAuthEvent('profile_fetch', 'anonymous', 'linkedin', false, {
-      'error.type': 'exception',
-      'error.message': error.message
+    console.error('❌ Profile fetch exception:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
     })
     
-    // Log errors without emojis to prevent TTY issues
-    console.error('Profile fetch error:', error.message)
     return res.status(500).json({ 
       error: 'Failed to fetch profile',
-      details: error.message 
+      details: error.message,
+      type: 'exception'
     })
   }
 }
 
-// Export with tracing wrapper
-export default withTracing('linkedin_profile_fetch', profileHandler)
+// Export without tracing wrapper (temporarily)
+export default profileHandler
