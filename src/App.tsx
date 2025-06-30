@@ -44,29 +44,36 @@ function AppContent() {
   useRouteTracing()
   
   return (
-    <div className="min-h-screen bg-background transition-colors duration-300">
-      <Header />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/cases" element={<CasesPage />} />
-        <Route path="/labs" element={<LabsPage />} />
-        <Route path="/projects" element={<LabsPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/blog" element={<BlogPage />} />
-        <Route path="/blog/:slug" element={<ArticlePage />} />
-        <Route path="/auth/debug" element={<AuthDebugPage />} />
-        <Route path="/auth/linkedin/callback" element={<LinkedInCallbackPage />} />
-      </Routes>
-      <BottomNavigation />
-      {/* Add bottom padding to prevent content from being hidden behind bottom nav */}
-      <div className="lg:hidden h-16" />
-      {/* Auth Modal */}
-      <AuthModal />
-      {/* Auth Status Indicator */}
-      <AuthStatusIndicator />
-      {/* Auth Error Display */}
-      <AuthErrorDisplayWrapper />
-    </div>
+    <Routes>
+      {/* LinkedIn Callback - FORA da estrutura principal para evitar carregar Header/Nav */}
+      <Route path="/auth/linkedin/callback" element={<LinkedInCallbackPage />} />
+      
+      {/* Todas outras rotas com estrutura completa */}
+      <Route path="/*" element={
+        <div className="min-h-screen bg-background transition-colors duration-300">
+          <Header />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/cases" element={<CasesPage />} />
+            <Route path="/labs" element={<LabsPage />} />
+            <Route path="/projects" element={<LabsPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:slug" element={<ArticlePage />} />
+            <Route path="/auth/debug" element={<AuthDebugPage />} />
+          </Routes>
+          <BottomNavigation />
+          {/* Add bottom padding to prevent content from being hidden behind bottom nav */}
+          <div className="lg:hidden h-16" />
+          {/* Auth Modal */}
+          <AuthModal />
+          {/* Auth Status Indicator */}
+          <AuthStatusIndicator />
+          {/* Auth Error Display */}
+          <AuthErrorDisplayWrapper />
+        </div>
+      } />
+    </Routes>
   )
 }
 
