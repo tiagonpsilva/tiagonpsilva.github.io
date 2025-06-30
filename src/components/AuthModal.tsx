@@ -83,6 +83,11 @@ const AuthModal: React.FC = () => {
     }
   ]
 
+  // EMERGENCY FIX: Disable AuthModal completely in production
+  if (!import.meta.env.DEV) {
+    return null
+  }
+
   return (
     <AnimatePresence>
       {showAuthModal && (
