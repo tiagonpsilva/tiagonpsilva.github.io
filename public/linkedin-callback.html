@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn OAuth - Processando...</title>
+</head>
+<body>
+    <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+        <h2>✅ Processando autenticação LinkedIn...</h2>
+        <p>Esta é a página de callback. Aguarde...</p>
+    </div>
+
+    <script>
+        console.log('🎯 LINKEDIN CALLBACK LOADED - Static page working!');
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+        const error = urlParams.get('error');
+
+        console.log('📋 OAuth Parameters:', { code: !!code, state: !!state, error });
+
+        if (error) {
+            console.error('❌ OAuth error:', error);
+            if (window.opener && !window.opener.closed) {
+                window.opener.postMessage({
+                    type: 'LINKEDIN_AUTH_ERROR',
+                    error: error
+                }, window.location.origin);
+            }
+            window.close();
+            return;
+        }
+
+        if (code && state) {
+            console.log('✅ Success - sending code to parent window');
+            if (window.opener && !window.opener.closed) {
+                window.opener.postMessage({
+                    type: 'LINKEDIN_AUTH_CODE',
+                    code: code,
+                    state: state
+                }, window.location.origin);
+                console.log('📤 Message sent, closing popup in 2 seconds...');
+                setTimeout(() => window.close(), 2000);
+            } else {
+                console.warn('⚠️ No parent window found');
+                window.close();
+            }
+        } else {
+            console.error('❌ Missing code or state parameters');
+            window.close();
+        }
+    </script>
+</body>
+</html>
