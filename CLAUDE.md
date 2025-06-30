@@ -300,9 +300,24 @@ All problems, bugs, and improvements encountered during development must be docu
 When encountering any problem or improvement opportunity:
 
 1. **Create GitHub Issue** using the `gh` CLI tool or GitHub web interface
-2. **Title Format**: Clear, descriptive title summarizing the problem
-3. **Labels**: Apply appropriate labels (bug, enhancement, documentation, etc.)
-4. **Description Template**:
+2. **Title Format**: Use prefixes for epic-related issues: `[EPIC-NAME] Issue Title`
+   - **Epic Issues**: `[EPIC-NAME] ÉPICO: Description`
+   - **Feature Issues**: `[EPIC-NAME] Fase X.Y: Feature Description`
+   - **Standalone Issues**: Regular title without prefix
+   - **Examples**:
+     - `[OBSERVABILITY] ÉPICO: Implementar Observabilidade com OpenTelemetry + DataDog`
+     - `[OBSERVABILITY] Fase 1.1: Setup OpenTelemetry Infrastructure Base`
+     - `[CYPRESS-OPTIMIZATION] Fase 2: Implementar Execução Condicional Inteligente`
+     - `Bug: LinkedIn auth fails on mobile Safari` (standalone)
+3. **Epic Prefixes Standards**:
+   - `[OBSERVABILITY]` - OpenTelemetry, DataDog, monitoring, alerting
+   - `[CYPRESS-OPTIMIZATION]` - E2E testing optimization, CI/CD improvements
+   - `[SEO]` - Search engine optimization initiatives
+   - `[PERFORMANCE]` - Performance optimization projects
+   - `[SECURITY]` - Security enhancements and fixes
+   - `[ACCESSIBILITY]` - Accessibility improvements
+4. **Labels**: Apply appropriate labels (bug, enhancement, documentation, etc.)
+5. **Description Template**:
    ```markdown
    ## Problem Description
    [Detailed description of the issue]
