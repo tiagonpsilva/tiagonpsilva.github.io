@@ -256,6 +256,58 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Initialize engagement tracking
   useEffect(() => {
     const initializeAuth = () => {
+      // Check for OAuth redirect result first
+      const oauthResult = sessionStorage.getItem('linkedin_oauth_result')
+      if (oauthResult) {
+        try {
+          const { code, state, timestamp } = JSON.parse(oauthResult)
+          
+          // Check if data is recent (within 5 minutes)
+          if (Date.now() - timestamp < 5 * 60 * 1000) {
+            console.log('🔄 Processing OAuth redirect result...')
+            
+            // Validate state
+            const savedState = sessionStorage.getItem('linkedin_oauth_state')
+            if (state === savedState) {
+              // Clear the stored result to prevent reprocessing
+              sessionStorage.removeItem('linkedin_oauth_result')
+              
+              // Process the OAuth code
+              console.log('🔄 Starting OAuth code exchange from redirect...')
+              exchangeCodeForProfile(code)
+                .then(userData => {
+                  console.log('✅ OAuth redirect exchange successful:', userData)
+                  const validatedUser = validateUserData(userData)
+                  
+                  if (validatedUser) {
+                    storage.setItem('linkedin_user', JSON.stringify(validatedUser))
+                    setUser(validatedUser)
+                    identifyLinkedInUser(validatedUser)
+                    clearAuthError()
+                    console.log('✅ User authenticated via redirect flow:', validatedUser.name)
+                  } else {
+                    console.error('❌ Invalid user data from redirect flow')
+                    setAuthError(AuthErrorHandler.handleError('Invalid user data', { type: 'invalid_user_data' }))
+                  }
+                })
+                .catch(error => {
+                  console.error('❌ OAuth redirect exchange failed:', error)
+                  setAuthError(AuthErrorHandler.handleError(error, { type: 'token_exchange_redirect' }))
+                })
+            } else {
+              console.warn('⚠️ State mismatch in redirect flow')
+              sessionStorage.removeItem('linkedin_oauth_result')
+            }
+          } else {
+            console.log('⏰ OAuth redirect data expired, removing...')
+            sessionStorage.removeItem('linkedin_oauth_result')
+          }
+        } catch (error) {
+          console.error('❌ Error processing OAuth redirect result:', error)
+          sessionStorage.removeItem('linkedin_oauth_result')
+        }
+      }
+      
       // Check for existing user session
       const savedUser = storage.getItem('linkedin_user')
       if (savedUser) {

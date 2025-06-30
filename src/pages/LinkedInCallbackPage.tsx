@@ -103,13 +103,33 @@ const LinkedInCallbackPage: React.FC = () => {
         }
         
       } else {
-        log('⚠️ No parent window found')
-        setStatus('⚠️ Janela pai não encontrada')
+        log('⚠️ No parent window found - handling as redirect flow')
+        setStatus('🔄 Processando dados OAuth via redirect...')
         
-        // Fallback: redirect to home
-        setTimeout(() => {
-          window.location.href = '/'
-        }, 2000)
+        // Store OAuth data in sessionStorage for main app to pick up
+        try {
+          sessionStorage.setItem('linkedin_oauth_result', JSON.stringify({
+            code: code,
+            state: state,
+            timestamp: Date.now()
+          }))
+          log('💾 OAuth data stored in sessionStorage for main app')
+          setStatus('✅ Dados salvos! Redirecionando...')
+          
+          // Redirect to home page where main app will process the data
+          setTimeout(() => {
+            window.location.href = '/'
+          }, 1500)
+          
+        } catch (e) {
+          log(`❌ Storage error: ${(e as Error).message}`)
+          setStatus(`❌ Erro de armazenamento: ${(e as Error).message}`)
+          
+          // Fallback: redirect to home anyway
+          setTimeout(() => {
+            window.location.href = '/'
+          }, 3000)
+        }
       }
     }
 
