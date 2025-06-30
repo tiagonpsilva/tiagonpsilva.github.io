@@ -58,39 +58,56 @@ const LinkedInCallback: React.FC = () => {
           })
         }
 
-        // Exchange code for access token
-        const tokenResponse = await fetch('/api/auth/linkedin/token', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ code })
-        })
-
-        if (!tokenResponse.ok) {
-          console.error('Token exchange failed:', tokenResponse.status)
-          navigate('/', { replace: true })
-          return
-        }
-
-        const { access_token } = await tokenResponse.json()
-
-        // Get user profile with access token
-        const profileResponse = await fetch('/api/auth/linkedin/profile', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${access_token}`,
-            'Content-Type': 'application/json',
+        // For development: Use mock user data since API endpoints need Vercel environment
+        let userData
+        
+        if (import.meta.env.DEV) {
+          console.log('🧪 Using mock user data for development')
+          userData = {
+            id: 'dev_user_' + Date.now(),
+            name: 'Usuário de Desenvolvimento',
+            email: 'dev@example.com',
+            headline: 'Desenvolvedor LinkedIn Local',
+            location: 'Brasil',
+            industry: 'Technology',
+            publicProfileUrl: 'https://linkedin.com/in/dev-user',
+            picture: `https://ui-avatars.com/api/?name=Dev+User&background=0077B5&color=fff&size=200`
           }
-        })
+        } else {
+          // Production: Use real API endpoints
+          const tokenResponse = await fetch('/api/auth/linkedin/token', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ code })
+          })
 
-        if (!profileResponse.ok) {
-          console.error('Profile fetch failed:', profileResponse.status)
-          navigate('/', { replace: true })
-          return
+          if (!tokenResponse.ok) {
+            console.error('Token exchange failed:', tokenResponse.status)
+            navigate('/', { replace: true })
+            return
+          }
+
+          const { access_token } = await tokenResponse.json()
+
+          // Get user profile with access token
+          const profileResponse = await fetch('/api/auth/linkedin/profile', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${access_token}`,
+              'Content-Type': 'application/json',
+            }
+          })
+
+          if (!profileResponse.ok) {
+            console.error('Profile fetch failed:', profileResponse.status)
+            navigate('/', { replace: true })
+            return
+          }
+
+          userData = await profileResponse.json()
         }
-
-        const userData = await profileResponse.json()
 
         // Send user data to parent window (popup flow)
         if (window.opener && !window.opener.closed) {

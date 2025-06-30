@@ -73,13 +73,13 @@ function App() {
   return (
     <ThemeProvider>
       <MixpanelProvider>
-        <AuthProvider>
-          <ToastProvider>
-            <Router>
+        <ToastProvider>
+          <Router>
+            <AuthProvider>
               <AppContent />
-            </Router>
-          </ToastProvider>
-        </AuthProvider>
+            </AuthProvider>
+          </Router>
+        </ToastProvider>
       </MixpanelProvider>
     </ThemeProvider>
   )
