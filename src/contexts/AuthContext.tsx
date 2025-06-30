@@ -94,7 +94,7 @@ const exchangeCodeForProfile = async (code: string): Promise<LinkedInUser> => {
     console.log('🔄 Step 1: Exchanging authorization code for access token via API...')
     console.log('🔍 Code received:', code.substring(0, 10) + '...')
     
-    const tokenResponse = await fetch('/api/auth/linkedin/token', {
+    const tokenResponse = await fetch('/api/auth/linkedin/token-simple', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
