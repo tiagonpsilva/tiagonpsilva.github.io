@@ -335,6 +335,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     // Listen for auth success from popup
     const handleAuthMessage = (event: MessageEvent) => {
+      console.log('📥 Received message from popup:', event.data)
+      
       // Security: check origin
       if (event.origin !== window.location.origin) {
         console.warn('⚠️ Ignoring message from untrusted origin:', event.origin)
@@ -342,7 +344,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
 
       if (event.data?.type === 'LINKEDIN_AUTH_CODE') {
-        console.log('📨 Received auth code from popup')
+        console.log('📨 Processing LINKEDIN_AUTH_CODE message')
         
         // Validate state
         const savedState = sessionStorage.getItem('linkedin_oauth_state')
@@ -354,6 +356,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         
         // Exchange code for access token and fetch user profile
         console.log('🔄 Starting OAuth code exchange process...')
+        console.log('🔍 Code to exchange:', event.data.code.substring(0, 20) + '...')
+        console.log('🔍 State received:', event.data.state)
+        console.log('🔍 State saved:', savedState)
+        
         exchangeCodeForProfile(event.data.code)
           .then(userData => {
             console.log('✅ OAuth exchange successful, received user data:', userData)
@@ -375,7 +381,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           .catch(error => {
             console.error('❌ Failed to exchange code for user profile:', error)
             console.error('❌ Error details:', error.message, error.stack)
-            setAuthError(AuthErrorHandler.handleError(error, { type: 'token_exchange' }))
+            try {
+              setAuthError(AuthErrorHandler.handleError(error, { type: 'token_exchange' }))
+            } catch (handlerError) {
+              console.error('❌ Error handler failed:', handlerError)
+              setAuthError({
+                message: error.message || 'Authentication failed',
+                type: 'token_exchange',
+                timestamp: Date.now(),
+                details: { originalError: error.toString() }
+              })
+            }
           })
         
       } else if (event.data?.type === 'LINKEDIN_AUTH_SUCCESS') {
