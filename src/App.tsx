@@ -55,7 +55,7 @@ function AppContent() {
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:slug" element={<ArticlePage />} />
         <Route path="/auth/debug" element={<AuthDebugPage />} />
-        <Route path="/auth/linkedin/callback" element={<LinkedInCallbackPage />} />
+        <Route path="/api/auth/linkedin/callback" element={<LinkedInCallbackPage />} />
       </Routes>
       <BottomNavigation />
       {/* Add bottom padding to prevent content from being hidden behind bottom nav */}
