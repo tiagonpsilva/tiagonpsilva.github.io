@@ -399,6 +399,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     console.log('Client ID:', clientId)
     console.log('Redirect URI:', redirectUri)
     
+    // TESTE DEBUG: Mostrar URL exata
+    alert(`🔍 DEBUG - URL SENDO ENVIADA:\n\n${redirectUri}\n\nVerifique se esta URL EXATA está configurada no LinkedIn App!\n\nOrigin: ${currentOrigin}`)
+    
     if (!clientId) {
       const error = new Error('VITE_LINKEDIN_CLIENT_ID not found')
       setAuthError(error, { step: 'config_validation' })
