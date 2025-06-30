@@ -5,13 +5,13 @@
 echo "Criando Issue 1: Mixpanel Analytics..."
 gh issue create \
   --title "Mixpanel Analytics Not Collecting Metrics in Production Environment" \
-  --body-file ISSUE_MIXPANEL_PRODUCTION.md \
+  --body-file docs/issues/ISSUE_MIXPANEL_PRODUCTION.md \
   --label "bug,analytics,production,mixpanel"
 
 echo "Criando Issue 2: LinkedIn Authentication..."
 gh issue create \
   --title "LinkedIn OAuth Authentication Errors: Blank Screen and Non-Responsive Button" \
-  --body-file ISSUE_LINKEDIN_AUTH_ERRORS.md \
+  --body-file docs/issues/ISSUE_LINKEDIN_AUTH_ERRORS.md \
   --label "bug,authentication,oauth,linkedin,production"
 
 echo "Issues criadas com sucesso!"

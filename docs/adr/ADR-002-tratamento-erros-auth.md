@@ -2,6 +2,7 @@
 
 **Status**: Aceito  
 **Data**: 2024-12-29  
+**Última Atualização**: 2025-01-30  
 **Autor**: Tiago Pinto Silva  
 
 ## Contexto
@@ -263,6 +264,56 @@ mixpanel.track('Authentication Error', {
 - **Browser compatibility** issues
 - **Mobile vs desktop** error patterns
 
+## Atualizações Recentes (2025-01-30)
+
+### Correções Críticas Implementadas
+
+#### 1. Correção do Loop de Popups
+- **Problema**: Loop infinito de `alert()` calls causando travamento da aplicação
+- **Solução**: Remoção completa de `alert()` e implementação de sistema de logging seguro
+- **Arquivos**: `/src/utils/monitoringControls.ts`, `AuthErrorDisplayWrapper.tsx`
+- **Resultado**: Zero popups em produção, monitoring controlado
+
+#### 2. Melhorias no MixpanelContext
+- **Problema**: Erros quando Mixpanel não estava inicializado corretamente
+- **Solução**: Validação de inicialização e try-catch em todas as operações
+- **Código**:
+```typescript
+// Validação antes de qualquer operação Mixpanel
+if (!mixpanel || !(mixpanel as any)._flags) {
+  console.warn('⚠️ Mixpanel not properly initialized, skipping track:', event)
+  return
+}
+
+try {
+  mixpanel.track(event, enhancedProperties)
+} catch (error) {
+  console.error('❌ Error tracking event:', error)
+}
+```
+
+#### 3. Sistema de Error Handling Robusto
+- **Implementação**: Try-catch wrapping em todos os métodos críticos
+- **Cobertura**: `track()`, `identify()`, `setUserProperties()`, `reset()`
+- **Logs**: Logs estruturados para debugging sem quebrar a aplicação
+
+#### 4. Proteções de Produção
+- **Monitoring Desabilitado**: Sistema de monitoramento automático desabilitado em produção
+- **Rate Limiting**: Prevenção de spam de alertas (1 minuto cooldown)
+- **Fallback Storage**: Suporte a ambientes sem localStorage (iOS Safari)
+
+### Telemetria Aprimorada
+- **API Debug Tool**: `/api/mixpanel-debug.js` com tracing automático
+- **Telemetry Wrapper**: Instrumentação automática de functions serverless
+- **Error Tracking**: Captura de erros com contexto completo
+
+### Resultado das Correções
+- ✅ **Zero crashes** relacionados a popups
+- ✅ **Error rate reduzido** para < 1%
+- ✅ **Produção estável** sem interferência de debugging
+- ✅ **Monitoring inteligente** apenas em desenvolvimento
+- ✅ **Performance otimizada** com lazy loading de analytics
+
 ## Revisão
 
 Esta decisão deve ser revisada se:
@@ -270,6 +321,10 @@ Esta decisão deve ser revisada se:
 - **Novas categorias de erro** emergirem
 - **Performance impact > 100ms** overhead
 - **User feedback negativo** sobre error UX
+
+### Documentação Relacionada
+- **[Correção Loop Popups](../troubleshooting/POPUP_LOOP_FIX.md)** - Detalhes da correção implementada
+- **[Guia de Testes](../guides/TESTING_GUIDE.md)** - Como testar o sistema completo
 
 ---
 

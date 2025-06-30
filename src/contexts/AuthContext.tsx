@@ -536,16 +536,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     attemptAuth(async () => {
     const clientId = import.meta.env.VITE_LINKEDIN_CLIENT_ID
     const currentOrigin = window.location.origin
-    // URL que o React Router pode capturar (sem /api/)
-    const redirectUri = `https://tiagopinto.io/oauth/linkedin/callback`
+    // URL dinâmica baseada no ambiente atual (localhost ou produção)
+    const redirectUri = `${currentOrigin}/oauth/linkedin/callback`
     const scope = 'openid profile email'
     const state = Math.random().toString(36).substring(7)
     
     console.log('🔐 Starting LinkedIn OAuth...')
-    console.log('Device Info:', { isMobile, isPopupSupported, preferRedirect })
-    console.log('Current Origin:', currentOrigin)
-    console.log('Client ID:', clientId)
-    console.log('Redirect URI:', redirectUri)
+    console.log('🌍 Environment:', import.meta.env.DEV ? 'Development' : 'Production')
+    console.log('🔗 Redirect URI:', redirectUri)
+    console.log('🔧 Client ID:', clientId)
+    console.log('📱 Device Info:', { isMobile, isPopupSupported, preferRedirect })
     
     
     if (!clientId) {

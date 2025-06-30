@@ -65,7 +65,7 @@ Portfolio profissional moderno desenvolvido com React 18, TypeScript e arquitetu
 
 ### Architecture Decision Records (ADRs)
 - **[ADR-001](docs/adr/ADR-001-sistema-autenticacao-linkedin.md)** - Sistema de Autenticação LinkedIn
-- **[ADR-002](docs/adr/ADR-002-tratamento-erros-auth.md)** - Tratamento de Erros de Autenticação  
+- **[ADR-002](docs/adr/ADR-002-tratamento-erros-auth.md)** - Tratamento de Erros de Autenticação *(Atualizado 2025-01-30)*
 - **[ADR-003](docs/adr/ADR-003-analytics-mixpanel.md)** - Integração Analytics com Mixpanel
 - **[ADR-004](docs/adr/ADR-004-testing-cypress.md)** - Framework de Testes com Cypress
 

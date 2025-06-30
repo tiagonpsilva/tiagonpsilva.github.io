@@ -14,10 +14,17 @@ npm run type-check   # Run TypeScript compiler without emitting files
 
 ### Deployment
 ```bash
-npm run deploy       # Build and deploy to GitHub Pages manually
+npm run deploy       # Build and deploy manually (deprecated - use Vercel)
 ```
 
 Note: The project uses **Vercel** for automatic deployment on push to main branch.
+
+#### Scripts de Automação
+```bash
+# Scripts disponíveis em /scripts/
+chmod +x scripts/deploy_mixpanel.sh && scripts/deploy_mixpanel.sh  # Deploy completo do Mixpanel
+chmod +x scripts/create_issues.sh && scripts/create_issues.sh      # Criar GitHub issues
+```
 
 #### Deployment Verification Protocol
 **IMPORTANT**: After every push to main, ALWAYS verify deployment status:
@@ -290,6 +297,58 @@ Detailed implementation timeline and tasks are documented in `/management/SEO_RO
 - **Weekly**: Core Web Vitals and Search Console checks
 - **Monthly**: Keyword rankings and traffic analysis
 - **Quarterly**: Content gap analysis and strategy updates
+
+## File Organization Guidelines
+
+### Documentation Structure
+**IMPORTANT**: All documentation files must be organized in the `docs/` directory with the following structure:
+
+```
+docs/
+├── adr/                    # Architecture Decision Records
+├── diagramas/              # C4 Model e sequence diagrams
+├── setup/                  # Configuration guides  
+├── guides/                 # Technical guides
+├── troubleshooting/        # Problem resolution guides
+├── issues/                 # GitHub issue documentation
+└── status/                 # Implementation status files
+```
+
+### Scripts Organization
+All shell scripts (`.sh`) and automation scripts must be placed in the `scripts/` directory:
+
+```
+scripts/
+├── *.sh                   # Shell scripts for automation
+├── *.js                   # Node.js utility scripts
+└── README.md              # Scripts documentation
+```
+
+### Root Directory Policy
+The root directory should only contain:
+- **README.md** - Main project documentation
+- **CLAUDE.md** - This file with guidelines for Claude Code
+- **Configuration files** (package.json, vite.config.ts, etc.)
+- **Source directories** (src/, public/, etc.)
+
+### File Naming Conventions
+- **Documentation**: Use descriptive names with context (e.g., `TROUBLESHOOTING_AUTH_ERRORS.md`)
+- **Scripts**: Use action-based names (e.g., `deploy_mixpanel.sh`, `create_issues.sh`)
+- **ADRs**: Follow pattern `ADR-XXX-descriptive-name.md`
+
+### Moving Files
+When organizing files, always:
+1. Move documentation to appropriate `docs/` subdirectory
+2. Move scripts to `scripts/` directory
+3. Update any references in other files
+4. Remove duplicate files from root
+5. Update README.md links if necessary
+
+### Cleanup Commands
+```bash
+# Organize all files according to guidelines
+chmod +x cleanup_root.sh && ./cleanup_root.sh
+```
 
 ## Issue Management Protocol
 
