@@ -46,7 +46,7 @@ function AppContent() {
   return (
     <Routes>
       {/* LinkedIn Callback - FORA da estrutura principal para evitar carregar Header/Nav */}
-      <Route path="/auth/linkedin/callback" element={<LinkedInCallbackPage />} />
+      <Route path="/api/auth/linkedin/callback" element={<LinkedInCallbackPage />} />
       
       {/* Todas outras rotas com estrutura completa */}
       <Route path="/*" element={
