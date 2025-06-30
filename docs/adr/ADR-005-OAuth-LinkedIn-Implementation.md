@@ -14,6 +14,7 @@ O portfólio necessitava de um sistema de autenticação LinkedIn para personali
 Implementamos um sistema OAuth LinkedIn híbrido com as seguintes características:
 
 ### Arquitetura Geral
+
 - **Frontend:** React com TypeScript e Context API para gerenciamento de estado
 - **Backend:** Funções serverless Vercel para troca segura de tokens
 - **Estratégia Híbrida:** Popup para desktop, redirect para mobile/Safari
@@ -216,7 +217,8 @@ VITE_LINKEDIN_CLIENT_ID=77s778titub44r
 ```
 
 **Callback URLs:**
-- http://localhost:5173/oauth/linkedin/callback
+
+- <http://localhost:5173/oauth/linkedin/callback>
 
 **Benefícios:**
 - Desenvolvimento offline possível
@@ -456,5 +458,5 @@ O sistema está em produção funcionando perfeitamente, com dados reais sendo c
 - Security Guidelines: OAuth Implementation
 - Testing Guide: Authentication Flows
 
-**Última Atualização:** 30/06/2025
+**Última Atualização:** 30/06/2025  
 **Próxima Revisão:** Q3 2025
