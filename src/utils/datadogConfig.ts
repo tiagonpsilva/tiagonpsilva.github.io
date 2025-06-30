@@ -39,7 +39,7 @@ export const getDataDogConfig = (): DataDogConfig => {
   const telemetryEnabled = import.meta.env.VITE_TELEMETRY_ENABLED === 'true'
   
   const config: DataDogConfig = {
-    enabled: telemetryEnabled && !!(rumApplicationId && rumClientToken),
+    enabled: isDev && telemetryEnabled && !!(rumApplicationId && rumClientToken), // Only enabled in development
     environment: isDev ? 'development' : 'production',
     rum: {
       applicationId: rumApplicationId,

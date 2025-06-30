@@ -18,7 +18,7 @@ export const getTelemetryConfig = (): TelemetryConfig => {
   const datadogApiKey = import.meta.env.VITE_DATADOG_API_KEY
   
   const config: TelemetryConfig = {
-    enabled: telemetryEnabled && !!datadogApiKey,
+    enabled: isDev && telemetryEnabled && !!datadogApiKey, // Only enabled in development
     environment: isDev ? 'development' : 'production',
     debug: isDev
   }
