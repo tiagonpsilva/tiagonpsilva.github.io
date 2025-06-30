@@ -1,12 +1,16 @@
 {
-  "rewrites": [
+  "routes": [
     {
-      "source": "/auth/linkedin/callback",
-      "destination": "/auth/linkedin/callback.html"
+      "src": "/auth/linkedin/callback",
+      "dest": "/auth/linkedin/callback.html"
     },
     {
-      "source": "/((?!api/|auth/).*)",
-      "destination": "/index.html"
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
