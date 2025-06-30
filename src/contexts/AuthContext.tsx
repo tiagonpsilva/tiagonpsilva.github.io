@@ -89,6 +89,29 @@ const validateEmail = (email: string): boolean => {
 
 // Exchange authorization code for access token and fetch user profile using serverless functions
 const exchangeCodeForProfile = async (code: string): Promise<LinkedInUser> => {
+  // Mock data for local development
+  if (import.meta.env.DEV) {
+    console.log('🧪 Development mode: Using mock LinkedIn data')
+    
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1500))
+    
+    const mockUser: LinkedInUser = {
+      id: 'dev_linkedin_' + Date.now(),
+      name: 'Tiago Pinto (DEV)',
+      email: 'tiago.dev@example.com',
+      picture: 'https://via.placeholder.com/150/0077b5/white?text=TP',
+      headline: 'Head de Tecnologia & Desenvolvedor Full Stack',
+      location: 'São Paulo, Brasil',
+      industry: 'Tecnologia',
+      publicProfileUrl: 'https://linkedin.com/in/tiagopinto-dev'
+    }
+    
+    console.log('✅ Mock authentication completed for:', mockUser.name)
+    return mockUser
+  }
+
+  // Production: Use real serverless functions
   try {
     // Step 1: Exchange code for access token using serverless function
     console.log('🔄 Step 1: Exchanging code for access token...')
@@ -101,8 +124,6 @@ const exchangeCodeForProfile = async (code: string): Promise<LinkedInUser> => {
       body: JSON.stringify({ code })
     })
 
-    // console.log('📡 Token API response status:', tokenResponse.status)
-
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.json().catch(() => ({ error: 'Unknown error' }))
       console.error('❌ Token exchange error response:', errorData)
@@ -110,7 +131,6 @@ const exchangeCodeForProfile = async (code: string): Promise<LinkedInUser> => {
     }
 
     const tokenData = await tokenResponse.json()
-    // console.log('✅ Token response received:', { hasToken: !!tokenData.access_token })
     const accessToken = tokenData.access_token
 
     if (!accessToken) {
@@ -128,8 +148,6 @@ const exchangeCodeForProfile = async (code: string): Promise<LinkedInUser> => {
         'Accept': 'application/json'
       }
     })
-
-    // console.log('📡 Profile API response status:', profileResponse.status)
 
     if (!profileResponse.ok) {
       const errorData = await profileResponse.json().catch(() => ({ error: 'Unknown error' }))
