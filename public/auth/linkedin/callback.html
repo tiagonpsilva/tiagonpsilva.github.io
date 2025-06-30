@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn OAuth Callback</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+        .debug {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 10px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spinner"></div>
+        <h2>Processando autenticação LinkedIn...</h2>
+        <p>Aguarde enquanto validamos seus dados.</p>
+        <div id="error-container"></div>
+        <div id="debug-info" class="debug"></div>
+    </div>
+
+    <script>
+        // Configuration
+        const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const API_BASE = isDevelopment ? 'http://localhost:5173' : window.location.origin;
+        
+        // Debug logging function
+        function debugLog(message, data = null) {
+            console.log(`[LinkedIn Callback] ${message}`, data);
+            if (isDevelopment) {
+                const debugElement = document.getElementById('debug-info');
+                if (debugElement) {
+                    debugElement.innerHTML += `<div>${message}${data ? ': ' + JSON.stringify(data) : ''}</div>`;
+                }
+            }
+        }
+
+        // Error display function
+        function showError(message) {
+            const errorContainer = document.getElementById('error-container');
+            errorContainer.innerHTML = `<div class="error">${message}</div>`;
+            debugLog('Error displayed', message);
+        }
+
+        // Main callback handler
+        async function handleLinkedInCallback() {
+            try {
+                debugLog('Starting LinkedIn callback processing');
+                
+                // Get URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const code = urlParams.get('code');
+                const state = urlParams.get('state');
+                const error = urlParams.get('error');
+                const errorDescription = urlParams.get('error_description');
+
+                debugLog('URL parameters', { 
+                    hasCode: !!code, 
+                    hasState: !!state, 
+                    error: error,
+                    errorDescription: errorDescription 
+                });
+
+                // Check for OAuth errors first
+                if (error) {
+                    debugLog('OAuth error received', { error, errorDescription });
+                    showError(`Erro de autenticação: ${errorDescription || error}`);
+                    
+                    // Notify parent and close
+                    if (window.opener && !window.opener.closed) {
+                        window.opener.postMessage({
+                            type: 'LINKEDIN_AUTH_ERROR',
+                            error: error,
+                            errorDescription: errorDescription
+                        }, window.location.origin);
+                        setTimeout(() => window.close(), 2000);
+                    }
+                    return;
+                }
+
+                // Validate authorization code
+                if (!code) {
+                    debugLog('No authorization code received');
+                    showError('Código de autorização não recebido');
+                    
+                    if (window.opener && !window.opener.closed) {
+                        window.opener.postMessage({
+                            type: 'LINKEDIN_AUTH_ERROR',
+                            error: 'no_code',
+                            errorDescription: 'No authorization code received'
+                        }, window.location.origin);
+                        setTimeout(() => window.close(), 2000);
+                    }
+                    return;
+                }
+
+                // CRITICAL: Validate state parameter for security (CSRF protection)
+                const savedState = sessionStorage.getItem('linkedin_oauth_state');
+                debugLog('State validation', { receivedState: state, savedState: savedState });
+                
+                if (!state) {
+                    debugLog('Security error: No state parameter received');
+                    showError('Erro de segurança: Parâmetro state ausente');
+                    return;
+                }
+                
+                if (!savedState) {
+                    debugLog('Security error: No saved state found');
+                    showError('Erro de segurança: State salvo não encontrado');
+                    return;
+                }
+                
+                if (state !== savedState) {
+                    debugLog('Security error: State parameter mismatch');
+                    sessionStorage.removeItem('linkedin_oauth_state');
+                    showError('Erro de segurança: State inválido');
+                    return;
+                }
+
+                // Process authentication based on environment
+                let userData;
+                
+                if (isDevelopment) {
+                    debugLog('Using mock user data for development');
+                    userData = {
+                        id: 'dev_user_' + Date.now(),
+                        name: 'Usuário de Desenvolvimento',
+                        email: 'dev@example.com',
+                        headline: 'Desenvolvedor LinkedIn Local',
+                        location: 'Brasil',
+                        industry: 'Technology',
+                        publicProfileUrl: 'https://linkedin.com/in/dev-user',
+                        picture: `https://ui-avatars.com/api/?name=Dev+User&background=0077B5&color=fff&size=200`
+                    };
+                } else {
+                    debugLog('Fetching real user data from API');
+                    
+                    // Production: Exchange code for token
+                    const tokenResponse = await fetch(`${API_BASE}/api/auth/linkedin/token`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ code })
+                    });
+
+                    if (!tokenResponse.ok) {
+                        debugLog('Token exchange failed', tokenResponse.status);
+                        showError(`Falha na troca de token: ${tokenResponse.status}`);
+                        return;
+                    }
+
+                    const { access_token } = await tokenResponse.json();
+                    debugLog('Token received successfully');
+
+                    // Get user profile with access token
+                    const profileResponse = await fetch(`${API_BASE}/api/auth/linkedin/profile`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${access_token}`,
+                            'Content-Type': 'application/json',
+                        }
+                    });
+
+                    if (!profileResponse.ok) {
+                        debugLog('Profile fetch failed', profileResponse.status);
+                        showError(`Falha ao buscar perfil: ${profileResponse.status}`);
+                        return;
+                    }
+
+                    userData = await profileResponse.json();
+                    debugLog('User profile fetched successfully');
+                }
+
+                // Send user data to parent window (popup flow)
+                if (window.opener && !window.opener.closed) {
+                    debugLog('Sending auth success to parent window');
+                    window.opener.postMessage({
+                        type: 'LINKEDIN_AUTH_SUCCESS',
+                        userData: userData
+                    }, window.location.origin);
+                    
+                    // Clean up state
+                    sessionStorage.removeItem('linkedin_oauth_state');
+                    
+                    // Close popup after a brief delay
+                    debugLog('Closing popup in 1 second');
+                    setTimeout(() => {
+                        window.close();
+                    }, 1000);
+                    
+                } else {
+                    debugLog('No parent window detected, handling as redirect flow');
+                    
+                    // Mobile/redirect flow: save to localStorage and navigate back
+                    try {
+                        localStorage.setItem('linkedin_user', JSON.stringify(userData));
+                        sessionStorage.removeItem('linkedin_oauth_state');
+                        
+                        // Check if we should return to a specific page
+                        const returnUrl = sessionStorage.getItem('linkedin_auth_return_url');
+                        if (returnUrl) {
+                            sessionStorage.removeItem('linkedin_auth_return_url');
+                            debugLog('Returning to:', returnUrl);
+                            window.location.href = returnUrl;
+                        } else {
+                            debugLog('Redirecting to home');
+                            window.location.href = '/';
+                        }
+                        
+                    } catch (error) {
+                        debugLog('Failed to save user data', error);
+                        showError('Falha ao salvar dados do usuário');
+                    }
+                }
+
+            } catch (error) {
+                debugLog('LinkedIn authentication error', error);
+                showError(`Erro de autenticação: ${error.message}`);
+                
+                // Clean up state on any error
+                try {
+                    sessionStorage.removeItem('linkedin_oauth_state');
+                } catch (cleanupError) {
+                    debugLog('Cleanup error ignored', cleanupError);
+                }
+                
+                // Notify parent window of error
+                if (window.opener && !window.opener.closed) {
+                    window.opener.postMessage({
+                        type: 'LINKEDIN_AUTH_ERROR',
+                        error: 'callback_error',
+                        errorDescription: error.message
+                    }, window.location.origin);
+                    setTimeout(() => window.close(), 3000);
+                }
+            }
+        }
+
+        // Start processing when page loads
+        debugLog('LinkedIn callback page loaded');
+        handleLinkedInCallback();
+    </script>
+</body>
+</html>

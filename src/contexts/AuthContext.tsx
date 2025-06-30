@@ -4,7 +4,7 @@ import { storage } from '../utils/storage'
 import { useDeviceCapabilities } from '../hooks/useMediaQuery'
 import { useAuthConcurrencyControl } from '../hooks/useAuthStatePersistence'
 import { useAuthError } from '../hooks/useAuthError'
-import { AuthError } from '../utils/AuthErrorHandler'
+import { AuthError, AuthErrorHandler } from '../utils/AuthErrorHandler'
 import { updateDataDogUser } from '../utils/datadogConfig'
 
 export interface LinkedInUser {
@@ -228,14 +228,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             setUser(validatedUser)
             identifyLinkedInUser(validatedUser)
             setShowAuthModal(false)
+            clearAuthError() // Clear any previous errors
             console.log('✅ User authenticated via postMessage')
           } catch (error) {
             console.error('❌ Failed to save user data:', error)
+            setAuthError(AuthErrorHandler.handleError(error, { type: 'storage_save' }))
           }
         } else {
           console.error('❌ Invalid user data received from OAuth')
+          setAuthError(AuthErrorHandler.handleError('Invalid user data', { type: 'invalid_user_data' }))
           setShowAuthModal(false)
         }
+      } else if (event.data?.type === 'LINKEDIN_AUTH_ERROR') {
+        console.error('📨 Received auth error from popup:', event.data)
+        
+        const errorCode = event.data.error || 'AUTH_ERROR'
+        const errorDescription = event.data.errorDescription || 'Erro de autenticação'
+        
+        setAuthError(AuthErrorHandler.handleError(errorDescription, { 
+          type: 'oauth_callback_error',
+          errorCode,
+          source: 'popup_message'
+        }))
+        setShowAuthModal(false)
+        console.log('❌ Authentication failed via postMessage')
       }
     }
 
