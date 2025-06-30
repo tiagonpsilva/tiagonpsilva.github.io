@@ -9,6 +9,20 @@ import { useComponentTracing } from '../hooks/useComponentTracing'
 import { useDataDogInteractions } from '../hooks/useDataDog'
 import AuthButton from './AuthButton'
 
+// Environment indicator for staging
+const EnvironmentIndicator = () => {
+  const isStaging = import.meta.env.VITE_STAGING_ENV === 'true'
+  const isDev = import.meta.env.DEV
+  
+  if (!isStaging && !isDev) return null
+  
+  return (
+    <div className="fixed top-0 left-0 right-0 bg-yellow-400 text-black text-center py-1 text-sm font-bold z-50">
+      🧪 {isStaging ? 'STAGING' : 'DEVELOPMENT'} ENVIRONMENT - OAuth Testing Mode
+    </div>
+  )
+}
+
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const { isDarkMode, toggleDarkMode } = useTheme()
@@ -101,7 +115,9 @@ const Header: React.FC = () => {
   }
 
   return (
-    <motion.header
+    <>
+      <EnvironmentIndicator />
+      <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       className={cn(
@@ -219,6 +235,7 @@ const Header: React.FC = () => {
 
       </div>
     </motion.header>
+    </>
   )
 }
 
