@@ -389,8 +389,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     attemptAuth(async () => {
     const clientId = import.meta.env.VITE_LINKEDIN_CLIENT_ID
     const currentOrigin = window.location.origin
-    // URL correta configurada no LinkedIn App
-    const redirectUri = `https://tiagopinto.io/api/auth/linkedin/callback`
+    // URL que o React Router pode capturar (sem /api/)
+    const redirectUri = `https://tiagopinto.io/oauth/linkedin/callback`
     const scope = 'openid profile email'
     const state = Math.random().toString(36).substring(7)
     
