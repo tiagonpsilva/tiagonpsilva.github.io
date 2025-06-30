@@ -2,10 +2,10 @@
   "rewrites": [
     {
       "source": "/auth/linkedin/callback",
-      "destination": "/auth/linkedin/callback.html"
+      "destination": "/api/auth/linkedin/original-callback"
     },
     {
-      "source": "/((?!api/|assets/|auth/linkedin/callback).*)",
+      "source": "/((?!api/|assets/).*)",
       "destination": "/index.html"
     }
   ]
