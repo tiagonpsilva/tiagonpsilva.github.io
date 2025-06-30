@@ -247,9 +247,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, [])
 
-  // Track page views and time for modal trigger
+  // Track page views and time for modal trigger - DISABLED IN PRODUCTION
   useEffect(() => {
-    if (!user && !loading) {
+    // Only show automatic modals in development
+    if (!user && !loading && import.meta.env.DEV) {
       const timer = setTimeout(() => {
         if (shouldShowAuthModal()) {
           setShowAuthModal(true)
@@ -299,8 +300,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     storage.setItem('user_engagement', JSON.stringify(updated))
 
-    // Check if should show modal based on page views
-    if (!user && updated.pageViews >= 3 && shouldShowAuthModal()) {
+    // Check if should show modal based on page views - DISABLED IN PRODUCTION
+    if (!user && updated.pageViews >= 3 && shouldShowAuthModal() && import.meta.env.DEV) {
       setShowAuthModal(true)
       track('Auth Modal Shown', {
         trigger: 'page_views',
