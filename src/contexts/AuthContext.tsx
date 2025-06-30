@@ -91,8 +91,7 @@ const validateEmail = (email: string): boolean => {
 const exchangeCodeForProfile = async (code: string): Promise<LinkedInUser> => {
   try {
     // Step 1: Exchange code for access token using serverless function
-    console.log('🔄 Step 1: Exchanging authorization code for access token via API...')
-    console.log('🔍 Code received:', code.substring(0, 10) + '...')
+    console.log('🔄 Step 1: Exchanging code for access token...')
     
     const tokenResponse = await fetch('/api/auth/linkedin/token', {
       method: 'POST',
@@ -102,7 +101,7 @@ const exchangeCodeForProfile = async (code: string): Promise<LinkedInUser> => {
       body: JSON.stringify({ code })
     })
 
-    console.log('📡 Token API response status:', tokenResponse.status)
+    // console.log('📡 Token API response status:', tokenResponse.status)
 
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.json().catch(() => ({ error: 'Unknown error' }))
@@ -111,7 +110,7 @@ const exchangeCodeForProfile = async (code: string): Promise<LinkedInUser> => {
     }
 
     const tokenData = await tokenResponse.json()
-    console.log('✅ Token response received:', { hasToken: !!tokenData.access_token })
+    // console.log('✅ Token response received:', { hasToken: !!tokenData.access_token })
     const accessToken = tokenData.access_token
 
     if (!accessToken) {
@@ -119,10 +118,10 @@ const exchangeCodeForProfile = async (code: string): Promise<LinkedInUser> => {
       throw new Error('No access token received from API')
     }
 
-    console.log('✅ Step 1 complete: Access token obtained successfully')
+    console.log('✅ Step 1 complete: Access token obtained')
 
     // Step 2: Fetch user profile using serverless function
-    console.log('🔄 Step 2: Fetching user profile via API...')
+    console.log('🔄 Step 2: Fetching user profile...')
     const profileResponse = await fetch('/api/auth/linkedin/profile', {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -130,7 +129,7 @@ const exchangeCodeForProfile = async (code: string): Promise<LinkedInUser> => {
       }
     })
 
-    console.log('📡 Profile API response status:', profileResponse.status)
+    // console.log('📡 Profile API response status:', profileResponse.status)
 
     if (!profileResponse.ok) {
       const errorData = await profileResponse.json().catch(() => ({ error: 'Unknown error' }))
@@ -139,7 +138,7 @@ const exchangeCodeForProfile = async (code: string): Promise<LinkedInUser> => {
     }
 
     const profileData = await profileResponse.json()
-    console.log('✅ Step 2 complete: LinkedIn profile data received:', profileData)
+    console.log('✅ Step 2 complete: Profile data received')
 
     // The serverless function already returns data in the correct format
     const linkedInUser: LinkedInUser = {
@@ -153,7 +152,7 @@ const exchangeCodeForProfile = async (code: string): Promise<LinkedInUser> => {
       publicProfileUrl: profileData.publicProfileUrl || ''
     }
 
-    console.log('🎯 Final user object created:', linkedInUser)
+    console.log('✅ User authentication completed for:', linkedInUser.name)
     return linkedInUser
   } catch (error) {
     console.error('❌ OAuth exchange via API failed:', error)
@@ -335,7 +334,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     // Listen for auth success from popup
     const handleAuthMessage = (event: MessageEvent) => {
-      console.log('📥 Received message from popup:', event.data)
+      // console.log('📥 Received message from popup:', event.data)
       
       // Security: check origin
       if (event.origin !== window.location.origin) {
@@ -344,7 +343,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
 
       if (event.data?.type === 'LINKEDIN_AUTH_CODE') {
-        console.log('📨 Processing LINKEDIN_AUTH_CODE message')
+        // console.log('📨 Processing LINKEDIN_AUTH_CODE message')
         
         // Validate state
         const savedState = sessionStorage.getItem('linkedin_oauth_state')
@@ -355,16 +354,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
         
         // Exchange code for access token and fetch user profile
-        console.log('🔄 Starting OAuth code exchange process...')
-        console.log('🔍 Code to exchange:', event.data.code.substring(0, 20) + '...')
-        console.log('🔍 State received:', event.data.state)
-        console.log('🔍 State saved:', savedState)
+        console.log('🔄 Starting LinkedIn authentication...')
         
         exchangeCodeForProfile(event.data.code)
           .then(userData => {
-            console.log('✅ OAuth exchange successful, received user data:', userData)
+            console.log('✅ LinkedIn authentication successful')
             const validatedUser = validateUserData(userData)
-            console.log('🔍 Validated user data:', validatedUser)
             
             if (validatedUser) {
               storage.setItem('linkedin_user', JSON.stringify(validatedUser))

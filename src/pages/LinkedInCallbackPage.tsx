@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react'
 
 // LinkedIn OAuth Callback Page - funciona DENTRO do React Router
 const LinkedInCallbackPage: React.FC = () => {
-  const [status, setStatus] = useState('Iniciando processamento...')
-  const [logs, setLogs] = useState<string[]>(['🚀 Página de callback React carregada...'])
-  const [params, setParams] = useState<any>({})
+  const [status, setStatus] = useState('Processando autenticação...')
+  const [isSuccess, setIsSuccess] = useState(false)
 
   const log = (message: string) => {
+    // Keep console logs for debugging but hide from UI
     console.log(`[REACT CALLBACK] ${message}`)
-    const timestamp = new Date().toLocaleTimeString()
-    setLogs(prev => [...prev, `[${timestamp}] ${message}`])
   }
 
   useEffect(() => {
@@ -23,21 +21,12 @@ const LinkedInCallbackPage: React.FC = () => {
       const error = urlParams.get('error')
       const errorDescription = urlParams.get('error_description')
 
-      setParams({
-        code: code ? `✅ Present (${code.slice(0, 15)}...)` : '❌ Missing',
-        state: state ? `✅ Present (${state})` : '❌ Missing',
-        error: error || '✅ None',
-        errorDescription: errorDescription || '✅ None',
-        windowOpener: window.opener ? '✅ Present' : '❌ Missing',
-        openerClosed: window.opener ? (window.opener.closed ? '❌ Closed' : '✅ Open') : 'N/A'
-      })
-
       log(`📋 Parameters: code=${!!code}, state=${!!state}, error=${error || 'none'}`)
 
       // Handle errors
       if (error) {
         log(`❌ OAuth error: ${error} - ${errorDescription}`)
-        setStatus(`❌ Erro OAuth: ${errorDescription || error}`)
+        setStatus('Erro na autenticação. Fechando...')
         
         if (window.opener && !window.opener.closed) {
           log('📤 Sending error to parent window')
@@ -63,21 +52,22 @@ const LinkedInCallbackPage: React.FC = () => {
       // Handle missing parameters
       if (!code) {
         log('❌ Authorization code missing')
-        setStatus('❌ Código de autorização ausente')
+        setStatus('Dados de autenticação inválidos')
         setTimeout(() => window.close(), 2000)
         return
       }
 
       if (!state) {
         log('❌ State parameter missing')
-        setStatus('❌ Parâmetro state ausente')
+        setStatus('Dados de autenticação inválidos')
         setTimeout(() => window.close(), 2000)
         return
       }
 
       // Success case
       log('✅ All parameters present - processing success')
-      setStatus('✅ Parâmetros OK - enviando para janela pai...')
+      setStatus('Autenticação realizada com sucesso!')
+      setIsSuccess(true)
 
       if (window.opener && !window.opener.closed) {
         log('📤 Sending success message to parent window')
@@ -90,7 +80,7 @@ const LinkedInCallbackPage: React.FC = () => {
           }, window.location.origin)
           
           log('✅ Success message sent!')
-          setStatus('✅ Dados enviados! Fechando popup...')
+          setStatus('Conectando... Popup será fechado automaticamente.')
           
           setTimeout(() => {
             log('🔒 Closing popup...')
@@ -99,12 +89,12 @@ const LinkedInCallbackPage: React.FC = () => {
           
         } catch (e) {
           log(`❌ Error sending message: ${(e as Error).message}`)
-          setStatus(`❌ Erro ao enviar: ${(e as Error).message}`)
+          setStatus('Erro na comunicação. Fechando popup...')
         }
         
       } else {
         log('⚠️ No parent window found - handling as redirect flow')
-        setStatus('🔄 Processando dados OAuth via redirect...')
+        setStatus('Processando autenticação...')
         
         // Store OAuth data in sessionStorage for main app to pick up
         try {
@@ -114,7 +104,8 @@ const LinkedInCallbackPage: React.FC = () => {
             timestamp: Date.now()
           }))
           log('💾 OAuth data stored in sessionStorage for main app')
-          setStatus('✅ Dados salvos! Redirecionando...')
+          setStatus('Autenticação concluída! Redirecionando...')
+          setIsSuccess(true)
           
           // Redirect to home page where main app will process the data
           setTimeout(() => {
@@ -123,7 +114,7 @@ const LinkedInCallbackPage: React.FC = () => {
           
         } catch (e) {
           log(`❌ Storage error: ${(e as Error).message}`)
-          setStatus(`❌ Erro de armazenamento: ${(e as Error).message}`)
+          setStatus('Erro no processamento. Redirecionando...')
           
           // Fallback: redirect to home anyway
           setTimeout(() => {
@@ -138,89 +129,88 @@ const LinkedInCallbackPage: React.FC = () => {
 
   return (
     <div style={{
-      fontFamily: 'Arial, sans-serif',
-      padding: '20px',
-      background: '#e6f3ff',
-      minHeight: '100vh'
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+      padding: '40px 20px',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
     }}>
       <div style={{
-        maxWidth: '600px',
-        margin: '0 auto',
         background: 'white',
-        padding: '30px',
-        borderRadius: '8px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-        border: '3px solid #007bff'
+        padding: '40px',
+        borderRadius: '12px',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+        textAlign: 'center',
+        maxWidth: '400px',
+        width: '100%'
       }}>
+        {/* LinkedIn Logo */}
         <div style={{
-          background: '#007bff',
+          width: '60px',
+          height: '60px',
+          background: '#0077b5',
+          borderRadius: '8px',
+          margin: '0 auto 20px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '30px',
           color: 'white',
-          textAlign: 'center',
-          padding: '10px',
-          borderRadius: '4px',
-          marginBottom: '20px',
-          fontSize: '18px',
           fontWeight: 'bold'
         }}>
-          🔵 CALLBACK REACT ROUTER FUNCIONANDO!
+          in
         </div>
         
-        <h2>🔍 LinkedIn OAuth - React Router</h2>
-        
+        {/* Status Icon */}
         <div style={{
-          padding: '15px',
-          borderRadius: '4px',
-          margin: '10px 0',
-          background: status.includes('❌') ? '#f8d7da' : status.includes('✅') ? '#d4edda' : '#d1ecf1',
-          color: status.includes('❌') ? '#721c24' : status.includes('✅') ? '#155724' : '#0c5460',
-          fontWeight: 'bold'
+          fontSize: '48px',
+          marginBottom: '20px'
+        }}>
+          {isSuccess ? '✅' : '🔄'}
+        </div>
+        
+        {/* Status Message */}
+        <h2 style={{
+          margin: '0 0 10px 0',
+          color: '#333',
+          fontSize: '20px',
+          fontWeight: '600'
+        }}>
+          LinkedIn
+        </h2>
+        
+        <p style={{
+          margin: '0 0 20px 0',
+          color: '#666',
+          fontSize: '16px',
+          lineHeight: '1.5'
         }}>
           {status}
-        </div>
+        </p>
         
-        <div style={{
-          background: '#fff3cd',
-          padding: '15px',
-          borderRadius: '4px',
-          margin: '15px 0'
-        }}>
-          <h3>📋 URL Atual:</h3>
-          <code>{window.location.href}</code>
-        </div>
-        
-        <div style={{
-          background: '#fff3cd',
-          padding: '15px',
-          borderRadius: '4px',
-          margin: '15px 0'
-        }}>
-          <h3>🔗 Parâmetros OAuth:</h3>
-          <ul style={{ margin: 0 }}>
-            <li><strong>code:</strong> {params.code}</li>
-            <li><strong>state:</strong> {params.state}</li>
-            <li><strong>error:</strong> {params.error}</li>
-            <li><strong>error_description:</strong> {params.errorDescription}</li>
-            <li><strong>window.opener:</strong> {params.windowOpener}</li>
-            <li><strong>opener.closed:</strong> {params.openerClosed}</li>
-            <li><strong>Component Type:</strong> ✅ React Router Component</li>
-          </ul>
-        </div>
-        
-        <div style={{
-          background: '#f8f9fa',
-          border: '1px solid #e9ecef',
-          padding: '15px',
-          margin: '15px 0',
-          fontFamily: 'monospace',
-          fontSize: '12px',
-          maxHeight: '200px',
-          overflowY: 'auto'
-        }}>
-          {logs.map((log, index) => (
-            <div key={index}>{log}</div>
-          ))}
-        </div>
+        {/* Loading indicator */}
+        {!isSuccess && (
+          <div style={{
+            display: 'inline-block',
+            width: '20px',
+            height: '20px',
+            border: '2px solid #e3e3e3',
+            borderRadius: '50%',
+            borderTop: '2px solid #0077b5',
+            animation: 'spin 1s linear infinite'
+          }} />
+        )}
       </div>
+      
+      {/* CSS for spinner animation */}
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   )
 }
