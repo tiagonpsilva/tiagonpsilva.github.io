@@ -3,19 +3,48 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { UserCheck, User, LogOut, ExternalLink, ChevronDown } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useInteractionTracking } from '@/contexts/MixpanelContext'
+import { useComponentTracing } from '@/hooks/useComponentTracing'
+import { useDataDogInteractions, useDataDogBusiness } from '@/hooks/useDataDog'
 
 const AuthButton: React.FC = () => {
   const { user, isAuthenticated, signInWithLinkedIn, signOut, loading } = useAuth()
   const { trackClick } = useInteractionTracking()
+  const { trackClick: trackDataDogClick } = useDataDogInteractions()
+  const { trackConversion } = useDataDogBusiness()
+  const { trackInteraction } = useComponentTracing({
+    componentName: 'AuthButton',
+    trackMount: true,
+    trackUnmount: false,
+    trackRender: false,
+    trackErrors: true
+  })
   const [showMenu, setShowMenu] = useState(false)
 
   if (loading) return null
 
   const handleSignIn = () => {
+    // Track with multiple systems
     trackClick('Auth Button Clicked', 'Header', {
       action: 'sign_in',
       trigger: 'manual'
     })
+
+    trackDataDogClick('auth_sign_in_clicked', 'AuthButton', {
+      auth_provider: 'linkedin',
+      trigger: 'manual'
+    })
+
+    trackInteraction('sign_in_click', 'auth_button', {
+      provider: 'linkedin',
+      trigger: 'manual'
+    })
+
+    // Track as potential conversion
+    trackConversion('linkedin', {
+      action: 'sign_in_attempt',
+      trigger: 'manual'
+    })
+
     signInWithLinkedIn()
   }
 

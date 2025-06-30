@@ -5,12 +5,22 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { useTheme } from '../contexts/ThemeContext'
 import { useInteractionTracking } from '../contexts/MixpanelContext'
+import { useComponentTracing } from '../hooks/useComponentTracing'
+import { useDataDogInteractions } from '../hooks/useDataDog'
 import AuthButton from './AuthButton'
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const { isDarkMode, toggleDarkMode } = useTheme()
   const { trackClick } = useInteractionTracking()
+  const { trackClick: trackDataDogClick, trackNavigation } = useDataDogInteractions()
+  const { trackInteraction } = useComponentTracing({
+    componentName: 'Header',
+    trackMount: true,
+    trackUnmount: false,
+    trackRender: false,
+    trackErrors: true
+  })
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -35,6 +45,7 @@ const Header: React.FC = () => {
     }
   }, [location])
 
+
   const navItems = [
     { href: '#home', label: 'Início' },
     { href: '#expertise', label: 'Expertise' },
@@ -46,13 +57,31 @@ const Header: React.FC = () => {
   ]
 
   const handleNavigation = (href: string, isExternal?: boolean, label?: string) => {
-    // Track navigation click
+    // Track navigation click with both systems
     trackClick('Navigation Link', 'Header', {
       link_href: href,
       link_label: label,
       is_external: isExternal,
       current_page: location.pathname
     })
+
+    // DataDog tracking
+    trackDataDogClick(label || 'navigation_link', 'Header', {
+      destination: href,
+      is_external: isExternal,
+      source_page: location.pathname
+    })
+
+    // Component-level tracing
+    trackInteraction('navigation_click', label || href, {
+      href,
+      is_external: isExternal,
+      current_page: location.pathname
+    })
+
+    if (isExternal) {
+      trackNavigation(location.pathname, href, 'click')
+    }
 
     if (isExternal) {
       navigate(href)
@@ -130,9 +159,22 @@ const Header: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: navItems.length * 0.1 }}
               onClick={() => {
+                const newTheme = isDarkMode ? 'light' : 'dark'
+                
+                // Track theme toggle with both systems
                 trackClick('Theme Toggle', 'Header', {
-                  theme_changed_to: isDarkMode ? 'light' : 'dark'
+                  theme_changed_to: newTheme
                 })
+
+                trackDataDogClick('theme_toggle', 'Header', {
+                  from_theme: isDarkMode ? 'dark' : 'light',
+                  to_theme: newTheme
+                })
+
+                trackInteraction('theme_toggle', 'theme_button', {
+                  theme_changed_to: newTheme
+                })
+
                 toggleDarkMode()
               }}
               className="p-2 text-foreground hover:text-primary transition-colors duration-200 ml-4"

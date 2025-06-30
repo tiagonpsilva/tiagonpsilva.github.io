@@ -1,13 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowDown, Github, Linkedin, Mail, MessageSquare } from 'lucide-react'
 import { MagicCard } from './ui/magic-card'
+import { useMetrics } from '../contexts/MetricsContext'
 
 const Hero: React.FC = () => {
+  const { portfolio, contact } = useMetrics()
+
+  // Track homepage view on mount
+  useEffect(() => {
+    portfolio.trackHomepageView()
+  }, [portfolio])
+
   const scrollToNext = () => {
     const aboutSection = document.querySelector('#expertise')
     if (aboutSection) {
       aboutSection.scrollIntoView({ behavior: 'smooth' })
+      portfolio.trackExpertiseView()
     }
   }
 
@@ -164,6 +173,12 @@ const Hero: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={social.label}
+                onClick={() => {
+                  if (social.label === 'GitHub') portfolio.trackGithubVisit('portfolio')
+                  else if (social.label === 'LinkedIn') contact.trackLinkedInClick()
+                  else if (social.label === 'Email') contact.trackEmailClick()
+                  else if (social.label === 'WhatsApp') contact.trackWhatsAppClick()
+                }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >

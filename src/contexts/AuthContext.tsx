@@ -5,6 +5,7 @@ import { useDeviceCapabilities } from '../hooks/useMediaQuery'
 import { useAuthConcurrencyControl } from '../hooks/useAuthStatePersistence'
 import { useAuthError } from '../hooks/useAuthError'
 import { AuthError } from '../utils/AuthErrorHandler'
+import { updateDataDogUser } from '../utils/datadogConfig'
 
 export interface LinkedInUser {
   id: string
@@ -507,6 +508,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       has_email: !!userData.email,
       has_headline: !!userData.headline,
       has_location: !!userData.location
+    })
+
+    // Update DataDog user context
+    updateDataDogUser({
+      id: userData.id,
+      name: userData.name,
+      email: userData.email,
+      type: 'linkedin_authenticated'
     })
 
     // Dispatch success event for UI feedback

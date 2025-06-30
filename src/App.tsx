@@ -18,8 +18,9 @@ import AuthErrorDisplayWrapper from './components/AuthErrorDisplayWrapper'
 import { ThemeProvider, useTheme } from './contexts/ThemeContext'
 import { MixpanelProvider } from './contexts/MixpanelContext'
 import { AuthProvider } from './contexts/AuthContext'
+import { MetricsProvider } from './contexts/MetricsContext'
 import { ToastProvider } from './components/ToastManager'
-import { useRouteTracking } from './hooks/useRouteTracking'
+import { useRouteTracing } from './hooks/useRouteTracing'
 
 function HomePage() {
   const { restorePreviousTheme } = useTheme()
@@ -39,8 +40,8 @@ function HomePage() {
 }
 
 function AppContent() {
-  // Track route changes for analytics
-  useRouteTracking()
+  // Track route changes for analytics with enhanced tracing
+  useRouteTracing()
   
   return (
     <div className="min-h-screen bg-background transition-colors duration-300">
@@ -73,13 +74,15 @@ function App() {
   return (
     <ThemeProvider>
       <MixpanelProvider>
-        <ToastProvider>
-          <Router>
-            <AuthProvider>
-              <AppContent />
-            </AuthProvider>
-          </Router>
-        </ToastProvider>
+        <MetricsProvider>
+          <ToastProvider>
+            <Router>
+              <AuthProvider>
+                <AppContent />
+              </AuthProvider>
+            </Router>
+          </ToastProvider>
+        </MetricsProvider>
       </MixpanelProvider>
     </ThemeProvider>
   )

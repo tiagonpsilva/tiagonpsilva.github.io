@@ -22,8 +22,10 @@ const AuthErrorDisplayWrapper: React.FC = () => {
     clearAuthError()
     
     // Could open a modal with alternative auth methods
-    // For now, just show instructions
-    alert('Método alternativo: Entre em contato conosco através do formulário de contato com o link do seu perfil LinkedIn.')
+    // For now, just log in development
+    if (import.meta.env.DEV) {
+      console.log('Alternative auth: Contact us through the contact form with your LinkedIn profile link.')
+    }
   }
 
   if (!authError) {
