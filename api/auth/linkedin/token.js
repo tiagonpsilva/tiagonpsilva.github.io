@@ -1,5 +1,5 @@
 // Vercel API Route for LinkedIn OAuth token exchange
-const { withTracing, trackExternalApiCall, trackAuthEvent } = require('../../utils/telemetry')
+// Note: Telemetry temporarily removed to fix FUNCTION_INVOCATION_FAILED
 
 async function tokenHandler(req, res) {
   // Only allow POST requests
@@ -63,30 +63,12 @@ async function tokenHandler(req, res) {
     console.log('📡 LinkedIn token response status:', tokenResponse.status)
     const tokenDuration = Date.now() - tokenStartTime
 
-    // Track external API call
-    trackExternalApiCall(
-      'https://www.linkedin.com/oauth/v2/accessToken',
-      'POST',
-      tokenResponse.status,
-      tokenDuration,
-      {
-        'oauth.provider': 'linkedin',
-        'oauth.step': 'token_exchange'
-      }
-    )
-
     if (!tokenResponse.ok) {
       const errorText = await tokenResponse.text()
       console.error('❌ LinkedIn token exchange failed:', {
         status: tokenResponse.status,
         statusText: tokenResponse.statusText,
         error: errorText
-      })
-      
-      // Track auth failure
-      trackAuthEvent('token_exchange', 'anonymous', 'linkedin', false, {
-        'error.status': tokenResponse.status,
-        'error.message': errorText.substring(0, 200)
       })
       
       return res.status(500).json({ 
@@ -97,16 +79,7 @@ async function tokenHandler(req, res) {
     }
 
     const tokenData = await tokenResponse.json()
-    
-    // Track successful token exchange
-    trackAuthEvent('token_exchange', 'anonymous', 'linkedin', true, {
-      'token.expires_in': tokenData.expires_in || 'unknown'
-    })
-    
-    // Success logging only in development to prevent TTY issues
-    if (process.env.NODE_ENV === 'development') {
-      console.log('✅ LinkedIn token exchange successful')
-    }
+    console.log('✅ LinkedIn token exchange successful')
     
     return res.status(200).json({
       access_token: tokenData.access_token
@@ -119,12 +92,6 @@ async function tokenHandler(req, res) {
       name: error.name
     })
     
-    // Track auth error
-    trackAuthEvent('token_exchange', 'anonymous', 'linkedin', false, {
-      'error.type': 'exception',
-      'error.message': error.message
-    })
-    
     return res.status(500).json({ 
       error: 'Authentication failed',
       details: error.message,
@@ -133,5 +100,5 @@ async function tokenHandler(req, res) {
   }
 }
 
-// Export with tracing wrapper
-export default withTracing('linkedin_token_exchange', tokenHandler)
+// Export without tracing wrapper (temporarily)
+export default tokenHandler
