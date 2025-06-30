@@ -11,6 +11,7 @@ import CasesPage from './pages/CasesPage'
 import LabsPage from './pages/LabsPage'
 import ContactPage from './pages/ContactPage'
 import AuthDebugPage from './pages/AuthDebugPage'
+import LinkedInCallbackPage from './pages/LinkedInCallbackPage'
 import AuthModal from './components/AuthModal'
 import AuthStatusIndicator from './components/AuthStatusIndicator'
 import AuthErrorDisplayWrapper from './components/AuthErrorDisplayWrapper'
@@ -54,6 +55,7 @@ function AppContent() {
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:slug" element={<ArticlePage />} />
         <Route path="/auth/debug" element={<AuthDebugPage />} />
+        <Route path="/auth/linkedin/callback" element={<LinkedInCallbackPage />} />
       </Routes>
       <BottomNavigation />
       {/* Add bottom padding to prevent content from being hidden behind bottom nav */}
