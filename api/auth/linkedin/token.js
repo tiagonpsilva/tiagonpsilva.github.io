@@ -14,17 +14,37 @@ async function tokenHandler(req, res) {
       return res.status(400).json({ error: 'Authorization code required' })
     }
 
-    // Log only essential information to avoid TTY issues in serverless environment
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🔄 Exchanging LinkedIn code for token...')
-      console.log('🔧 Environment check:', {
-        hasClientId: !!process.env.VITE_LINKEDIN_CLIENT_ID || !!process.env.LINKEDIN_CLIENT_ID,
-        hasClientSecret: !!process.env.LINKEDIN_CLIENT_SECRET,
-        origin: req.headers.origin
-      })
+    // Enhanced logging for debugging
+    console.log('🔄 Token exchange request received')
+    console.log('🔧 Environment check:', {
+      hasClientId: !!process.env.VITE_LINKEDIN_CLIENT_ID || !!process.env.LINKEDIN_CLIENT_ID,
+      hasClientSecret: !!process.env.LINKEDIN_CLIENT_SECRET,
+      origin: req.headers.origin,
+      codeLength: code?.length,
+      nodeEnv: process.env.NODE_ENV
+    })
+    
+    const clientId = process.env.VITE_LINKEDIN_CLIENT_ID || process.env.LINKEDIN_CLIENT_ID
+    const clientSecret = process.env.LINKEDIN_CLIENT_SECRET
+    
+    if (!clientId) {
+      console.error('❌ Missing CLIENT_ID')
+      return res.status(500).json({ error: 'LinkedIn CLIENT_ID not configured' })
+    }
+    
+    if (!clientSecret) {
+      console.error('❌ Missing CLIENT_SECRET')
+      return res.status(500).json({ error: 'LinkedIn CLIENT_SECRET not configured' })
     }
 
     // Exchange authorization code for access token
+    const redirectUri = `${req.headers.origin}/oauth/linkedin/callback`
+    console.log('🔄 Making request to LinkedIn token endpoint:', {
+      clientIdPreview: clientId.substring(0, 8) + '...',
+      redirectUri,
+      codePreview: code.substring(0, 20) + '...'
+    })
+    
     const tokenStartTime = Date.now()
     const tokenResponse = await fetch('https://www.linkedin.com/oauth/v2/accessToken', {
       method: 'POST',
@@ -34,11 +54,13 @@ async function tokenHandler(req, res) {
       body: new URLSearchParams({
         grant_type: 'authorization_code',
         code,
-        client_id: process.env.VITE_LINKEDIN_CLIENT_ID || process.env.LINKEDIN_CLIENT_ID,
-        client_secret: process.env.LINKEDIN_CLIENT_SECRET,
-        redirect_uri: `${req.headers.origin}/oauth/linkedin/callback`
+        client_id: clientId,
+        client_secret: clientSecret,
+        redirect_uri: redirectUri
       })
     })
+    
+    console.log('📡 LinkedIn token response status:', tokenResponse.status)
     const tokenDuration = Date.now() - tokenStartTime
 
     // Track external API call
@@ -55,6 +77,11 @@ async function tokenHandler(req, res) {
 
     if (!tokenResponse.ok) {
       const errorText = await tokenResponse.text()
+      console.error('❌ LinkedIn token exchange failed:', {
+        status: tokenResponse.status,
+        statusText: tokenResponse.statusText,
+        error: errorText
+      })
       
       // Track auth failure
       trackAuthEvent('token_exchange', 'anonymous', 'linkedin', false, {
@@ -62,9 +89,11 @@ async function tokenHandler(req, res) {
         'error.message': errorText.substring(0, 200)
       })
       
-      // Always log errors but avoid excessive console output in production
-      console.error('LinkedIn token exchange failed:', tokenResponse.status)
-      throw new Error(`Failed to exchange code for token: ${tokenResponse.status}`)
+      return res.status(500).json({ 
+        error: 'Token exchange failed',
+        details: `LinkedIn API returned ${tokenResponse.status}: ${errorText}`,
+        status: tokenResponse.status
+      })
     }
 
     const tokenData = await tokenResponse.json()
@@ -84,17 +113,22 @@ async function tokenHandler(req, res) {
     })
 
   } catch (error) {
+    console.error('❌ Token exchange exception:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    })
+    
     // Track auth error
     trackAuthEvent('token_exchange', 'anonymous', 'linkedin', false, {
       'error.type': 'exception',
       'error.message': error.message
     })
     
-    // Log errors without emojis to prevent TTY issues in serverless
-    console.error('Token exchange error:', error.message)
     return res.status(500).json({ 
       error: 'Authentication failed',
-      details: error.message 
+      details: error.message,
+      type: 'exception'
     })
   }
 }
