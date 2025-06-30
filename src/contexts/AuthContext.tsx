@@ -91,7 +91,9 @@ const validateEmail = (email: string): boolean => {
 const exchangeCodeForProfile = async (code: string): Promise<LinkedInUser> => {
   try {
     // Step 1: Exchange code for access token using serverless function
-    console.log('🔄 Exchanging authorization code for access token via API...')
+    console.log('🔄 Step 1: Exchanging authorization code for access token via API...')
+    console.log('🔍 Code received:', code.substring(0, 10) + '...')
+    
     const tokenResponse = await fetch('/api/auth/linkedin/token', {
       method: 'POST',
       headers: {
@@ -100,22 +102,27 @@ const exchangeCodeForProfile = async (code: string): Promise<LinkedInUser> => {
       body: JSON.stringify({ code })
     })
 
+    console.log('📡 Token API response status:', tokenResponse.status)
+
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.json().catch(() => ({ error: 'Unknown error' }))
+      console.error('❌ Token exchange error response:', errorData)
       throw new Error(`Token exchange failed: ${tokenResponse.status} - ${errorData.error || errorData.details}`)
     }
 
     const tokenData = await tokenResponse.json()
+    console.log('✅ Token response received:', { hasToken: !!tokenData.access_token })
     const accessToken = tokenData.access_token
 
     if (!accessToken) {
+      console.error('❌ No access token in response:', tokenData)
       throw new Error('No access token received from API')
     }
 
-    console.log('✅ Access token obtained successfully via API')
+    console.log('✅ Step 1 complete: Access token obtained successfully')
 
     // Step 2: Fetch user profile using serverless function
-    console.log('👤 Fetching user profile via API...')
+    console.log('🔄 Step 2: Fetching user profile via API...')
     const profileResponse = await fetch('/api/auth/linkedin/profile', {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -123,13 +130,16 @@ const exchangeCodeForProfile = async (code: string): Promise<LinkedInUser> => {
       }
     })
 
+    console.log('📡 Profile API response status:', profileResponse.status)
+
     if (!profileResponse.ok) {
       const errorData = await profileResponse.json().catch(() => ({ error: 'Unknown error' }))
+      console.error('❌ Profile fetch error response:', errorData)
       throw new Error(`Profile fetch failed: ${profileResponse.status} - ${errorData.error || errorData.details}`)
     }
 
     const profileData = await profileResponse.json()
-    console.log('✅ LinkedIn profile data received via API:', profileData)
+    console.log('✅ Step 2 complete: LinkedIn profile data received:', profileData)
 
     // The serverless function already returns data in the correct format
     const linkedInUser: LinkedInUser = {
@@ -143,6 +153,7 @@ const exchangeCodeForProfile = async (code: string): Promise<LinkedInUser> => {
       publicProfileUrl: profileData.publicProfileUrl || ''
     }
 
+    console.log('🎯 Final user object created:', linkedInUser)
     return linkedInUser
   } catch (error) {
     console.error('❌ OAuth exchange via API failed:', error)
@@ -290,23 +301,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
         
         // Exchange code for access token and fetch user profile
+        console.log('🔄 Starting OAuth code exchange process...')
         exchangeCodeForProfile(event.data.code)
           .then(userData => {
+            console.log('✅ OAuth exchange successful, received user data:', userData)
             const validatedUser = validateUserData(userData)
+            console.log('🔍 Validated user data:', validatedUser)
+            
             if (validatedUser) {
               storage.setItem('linkedin_user', JSON.stringify(validatedUser))
               setUser(validatedUser)
               identifyLinkedInUser(validatedUser)
               setShowAuthModal(false)
               clearAuthError()
-              console.log('✅ User authenticated with real LinkedIn data')
+              console.log('✅ User authenticated with real LinkedIn data:', validatedUser.name)
             } else {
-              console.error('❌ Invalid user data received')
+              console.error('❌ Invalid user data received after validation')
               setAuthError(AuthErrorHandler.handleError('Invalid user data received', { type: 'invalid_user_data' }))
             }
           })
           .catch(error => {
             console.error('❌ Failed to exchange code for user profile:', error)
+            console.error('❌ Error details:', error.message, error.stack)
             setAuthError(AuthErrorHandler.handleError(error, { type: 'token_exchange' }))
           })
         
